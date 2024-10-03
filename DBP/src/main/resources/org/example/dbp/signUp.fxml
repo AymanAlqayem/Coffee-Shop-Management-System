@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="634.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="regProject.SignUp">
+    <children>
+        <ImageView fitHeight="638.0" fitWidth="880.0" layoutX="6.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../coffebeans.jpg" />
+            </image>
+        </ImageView>
+        <AnchorPane layoutX="494.0" prefHeight="638.0" prefWidth="370.0" style="-fx-background-color: #603F26;">
+            <children>
+                <Label layoutX="56.0" layoutY="28.0" prefHeight="38.0" prefWidth="242.0" text="Create new account" textFill="#ffdbb5">
+                    <font>
+                        <Font name="Bell MT" size="26.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

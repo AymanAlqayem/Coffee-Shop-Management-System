@@ -19,7 +19,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-//import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTextField;
 //import com.jfoenix.controls.JFXPasswordField;
 
 public class SignUpController extends Application {

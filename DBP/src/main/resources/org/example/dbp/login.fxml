@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="551.0" prefWidth="833.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="regProject.SigninController">
+    <children>
+        <AnchorPane layoutX="214.0" layoutY="78.0" prefHeight="363.0" prefWidth="368.0" style="-fx-background-color: #212121;">
+            <children>
+                <Label layoutX="132.0" layoutY="63.0" prefHeight="46.0" prefWidth="104.0" text="login" textFill="#fcf7f7">
+                    <font>
+                        <Font name="Berlin Sans FB" size="40.0" />
+                    </font>
+                </Label>
+                <AnchorPane layoutX="132.0" layoutY="109.0" prefHeight="12.0" prefWidth="92.0" style="-fx-background-color: B8001F;" />
+                <TextField fx:id="tfUserName" layoutX="116.0" layoutY="157.0" promptText="user name">
+                    <font>
+                        <Font name="Lucida Fax Regular" size="12.0" />
+                    </font></TextField>
+                <ImageView fitHeight="33.0" fitWidth="37.0" layoutX="64.0" layoutY="152.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@../icons8-name-50.png" />
+                    </image>
+                </ImageView>
+                <ImageView fitHeight="33.0" fitWidth="40.0" layoutX="64.0" layoutY="196.0" pickOnBounds="true" preserveRatio="true" style="-fx-blend-mode: B8001F;">
+                    <image>
+                        <Image url="@../icons8-password-50.png" />
+                    </image>
+                </ImageView>
+                <Label layoutX="39.0" layoutY="318.0" prefHeight="23.0" prefWidth="170.0" text="you dont have an account ?" textFill="#ebe6e6">
+                    <font>
+                        <Font name="Microsoft New Tai Lue" size="12.0" />
+                    </font>
+                </Label>
+                <Text fill="#f2e6e6" layoutX="187.0" layoutY="334.0" strokeType="OUTSIDE" strokeWidth="0.0" text="  sign up" wrappingWidth="73.33673095703125">
+                    <font>
+                        <Font name="Microsoft New Tai Lue" size="12.0" />
+                    </font>
+                </Text>
+                <Button fx:id="btSignin" layoutX="127.0" layoutY="245.0" mnemonicParsing="false" onAction="#signIn" prefHeight="33.0" prefWidth="113.0" style="-fx-background-radius: 90; -fx-background-color: B8001F;" text="sign in" textFill="#1e1d1d" />
+                <PasswordField fx:id="tfPass" layoutX="118.0" layoutY="200.0" promptText="password">
+                    <font>
+                        <Font name="Lucida Fax Regular" size="12.0" />
+                    </font>
+                </PasswordField>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
