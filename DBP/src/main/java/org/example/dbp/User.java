@@ -19,6 +19,7 @@ public class User {
 
     public String getFirstName() {
         return firstName;
+
     }
 
     public void setFirstName(String firstName) {
@@ -52,7 +53,7 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "firstName='" + firstName + '\'' +
+                " firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", userName='" + userName + '\'' +
                 ", pass='" + pass + '\'' +
