@@ -44,6 +44,7 @@ public class SignUpController extends Application {
     @Override
     public void start(Stage stage) {
         try {
+
             FXMLLoader fxmlLoader = new FXMLLoader(SignUpController.class.getResource("/regProject/signUp.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 750, 600);
             stage.setScene(scene);
