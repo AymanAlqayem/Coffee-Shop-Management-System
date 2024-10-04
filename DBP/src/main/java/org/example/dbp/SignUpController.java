@@ -1,6 +1,7 @@
 package org.example.dbp;
 
 
+import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,33 +20,22 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.jfoenix.controls.JFXTextField;
+//import com.jfoenix.controls.JFXTextField;
 //import com.jfoenix.controls.JFXPasswordField;
 
 public class SignUpController extends Application {
 
     @FXML
-    TextField tfFirstName;
-    @FXML
-    TextField tfLastName;
-    @FXML
     TextField tfUserName;
     @FXML
     PasswordField tfPass;
     @FXML
-    PasswordField tfConfirm;
-    @FXML
-    Button btReg;
-    @FXML
-    Button btClose;
-    @FXML
-    Text login;
+    JFXButton btSignUp;
 
     @Override
     public void start(Stage stage) {
         try {
-
-            FXMLLoader fxmlLoader = new FXMLLoader(SignUpController.class.getResource("/regProject/signUp.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/signUp.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 750, 600);
             stage.setScene(scene);
             stage.show();
@@ -55,18 +45,8 @@ public class SignUpController extends Application {
 
     }
 
-    public void register(ActionEvent e) {
+    public void signUp(ActionEvent e) {
         boolean correct = true;
-
-        if (tfFirstName.getText().isEmpty()) {
-            showAlert("Error, First name cannot be empty.");
-            correct = false;
-        }
-
-        if (tfLastName.getText().isEmpty()) {
-            showAlert("Error, Last name cannot be empty.");
-            correct = false;
-        }
 
         if (tfUserName.getText().isEmpty()) {
             showAlert("Error, User name cannot be empty.");
@@ -83,33 +63,25 @@ public class SignUpController extends Application {
             correct = false;
         }
 
-        if (!tfConfirm.getText().equals(tfPass.getText())) {
-            showAlert("Error, Passwords do not match.");
-            correct = false;  // Ensure correct is set to false here
-        }
-
         // Stop execution if any validation failed
         if (!correct) {
             return;  // Return early to prevent the registration logic from running
         }
 
         if (correct) {
-            User user = new User(tfFirstName.getText(), tfLastName.getText(), tfUserName.getText(), tfPass.getText());
+            User user = new User(tfUserName.getText(), tfPass.getText());
 
             try {
                 // Establish connection
                 Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/regproject", "root", "root");
 
                 // Prepare the SQL statement
-                String sql = "INSERT INTO user_table (first_name, last_name, user_name, pass) VALUES (?, ?, ?, ?)";
+                String sql = "INSERT INTO user_table (user_name, pass) VALUES (?, ?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
                 // Set the values for the PreparedStatement
-                preparedStatement.setString(1, user.getFirstName());
-                preparedStatement.setString(2, user.getLastName());
-                preparedStatement.setString(3, user.getUserName());
-                preparedStatement.setString(4, user.getPass());
-
+                preparedStatement.setString(1, user.getUserName());
+                preparedStatement.setString(2, user.getPass());
                 // Execute the insert statement
                 int rowsAffected = preparedStatement.executeUpdate();
 
@@ -120,11 +92,8 @@ public class SignUpController extends Application {
                 }
 
                 // Clear the input fields
-                tfFirstName.clear();
-                tfLastName.clear();
                 tfUserName.clear();
                 tfPass.clear();
-                tfConfirm.clear();
 
                 // Close the connection and statement
                 preparedStatement.close();
