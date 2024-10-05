@@ -1,6 +1,8 @@
 package org.example.dbp;
 
 
+import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXTextArea;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,16 +22,14 @@ public class LoginController extends Application {
     @FXML
     PasswordField tfPass;
     @FXML
-    Button btSignin;
-
-
+    JFXButton btLogin;
 
 
     public void start(Stage stage) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(SignUpController.class.getResource("/dbp/login.fxml"));
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/login.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 800, 550);
-            stage.setTitle("Sign in");
+            stage.setTitle("Log in");
             stage.setScene(scene);
             stage.show();
 
@@ -41,7 +41,7 @@ public class LoginController extends Application {
     }
 
 
-    public void signIn() {
+    public void login() {
         String username = tfUserName.getText();
         String password = tfPass.getText();
 
@@ -52,8 +52,8 @@ public class LoginController extends Application {
 
         // Database connection and validation
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/regproject", "root", "root");
-            String query = "SELECT * FROM user_table WHERE user_name = ? AND pass = ?";
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/dpproject", "root", "root");
+            String query = "SELECT * FROM usert WHERE user_name = ? AND pass = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
@@ -61,11 +61,9 @@ public class LoginController extends Application {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                // User found
-                String firstName = resultSet.getString("first_name");
-                String lastName = resultSet.getString("last_name");
+                String userName = resultSet.getString("user_name");
 
-                showAlert("Login Successful", "Welcome, " + firstName + " " + lastName);
+                showAlert("Login Successful", "Welcome, " + userName);
 
                 // Display user's information or navigate to the main application
             } else {
