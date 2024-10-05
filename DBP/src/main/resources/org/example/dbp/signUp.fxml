@@ -37,7 +37,7 @@
             <JFXButton fx:id="btSignUp" layoutX="133.0" layoutY="348.0" onAction="#signUp" prefHeight="54.0" prefWidth="145.0" style="-fx-background-radius: 90; -fx-background-color: #603F26;" text="SignUp" textFill="WHITE" />
             <TextField fx:id="tfUserName" layoutX="123.0" layoutY="201.0" prefHeight="30.0" prefWidth="190.0" promptText="User name" style="-fx-background-color: #6C4E31;" />
             <PasswordField fx:id="tfPass" layoutX="123.0" layoutY="275.0" prefHeight="30.0" prefWidth="190.0" promptText="password" style="-fx-background-color: #6C4E31;" />
-            <Text layoutX="40.0" layoutY="591.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you have an acount ?" wrappingWidth="135.73681640625">
+            <Text layoutX="40.0" layoutY="591.0" strokeType="OUTSIDE" strokeWidth="0.0" text="you have an acount?" wrappingWidth="135.73681640625">
                <font>
                   <Font name="Yu Gothic UI Semilight" size="14.0" />
                </font>

@@ -34,7 +34,8 @@ public class SignUpController extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/signUp.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 750, 600);
+            Scene scene = new Scene(fxmlLoader.load(), 850, 634);
+            stage.setTitle("Sign Up");
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
