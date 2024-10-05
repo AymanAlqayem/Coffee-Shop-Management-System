@@ -20,8 +20,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-//import com.jfoenix.controls.JFXTextField;
-//import com.jfoenix.controls.JFXPasswordField;
 
 public class SignUpController extends Application {
 
@@ -73,10 +71,10 @@ public class SignUpController extends Application {
 
             try {
                 // Establish connection
-                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/regproject", "root", "root");
+                Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/dpproject", "root", "root");
 
                 // Prepare the SQL statement
-                String sql = "INSERT INTO user_table (user_name, pass) VALUES (?, ?)";
+                String sql = "INSERT INTO usert (user_name, pass) VALUES (?, ?)";
                 PreparedStatement preparedStatement = connection.prepareStatement(sql);
 
                 // Set the values for the PreparedStatement

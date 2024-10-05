@@ -52,8 +52,8 @@ public class LoginController extends Application {
 
         // Database connection and validation
         try {
-            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/regproject", "root", "root");
-            String query = "SELECT * FROM user_table WHERE user_name = ? AND pass = ?";
+            Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/dpproject", "root", "root");
+            String query = "SELECT * FROM usert WHERE user_name = ? AND pass = ?";
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
