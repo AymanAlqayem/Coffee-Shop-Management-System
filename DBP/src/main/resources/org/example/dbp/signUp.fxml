@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="634.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.SignUpController">
+<AnchorPane prefHeight="622.0" prefWidth="863.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.SignUpController">
     <children>
-        <ImageView fitHeight="638.0" fitWidth="880.0" layoutX="6.0" pickOnBounds="true" preserveRatio="true">
+        <ImageView fitHeight="652.0" fitWidth="853.0" layoutX="-4.0" layoutY="-6.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../../../coffebeans.jpg" />
             </image>
