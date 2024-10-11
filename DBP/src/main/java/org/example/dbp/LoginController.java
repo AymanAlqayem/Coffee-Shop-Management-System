@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.w3c.dom.events.MouseEvent;
 
 import java.io.IOException;
 import java.sql.*;
@@ -27,7 +28,7 @@ public class LoginController extends Application {
     public void start(Stage stage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/login.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 800, 550);
+            Scene scene = new Scene(fxmlLoader.load(), 1378, 750);
             stage.setTitle("Log in");
             stage.setScene(scene);
             stage.show();
@@ -58,13 +59,20 @@ public class LoginController extends Application {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                String userName = resultSet.getString("user_name");
+                // Load the Admin stage
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/admin.fxml"));
+                Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
 
-//                showAlert("Login Successful", "Welcome, " + userName);
-                adminStage(username);
-                // Display user's information or navigate to the main application
+                // Show the new stage
+                Stage adminStage = new Stage();
+                adminStage.setTitle("Admin Stage");
+                adminStage.setScene(scene);
+                adminStage.show();
+
+                // Close the login stage
+                Stage loginStage = (Stage) tfUserName.getScene().getWindow();
+                loginStage.close();
             } else {
-                // No user found
                 showAlert("Login Failed", "Invalid username or password.");
             }
 
@@ -73,56 +81,9 @@ public class LoginController extends Application {
             preparedStatement.close();
             connection.close();
 
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
-            showAlert("Database Error", "Unable to connect to the database.");
-        }
-    }
-
-    @FXML
-    Label lbName = new Label();
-
-    public void adminStage(String adminName) {
-        try {
-            Stage stage = new Stage();
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/admin.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 894, 687);
-            stage.setTitle("Admin Stage");
-            stage.setScene(scene);
-            lbName.setText(adminName);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();  // This will help you identify issues during runtime.
-        }
-
-    }
-
-
-    @FXML
-    private JFXButton btDash = new JFXButton();
-
-    @FXML
-    private JFXButton btInventory = new JFXButton();
-
-    @FXML
-    private JFXButton btMenu = new JFXButton();
-
-    @FXML
-    private AnchorPane dash_form = new AnchorPane();
-    @FXML
-    private AnchorPane inventor_form;
-
-
-
-    public void switchWin(ActionEvent e) {
-        if (e.getSource() == btDash){
-            System.out.println("Dash Form") ;
-            dash_form.setVisible(true);
-            inventor_form.setVisible(false);
-        } else if (e.getSource() == btInventory){
-            System.out.println("Inventor Form") ;
-            dash_form.setVisible(false);
-            inventor_form.setVisible(true);
+            showAlert("Error", "An error occurred: " + e.getMessage());
         }
     }
 
@@ -138,5 +99,3 @@ public class LoginController extends Application {
         launch(args);
     }
 }
-
-
