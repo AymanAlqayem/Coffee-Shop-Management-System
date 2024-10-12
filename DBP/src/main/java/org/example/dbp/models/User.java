@@ -3,16 +3,16 @@ package org.example.dbp.models;
 public class User {
     private String userName;
     private String pass;
-    private String role;
+//    private String role;
 
     public User() {
 
     }
 
-    public User(String userName, String pass, String role) {
+    public User(String userName, String pass) {
         this.userName = userName;
         this.pass = pass;
-        this.role = role;
+//        this.role = role;
     }
 
     public String getUserName() {

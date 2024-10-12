@@ -22,7 +22,7 @@ public class UserRepository {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    user = new User(resultSet.getString("userName"), resultSet.getString("pass"), resultSet.getString("role"));
+                    user = new User(resultSet.getString("user_name"), resultSet.getString("pass"));
                 }
             }
 
