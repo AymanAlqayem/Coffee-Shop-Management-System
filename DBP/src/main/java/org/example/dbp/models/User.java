@@ -1,16 +1,18 @@
-package org.example.dbp;
+package org.example.dbp.models;
 
 public class User {
     private String userName;
     private String pass;
+    private String role;
 
     public User() {
 
     }
 
-    public User(String userName, String pass) {
+    public User(String userName, String pass, String role) {
         this.userName = userName;
         this.pass = pass;
+        this.role = role;
     }
 
     public String getUserName() {
