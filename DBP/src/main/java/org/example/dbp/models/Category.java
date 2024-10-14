@@ -16,6 +16,14 @@ public class Category {
         this.categoryName = categoryName;
         this.items = items;
     }
+    public Category( String categoryName , ArrayList<Item> items) {
+        this.categoryName = categoryName;
+        this.items = items;
+    }
+    public Category( String categoryName) {
+        this.categoryName = categoryName;
+        items = new ArrayList<>();
+    }
 
     public String getCategoryName() {
         return categoryName;
