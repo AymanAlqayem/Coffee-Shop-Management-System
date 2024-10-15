@@ -5,6 +5,7 @@ module org.example.dbp {
     requires com.dlsc.formsfx;
     requires java.sql;
     requires com.jfoenix;
+    requires jdk.jdi;
 
     opens org.example.dbp to javafx.fxml;
     exports org.example.dbp;

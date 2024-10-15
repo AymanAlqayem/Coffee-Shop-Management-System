@@ -9,6 +9,10 @@ public class Item {
 
     public Item(){}
 
+    public Item(String itemName) {
+        this.itemName = itemName;
+    }
+
     public Item(int itemId , String itemName, double price, int inventoryId, int categoryId) {
         this.itemId = itemId;
         this.itemName = itemName;
