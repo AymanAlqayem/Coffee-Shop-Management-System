@@ -20,6 +20,12 @@ public class Item {
         this.inventoryId = inventoryId;
         this.categoryId = categoryId;
     }
+    public Item(String itemName, double price, int inventoryId, int categoryId) {
+        this.itemName = itemName;
+        this.price = price;
+        this.inventoryId = inventoryId;
+        this.categoryId = categoryId;
+    }
 
     public String getItemName() {
         return itemName;

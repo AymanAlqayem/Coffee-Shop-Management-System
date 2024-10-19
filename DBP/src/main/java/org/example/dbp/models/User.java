@@ -9,24 +9,36 @@ public class User {
     private String pass;
 
 
-    public User() {
-
-    }
-
-    public User(String userName, String pass) {
-        this.userName = userName;
-        this.pass = pass;
-//        this.role = role;
-    }
-
-    public User(String userName, String role, String hire_date, String email, String salary, String pass) {
-        this.userName = userName;
+    public User(int id, String name, String role, String hire_date, String email, String salary, String pass) {
+        this.userName = name;
         this.role = role;
         this.hire_date = hire_date;
         this.email = email;
         this.salary = salary;
         this.pass = pass;
     }
+
+//    public User(String userName, String pass, String role) {
+//        this.userName = userName;
+//        this.pass = pass;
+//        this.role = role;
+//
+//    }
+//
+//    public User(String userName, String pass) {
+//        this.userName = userName;
+//        this.pass = pass;
+////        this.role = role;
+//    }
+//
+//    public User(String userName, String role, String hire_date, String email, String salary, String pass) {
+//        this.userName = userName;
+//        this.role = role;
+//        this.hire_date = hire_date;
+//        this.email = email;
+//        this.salary = salary;
+//        this.pass = pass;
+//    }
 
     public String getUserName() {
         return userName;

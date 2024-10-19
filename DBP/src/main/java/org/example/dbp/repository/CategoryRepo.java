@@ -60,11 +60,11 @@ public class CategoryRepo {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(categories);
+//        System.out.println(categories);
         return categories;
     }
 
-//    public static void addCategory(Category category) {
+    //    public static void addCategory(Category category) {
 //        String query = "insert into category(category_name) values(?)";
 //        try (Connection connection = DataBase.getDBConnection()) {
 //            for (int i = 0; i < categories.size(); i++) {
@@ -81,26 +81,28 @@ public class CategoryRepo {
 //            e.printStackTrace();
 //        }
 //    }
-public static void addCategory(Category category) {
-    String query = "INSERT INTO category (category_name) " +
-            "SELECT ? WHERE NOT EXISTS (SELECT 1 FROM category WHERE category_name = ?)";
+    public static void addCategory(Category category) {
+        String query = "INSERT INTO category (category_name) " +
+                "SELECT ? WHERE NOT EXISTS (SELECT 1 FROM category WHERE category_name = ?)";
 
-    try (Connection connection = DataBase.getDBConnection()) {
-        PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, category.getCategoryName());
-        statement.setString(2, category.getCategoryName());
-        statement.executeUpdate();
+        try (Connection connection = DataBase.getDBConnection()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, category.getCategoryName());
+            statement.setString(2, category.getCategoryName());
+            statement.executeUpdate();
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-}
 
 
-    public void addItemToCategory(Item item, Category category) {
-        String query = "insert into item(item_name,price,inventory_id, category_id , ) values(?,?,?,?)";
+    public static void addItemToCategory(Category category, Item item) {
+        String query = "insert into item(item_name,price,inventory_id, category_id) values(?,?,?,?)";
+
         for (int i = 0; i < category.getItems().size(); i++) {
             if (item.getItemName().equals(category.getItems().get(i).getItemId())) {
+                System.out.println("Item exist + ...........");
                 return;
             }
         }
@@ -114,11 +116,28 @@ public static void addCategory(Category category) {
             statement.setInt(4, item.getCategoryId());
 
             statement.executeUpdate();
+            System.out.println("item added");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    public static boolean isItemInDatabase(String itemName) {
+        String query = "SELECT COUNT(item_name) FROM item WHERE item_name = ?";
+
+        try (Connection conn = DataBase.getDBConnection();
+             PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setString(1, itemName);
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0; // Returns true if count > 0
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
 
     public static void main(String[] args) {

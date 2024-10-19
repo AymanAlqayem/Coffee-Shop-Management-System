@@ -53,7 +53,14 @@ public class LoginController extends Application {
         if (user == null) {
             showAlert("Login Failed", "Invalid username or password.");
         } else {
-            // Later, check role...
+
+//            if (user.getRole().equalsIgnoreCase("admin")) {
+//
+//
+//            } else if (user.getRole().equalsIgnoreCase("Cashier")) {
+//
+//
+//            }
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/admin.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
