@@ -7,10 +7,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -78,30 +81,54 @@ public class MenuController extends Application {
     }
 
     public void loadMenuData() {
-        // Fetch categories from the repository
-        ArrayList<Category> categories = CategoryRepo.getCategories();
-        // Iterate over categories
+        ArrayList<Category> categories = CategoryRepo.getCategories();  // Fetch categories from the repository.
+
+        // Iterate over categories.
         for (int i = 0; i < categories.size(); i++) {
             TitledPane titledPane = new TitledPane(); // Create a new TitledPane for each category.
             titledPane.setText(categories.get(i).getCategoryName());
             titledPane.setStyle("-fx-font-size: 15px");
 
-            VBox vbox = new VBox(10);// VBox to store items.
+            VBox base = new VBox(2);// VBox to each item VBox.
+
+            base.setPadding(new Insets(4, 4, 4, 4));
+            base.setStyle("-fx-background-color: Black;");
 
             final Category currentCategory = categories.get(i);
             int invId = currentCategory.getItems().isEmpty() ? 0 : currentCategory.getItems().get(0).getInventoryId();
 
-            // Iterate over the items in the current category.
+            /**
+             *  Iterate over the items in the current category.
+             * */
             for (int j = 0; j < currentCategory.getItems().size(); j++) {
 
                 final Item currentItem = currentCategory.getItems().get(j);
                 invId = currentItem.getInventoryId();
 
-                // Create a button for each item with its name and price
-                JFXButton btItem = new JFXButton(currentItem.getItemName() + " " + currentItem.getPrice() + " - NIS");
-                btItem.setStyle("-fx-background-radius: 90");
-                btItem.setFont(Font.font("Times New Roman", 19));
-                vbox.getChildren().add(btItem);
+
+                VBox itemVBox = new VBox(10);
+
+                Label lbItemName = new Label(currentItem.getItemName());
+                Label lbItmePrice = new Label(currentItem.getPrice() +" NIS");
+                JFXButton btItem = new JFXButton();
+
+                lbItemName.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 20px; -fx-text-fill: #090808;");
+                lbItmePrice.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 16px; -fx-text-fill: #e85c0d;");
+
+
+                btItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ");
+
+                Image image = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\AddForMenu.png");
+                ImageView imageView = new ImageView(image);
+
+                btItem.setGraphic(imageView);
+
+                itemVBox.getChildren().addAll(lbItemName , lbItmePrice ,btItem);
+
+                itemVBox.setStyle("-fx-background-color: #f0f0f0;");
+                itemVBox.setPadding(new Insets(10, 10, 10, 10));
+
+                base.getChildren().add(itemVBox);
 
                 /**
                  * make actions when the item button clicked.
@@ -142,36 +169,48 @@ public class MenuController extends Application {
                 });
             }
 
+            VBox addDeleteItemVBox = new VBox(2);
+            addDeleteItemVBox.setStyle("-fx-background-color: #f0f0f0;");
+
+
             // Add a button to allow adding new items.
             JFXButton btAddNewItem = new JFXButton("Add new Item");
-//            btAddNewItem.setStyle("-fx-background-radius: 90");
-            btAddNewItem.setStyle("-fx-background-radius: 90; -fx-font-weight: bold;");
-            btAddNewItem.setFont(Font.font("Times New Roman", 19));
+            btAddNewItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ;-fx-font-weight: bold ");
 
             // Add a button to allow delete an existing items.
             JFXButton btDeleteItem = new JFXButton("Delete an item");
-            btDeleteItem.setStyle("-fx-background-radius: 90; -fx-font-weight: bold;");
-            btDeleteItem.setFont(Font.font("Times New Roman", 19));
-            vbox.getChildren().addAll(btAddNewItem, btDeleteItem);
+            btDeleteItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ;-fx-font-weight: bold ");
+            addDeleteItemVBox.getChildren().addAll(btAddNewItem,btDeleteItem);
+
+
+            base.getChildren().add(addDeleteItemVBox);
+
+;
+//
+//            // Add a button to allow delete an existing items.
+//            JFXButton btDeleteItem = new JFXButton("Delete an item");
+//            btDeleteItem.setStyle("-fx-background-radius: 90; -fx-font-weight: bold;");
+//            btDeleteItem.setFont(Font.font("Times New Roman", 19));
+//            vbox.getChildren().addAll(btAddNewItem, btDeleteItem);
 
             /**
              * make actions to the added new item button.
              * */
-            final int finalInvId = invId;
-            btAddNewItem.setOnAction(e -> {
-                addItem(currentCategory, finalInvId);
-            });
+//            final int finalInvId = invId;
+//            btAddNewItem.setOnAction(e -> {
+//                addItem(currentCategory, finalInvId);
+//            });
 
             /**
              * make actions for delete button.
              * */
-
-            btDeleteItem.setOnAction(e -> {
-                deleteItem(currentCategory);
-            });
+//
+//            btDeleteItem.setOnAction(e -> {
+//                deleteItem(currentCategory);
+//            });
 
             // Wrap the VBox in a ScrollPane to enable scrolling for long lists
-            ScrollPane scrollPane = new ScrollPane(vbox);
+            ScrollPane scrollPane = new ScrollPane(base);
             scrollPane.setFitToWidth(true); // Make the ScrollPane width match the VBox
 
             // Set the ScrollPane as the content of the TitledPane
@@ -227,7 +266,7 @@ public class MenuController extends Application {
 
 
     public void deleteItemFromCategory(Category category, Item itemToDelete) {
-        // Iterate over the panes in the accordion using a normal for loop
+
         for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
             TitledPane titledPane = menuAccordion.getPanes().get(i);
             if (titledPane.getText().equals(category.getCategoryName())) {
@@ -237,9 +276,8 @@ public class MenuController extends Application {
 
                 // Check if the ScrollPane's content is already a VBox
                 if (scrollPane.getContent() instanceof VBox) {
-                    vbox = (VBox) scrollPane.getContent(); // Retrieve the existing VBox
+                    vbox = (VBox) scrollPane.getContent();
 
-                    // Use a for loop to remove the button corresponding to the item to delete
                     for (int j = 0; j < vbox.getChildren().size(); j++) {
                         Node node = vbox.getChildren().get(j);
 
@@ -252,6 +290,8 @@ public class MenuController extends Application {
                                 vbox.getChildren().remove(j);
                                 // Adjust the index to avoid skipping the next item
                                 j--;
+
+                                //remove item from the UI
                             }
                         }
                     }
@@ -259,7 +299,7 @@ public class MenuController extends Application {
                     // After removing the item from the UI, delete it from the database as well
 //                    CategoryRepo.deleteItemFromCategory(category, itemToDelete);
                 }
-                break; // Break after finding the category to avoid unnecessary iterations
+                break;
             }
         }
     }
@@ -473,7 +513,7 @@ public class MenuController extends Application {
                 }
 
                 // Create a button for the new item with its name and price
-                JFXButton newItemButton = new JFXButton(newItem.getItemName() + " " + newItem.getPrice() + " - NIS");
+                JFXButton newItemButton = new JFXButton(newItem.getItemName() + "   " + newItem.getPrice() + " - NIS");
                 newItemButton.setStyle("-fx-background-radius: 90");
                 newItemButton.setFont(Font.font("Times New Roman", 19));
 

@@ -116,7 +116,6 @@ public class CategoryRepo {
             statement.setInt(4, item.getCategoryId());
 
             statement.executeUpdate();
-            System.out.println("item added");
         } catch (SQLException e) {
             e.printStackTrace();
         }
