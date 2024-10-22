@@ -4,21 +4,22 @@ import org.example.dbp.db.DataBase;
 import org.example.dbp.models.Category;
 import org.example.dbp.models.Item;
 
+import javax.imageio.ImageIO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class CategoryRepo {
 
     private static ArrayList<Category> categories = new ArrayList<>();
 
+    /**
+     * getCategories method that will get all categories with its items from the DB.
+     * */
+
     public static ArrayList<Category> getCategories() {
-//        ArrayList<Category> categories = new ArrayList<>();
-//        categories = new ArrayList<>();
         String query = "select * from category inner join item on category_id = category.id";
 
         try (Connection connection = DataBase.getDBConnection();
@@ -60,7 +61,6 @@ public class CategoryRepo {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-//        System.out.println(categories);
         return categories;
     }
 
@@ -96,18 +96,13 @@ public class CategoryRepo {
         }
     }
 
+    /**
+     * addItem method that will add the item into DB.
+     * */
 
-    public static void addItemToCategory(Category category, Item item) {
+    public static void addItem(Category category, Item item) {
         String query = "insert into item(item_name,price,inventory_id, category_id) values(?,?,?,?)";
 
-        for (int i = 0; i < category.getItems().size(); i++) {
-            if (item.getItemName().equals(category.getItems().get(i).getItemId())) {
-                System.out.println("Item exist + ...........");
-                return;
-            }
-        }
-
-        //Add the item.
         try (Connection conn = DataBase.getDBConnection();
              PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, item.getItemName());
@@ -121,6 +116,36 @@ public class CategoryRepo {
         }
     }
 
+    /**
+     * deleteItem method that will delete the item from DB.
+     * */
+
+    public static void deleteItem(String itemName) {
+        String query = "delete from item where item_name = ?";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, itemName);
+
+
+            int rowsAffected = statement.executeUpdate();
+
+            // Optionally, you can check if the deletion was successful
+            if (rowsAffected > 0) {
+                System.out.println("Item deleted successfully.");
+            } else {
+                System.out.println("No item found with the specified ID.");
+            }
+
+        } catch (SQLException e) {
+        }
+    }
+
+
+    /**
+     * isItemInDatabase method to check if the item already exists in the DB
+     * */
     public static boolean isItemInDatabase(String itemName) {
         String query = "SELECT COUNT(item_name) FROM item WHERE item_name = ?";
 
@@ -136,14 +161,5 @@ public class CategoryRepo {
             e.printStackTrace();
         }
         return false;
-    }
-
-
-    public static void main(String[] args) {
-        getCategories();
-        /////////////////////////////////////////////
-        addCategory(new Category("hot drinks"));
-        System.out.println("------------------------------------------------------");
-        getCategories();
     }
 }

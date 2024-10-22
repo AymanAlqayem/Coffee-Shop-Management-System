@@ -6,6 +6,7 @@ module org.example.dbp {
     requires java.sql;
     requires com.jfoenix;
     requires jdk.jdi;
+    requires java.desktop;
 
     opens org.example.dbp to javafx.fxml;
     exports org.example.dbp;

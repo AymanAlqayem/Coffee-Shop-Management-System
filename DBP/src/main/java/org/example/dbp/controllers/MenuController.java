@@ -8,12 +8,14 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
@@ -64,9 +66,6 @@ public class MenuController extends Application {
             stage.setTitle("Menu");
             stage.setScene(scene);
             stage.show();
-//            loadMenuData();
-//            addNewCategory(); // Setup the button action here
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,6 +79,10 @@ public class MenuController extends Application {
 
     }
 
+    /**
+     * loadMenuData method that will load all categories and items.
+     * */
+
     public void loadMenuData() {
         ArrayList<Category> categories = CategoryRepo.getCategories();  // Fetch categories from the repository.
 
@@ -89,7 +92,7 @@ public class MenuController extends Application {
             titledPane.setText(categories.get(i).getCategoryName());
             titledPane.setStyle("-fx-font-size: 15px");
 
-            VBox base = new VBox(2);// VBox to each item VBox.
+            VBox base = new VBox(2);// VBox contains HBoxes of items.
 
             base.setPadding(new Insets(4, 4, 4, 4));
             base.setStyle("-fx-background-color: Black;");
@@ -103,13 +106,19 @@ public class MenuController extends Application {
             for (int j = 0; j < currentCategory.getItems().size(); j++) {
 
                 final Item currentItem = currentCategory.getItems().get(j);
+
                 invId = currentItem.getInventoryId();
 
+                HBox hBox = new HBox(10);// hold item VBox and trash.
+                hBox.setAlignment(Pos.CENTER_LEFT);
 
                 VBox itemVBox = new VBox(10);
+                itemVBox.setAlignment(Pos.TOP_LEFT);
+                itemVBox.setPrefWidth(250);
+                itemVBox.setPadding(new Insets(10, 10, 10, 10));
 
                 Label lbItemName = new Label(currentItem.getItemName());
-                Label lbItmePrice = new Label(currentItem.getPrice() +" NIS");
+                Label lbItmePrice = new Label(currentItem.getPrice() + " NIS");
                 JFXButton btItem = new JFXButton();
 
                 lbItemName.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 20px; -fx-text-fill: #090808;");
@@ -123,12 +132,32 @@ public class MenuController extends Application {
 
                 btItem.setGraphic(imageView);
 
-                itemVBox.getChildren().addAll(lbItemName , lbItmePrice ,btItem);
+                itemVBox.getChildren().addAll(lbItemName, lbItmePrice, btItem);
 
                 itemVBox.setStyle("-fx-background-color: #f0f0f0;");
                 itemVBox.setPadding(new Insets(10, 10, 10, 10));
 
-                base.getChildren().add(itemVBox);
+                    ///.................................................
+
+
+                Image trashImage = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\trash.png");
+                ImageView trashImageView = new ImageView(trashImage);
+
+
+                VBox trashVBox = new VBox();
+                JFXButton btTrash = new JFXButton();
+                btTrash.setStyle("-fx-background-radius: 90;");
+
+                btTrash.setGraphic(trashImageView);
+
+                trashVBox.getChildren().add(btTrash);
+
+                trashVBox.setAlignment(Pos.CENTER_LEFT);
+
+                hBox.getChildren().addAll(itemVBox, trashVBox);
+                hBox.setStyle("-fx-background-color: #f0f0f0;");
+
+                base.getChildren().add(hBox);
 
                 /**
                  * make actions when the item button clicked.
@@ -177,37 +206,29 @@ public class MenuController extends Application {
             JFXButton btAddNewItem = new JFXButton("Add new Item");
             btAddNewItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ;-fx-font-weight: bold ");
 
-            // Add a button to allow delete an existing items.
+            // Add a button to allow deleting an existing items.
             JFXButton btDeleteItem = new JFXButton("Delete an item");
             btDeleteItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ;-fx-font-weight: bold ");
-            addDeleteItemVBox.getChildren().addAll(btAddNewItem,btDeleteItem);
+            addDeleteItemVBox.getChildren().addAll(btAddNewItem, btDeleteItem);
 
 
             base.getChildren().add(addDeleteItemVBox);
 
-;
-//
-//            // Add a button to allow delete an existing items.
-//            JFXButton btDeleteItem = new JFXButton("Delete an item");
-//            btDeleteItem.setStyle("-fx-background-radius: 90; -fx-font-weight: bold;");
-//            btDeleteItem.setFont(Font.font("Times New Roman", 19));
-//            vbox.getChildren().addAll(btAddNewItem, btDeleteItem);
 
             /**
              * make actions to the added new item button.
              * */
-//            final int finalInvId = invId;
-//            btAddNewItem.setOnAction(e -> {
-//                addItem(currentCategory, finalInvId);
-//            });
+            final int finalInvId = invId;
+            btAddNewItem.setOnAction(e -> {
+                addNewItem(currentCategory, finalInvId);
+            });
 
             /**
              * make actions for delete button.
              * */
-//
-//            btDeleteItem.setOnAction(e -> {
-//                deleteItem(currentCategory);
-//            });
+            btDeleteItem.setOnAction(e -> {
+                deleteItem(currentCategory);
+            });
 
             // Wrap the VBox in a ScrollPane to enable scrolling for long lists
             ScrollPane scrollPane = new ScrollPane(base);
@@ -219,93 +240,10 @@ public class MenuController extends Application {
         }
     }
 
-    public void deleteItem(Category category) {
-        ObservableList<String> itemNames = FXCollections.observableArrayList();
-
-        for (int i = 0; i < category.getItems().size(); i++) {
-            itemNames.add(category.getItems().get(i).getItemName());
-        }
-
-        // Show a dialog to select an item to delete
-        ChoiceDialog<String> dialog = new ChoiceDialog<>(itemNames.get(0), itemNames);
-        dialog.setTitle("Delete Item");
-        dialog.setHeaderText("Select an item to delete");
-        dialog.setContentText("Item:");
-
-        Optional<String> result = dialog.showAndWait();
-        result.ifPresent(itemNameToDelete -> {
-            // Find the corresponding item in the category
-            Item itemToDelete = null;
-            for (Item item : category.getItems()) {
-                if (item.getItemName().equals(itemNameToDelete)) {
-                    itemToDelete = item;
-                    break;
-                }
-            }
-
-            // Show confirmation alert
-            if (itemToDelete != null) {
-                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                confirmAlert.setTitle("Confirm Deletion");
-                confirmAlert.setHeaderText("Are you sure you want to delete this item?");
-                confirmAlert.setContentText("Item: " + itemToDelete.getItemName());
-
-                Optional<ButtonType> confirmationResult = confirmAlert.showAndWait();
-                if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
-                    deleteItemFromCategory(category, itemToDelete);
-
-                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-                    successAlert.setTitle("Item Deleted");
-                    successAlert.setHeaderText(null);
-                    successAlert.setContentText("Item '" + itemToDelete.getItemName() + "' deleted successfully.");
-                    successAlert.showAndWait();
-                }
-            }
-        });
-    }
-
-
-    public void deleteItemFromCategory(Category category, Item itemToDelete) {
-
-        for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
-            TitledPane titledPane = menuAccordion.getPanes().get(i);
-            if (titledPane.getText().equals(category.getCategoryName())) {
-                // Get the ScrollPane that holds the VBox
-                ScrollPane scrollPane = (ScrollPane) titledPane.getContent();
-                VBox vbox;
-
-                // Check if the ScrollPane's content is already a VBox
-                if (scrollPane.getContent() instanceof VBox) {
-                    vbox = (VBox) scrollPane.getContent();
-
-                    for (int j = 0; j < vbox.getChildren().size(); j++) {
-                        Node node = vbox.getChildren().get(j);
-
-                        if (node instanceof JFXButton) {
-                            JFXButton button = (JFXButton) node;
-
-                            // Check if the button text contains the item name to delete
-                            if (button.getText().contains(itemToDelete.getItemName())) {
-                                // Remove the button from the VBox
-                                vbox.getChildren().remove(j);
-                                // Adjust the index to avoid skipping the next item
-                                j--;
-
-                                //remove item from the UI
-                            }
-                        }
-                    }
-
-                    // After removing the item from the UI, delete it from the database as well
-//                    CategoryRepo.deleteItemFromCategory(category, itemToDelete);
-                }
-                break;
-            }
-        }
-    }
-
-
-    public void addItem(Category category, int inv_id) {
+    /**
+     * addNewItem method that will add the new item into both DB and the UI.
+     * */
+    public void addNewItem(Category category, int inv_id) {
         // First dialog to capture the item name
         TextInputDialog itemDialog = new TextInputDialog("");
         itemDialog.setTitle("New Item");
@@ -347,10 +285,10 @@ public class MenuController extends Application {
                         Item newItem = new Item(itemName, price, inv_id, category.getCategoryId());
 
                         // Add item to the database
-                        CategoryRepo.addItemToCategory(category, newItem);
+                        CategoryRepo.addItem(category, newItem);
 
                         // Add the item to the UI
-                        addItemToCategoryDisplay(category, newItem);
+                        addItemToUI(category, newItem);
 
                         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
                         successAlert.setTitle("Item Added");
@@ -368,6 +306,145 @@ public class MenuController extends Application {
             }
         });
     }
+
+
+    /**
+     * addItemToCategory method that will add the new item into UI.
+     * */
+    public void addItemToUI(Category category, Item newItem) {
+        // Iterate over the panes in the accordion using a normal for loop
+        for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
+            TitledPane titledPane = menuAccordion.getPanes().get(i);
+            if (titledPane.getText().equals(category.getCategoryName())) {
+                // Get the ScrollPane that holds the VBox
+                ScrollPane scrollPane = (ScrollPane) titledPane.getContent();
+                VBox base;
+
+                // Check if the ScrollPane's content is already a VBox
+                if (scrollPane.getContent() instanceof VBox) {
+                    base = (VBox) scrollPane.getContent(); // Retrieve the existing VBox
+                } else {
+                    // Create a new VBox and set it as the content of the ScrollPane
+                    base = new VBox(10);
+                    scrollPane.setContent(base);
+                }
+
+                VBox vBox = new VBox(10);
+
+                Label lbItemName = new Label(newItem.getItemName());
+                Label lbItmePrice = new Label(newItem.getPrice() + " NIS");
+                JFXButton btItem = new JFXButton();
+
+                lbItemName.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 20px; -fx-text-fill: #090808;");
+                lbItmePrice.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 16px; -fx-text-fill: #e85c0d;");
+
+
+                btItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ");
+
+                Image image = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\AddForMenu.png");
+                ImageView imageView = new ImageView(image);
+
+                btItem.setGraphic(imageView);
+
+                vBox.getChildren().addAll(lbItemName, lbItmePrice, btItem);
+                vBox.setStyle("-fx-background-color: #f0f0f0;");
+                vBox.setPadding(new Insets(10, 10, 10, 10));
+
+                base.getChildren().add(0,vBox);
+                break;
+            }
+        }
+    }
+
+
+    public void deleteItem(Category category) {
+        ObservableList<String> itemNames = FXCollections.observableArrayList();
+
+        for (int i = 0; i < category.getItems().size(); i++) {
+            itemNames.add(category.getItems().get(i).getItemName());
+        }
+
+        // Show a dialog to select an item to delete
+        ChoiceDialog<String> dialog = new ChoiceDialog<>(itemNames.get(0), itemNames);
+        dialog.setTitle("Delete Item");
+        dialog.setHeaderText("Select an item to delete");
+        dialog.setContentText("Item:");
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(itemNameToDelete -> {
+            // Find the corresponding item in the category
+            Item itemToDelete = null;
+
+            for (int i = 0; i < category.getItems().size(); i++) {
+                if (category.getItems().get(i).getItemName().equalsIgnoreCase(itemNameToDelete)){
+                    itemToDelete = category.getItems().get(i);
+                }
+            }
+
+            // Show confirmation alert.
+            if (itemToDelete != null) {
+                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                confirmAlert.setTitle("Confirm Deletion");
+                confirmAlert.setHeaderText("Are you sure you want to delete this item?");
+                confirmAlert.setContentText("Item: " + itemToDelete.getItemName());
+
+                Optional<ButtonType> confirmationResult = confirmAlert.showAndWait();
+                if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
+
+                    //delete the item from UI
+                    deleteItemFromUI(category, itemToDelete);
+
+                    //delete item from DB.
+                    CategoryRepo.deleteItem(itemToDelete.getItemName());
+
+                    //Update the choice Box
+                    category.getItems().remove(itemToDelete); // Remove item from category
+                    itemNames.remove(itemToDelete.getItemName()); // Remove item from the ObservableList
+
+                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+                    successAlert.setTitle("Item Deleted");
+                    successAlert.setHeaderText(null);
+                    successAlert.setContentText("Item '" + itemToDelete.getItemName() + "' deleted successfully.");
+                    successAlert.showAndWait();
+                }
+            }
+        });
+    }
+
+
+    /**
+     * deleteItemFromUI method that will remove the item from the UI.
+     * */
+    public void deleteItemFromUI(Category category, Item itemToDelete) {
+        for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
+            TitledPane titledPane = menuAccordion.getPanes().get(i);
+            if (titledPane.getText().equals(category.getCategoryName())) {
+                // Get the ScrollPane that holds the VBox
+                ScrollPane scrollPane = (ScrollPane) titledPane.getContent();
+                VBox base; // base contains VBoxes
+
+                // Check if the ScrollPane's content is already a VBox
+                if (scrollPane.getContent() instanceof VBox) {
+                    base = (VBox) scrollPane.getContent();
+
+                    // Iterate through the children of the VBox to find the item
+                    for (int j = 0; j < base.getChildren().size(); j++) {
+                        VBox itemVBox = (VBox) base.getChildren().get(j);
+
+                        Label lbItemName = (Label) itemVBox.getChildren().get(0);
+                        if (lbItemName.getText().equals(itemToDelete.getItemName())) {
+                            // Remove the item from the VBox
+                            base.getChildren().remove(j);
+                            break;
+                        }
+                    }
+                }
+                return;
+            }
+        }
+    }
+
+
 
 
     public void addNewCategory() {
@@ -493,75 +570,6 @@ public class MenuController extends Application {
         }
         return false;
     }
-
-    public void addItemToCategoryDisplay(Category category, Item newItem) {
-        // Iterate over the panes in the accordion using a normal for loop
-        for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
-            TitledPane titledPane = menuAccordion.getPanes().get(i);
-            if (titledPane.getText().equals(category.getCategoryName())) {
-                // Get the ScrollPane that holds the VBox
-                ScrollPane scrollPane = (ScrollPane) titledPane.getContent();
-                VBox vbox;
-
-                // Check if the ScrollPane's content is already a VBox
-                if (scrollPane.getContent() instanceof VBox) {
-                    vbox = (VBox) scrollPane.getContent(); // Retrieve the existing VBox
-                } else {
-                    // Create a new VBox and set it as the content of the ScrollPane
-                    vbox = new VBox(10); // Adjust spacing as needed
-                    scrollPane.setContent(vbox);
-                }
-
-                // Create a button for the new item with its name and price
-                JFXButton newItemButton = new JFXButton(newItem.getItemName() + "   " + newItem.getPrice() + " - NIS");
-                newItemButton.setStyle("-fx-background-radius: 90");
-                newItemButton.setFont(Font.font("Times New Roman", 19));
-
-                // Add action for the new item button
-                newItemButton.setOnMouseClicked(event -> {
-                    TextInputDialog dialog = new TextInputDialog("1");
-                    dialog.setTitle("Item Purchase");
-                    dialog.setHeaderText("Enter the number of items to purchase");
-                    dialog.setContentText("Quantity:");
-
-                    // Show the dialog and capture the user's input
-                    Optional<String> result = dialog.showAndWait();
-
-                    result.ifPresent(quantity -> {
-                        try {
-                            int qty = Integer.parseInt(quantity); // Parse the input to an integer
-                            if (qty > 0) {
-                                // Process the quantity entered by the user (e.g., add to bill)
-                                System.out.println("User wants to purchase " + qty + " of " + newItem.getItemName());
-                                // Handle logic to add the selected item and quantity to the bill
-                            } else {
-                                // Show an error alert if the user entered a non-positive number
-                                Alert alert = new Alert(Alert.AlertType.ERROR);
-                                alert.setTitle("Invalid Quantity");
-                                alert.setHeaderText(null);
-                                alert.setContentText("Please enter a valid quantity greater than 0.");
-                                alert.showAndWait();
-                            }
-                        } catch (NumberFormatException e) {
-                            // Show an error alert if the user entered an invalid number
-                            Alert alert = new Alert(Alert.AlertType.ERROR);
-                            alert.setTitle("Invalid Input");
-                            alert.setHeaderText(null);
-                            alert.setContentText("Please enter a valid number.");
-                            alert.showAndWait();
-                        }
-                    });
-                });
-
-                // Add the new item button at the top of the VBox
-                vbox.getChildren().add(0, newItemButton); // Add new item button at the top
-
-                // Break after adding the item to avoid unnecessary iterations
-                break;
-            }
-        }
-    }
-
 
     public static void main(String[] args) {
         launch(args);
