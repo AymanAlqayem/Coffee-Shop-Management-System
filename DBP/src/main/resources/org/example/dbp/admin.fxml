@@ -1,61 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.chart.AreaChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="687.0" prefWidth="894.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.LoginController">
+<AnchorPane prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.AdminController">
    <children>
       <AnchorPane layoutX="-2.0" prefHeight="687.0" prefWidth="210.0">
          <children>
-            <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="67.0" prefWidth="216.0" style="-fx-background-color: #40A578;">
+            <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="775.0" prefWidth="215.0" style="-fx-background-color: #050505;">
                <children>
-                  <ImageView fitHeight="57.0" fitWidth="74.0" layoutX="64.0" layoutY="5.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../CircleLogo.png" />
-                     </image>
-                  </ImageView>
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="-1.0" layoutY="66.0" prefHeight="622.0" prefWidth="215.0" style="-fx-background-color: #468585;">
-               <children>
-                  <JFXButton fx:id="btDash" layoutX="68.0" layoutY="121.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="DASHBOARD" />
-                  <JFXButton fx:id="btInventory" layoutX="68.0" layoutY="193.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="INVENTORY" />
-                  <JFXButton fx:id="btMenu" layoutX="68.0" layoutY="275.0" style="-fx-background-radius: 90;" text="MENU" />
-                  <JFXButton layoutX="68.0" layoutY="344.0" style="-fx-background-radius: 90;" text="CUSTOMERS" />
-                  <JFXButton layoutX="68.0" layoutY="405.0" style="-fx-background-radius: 90;" text="SIGN NEW EMPLOYEE" />
-                  <Label layoutX="7.0" layoutY="45.0" text="Welcom,">
+                  <JFXButton fx:id="btDash" layoutX="79.0" layoutY="144.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Dashboard" textFill="WHITE">
                      <font>
-                        <Font name="Bodoni MT" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="97.0" layoutY="572.0" text="Sign out">
+                        <Font name="Book Antiqua" size="17.0" />
+                     </font></JFXButton>
+                  <JFXButton fx:id="btInventory" layoutX="69.0" layoutY="218.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Inventory" textFill="WHITE">
                      <font>
                         <Font name="Book Antiqua" size="18.0" />
+                     </font></JFXButton>
+                  <JFXButton fx:id="btMenu" layoutX="83.0" layoutY="291.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Menu" textFill="WHITE">
+                     <font>
+                        <Font name="Book Antiqua" size="19.0" />
+                     </font></JFXButton>
+                  <JFXButton fx:id="btCustomers" layoutX="72.0" layoutY="355.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Customers" textFill="WHITE">
+                     <font>
+                        <Font name="Book Antiqua" size="16.0" />
+                     </font></JFXButton>
+                  <JFXButton fx:id="btAdd" layoutX="60.0" layoutY="463.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Add new Employee" textFill="WHITE">
+                     <font>
+                        <Font name="Book Antiqua" size="14.0" />
+                     </font></JFXButton>
+                  <JFXButton fx:id="btSignOut" layoutX="71.0" layoutY="712.0" onAction="#handleSignOut" prefHeight="38.0" prefWidth="98.0" style="-fx-background-radius: 90;" text="Sign out" textFill="WHITE">
+                     <font>
+                        <Font name="Book Antiqua" size="19.0" />
+                     </font>
+                  </JFXButton>
+                  <Label fx:id="lbName" layoutX="79.0" layoutY="28.0" prefHeight="38.0" prefWidth="120.0" text="User" textFill="WHITE">
+                     <font>
+                        <Font name="Bodoni MT" size="29.0" />
                      </font>
                   </Label>
-                  <ImageView fitHeight="38.0" fitWidth="50.0" layoutX="28.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="38.0" fitWidth="58.0" layoutX="22.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../user.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="18.0" layoutY="712.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../../signOut.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="lbName" layoutX="109.0" layoutY="41.0" prefHeight="38.0" prefWidth="98.0" text="Ayman">
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="18.0" layoutY="458.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../add.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../inventory.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="142.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../dashboard.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../userAdmin.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="352.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../customers.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="291.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../menu.png" />
+                     </image>
+                  </ImageView>
+                  <JFXButton fx:id="btCustomers1" layoutX="71.0" layoutY="409.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Employess" textFill="WHITE">
                      <font>
-                        <Font size="25.0" />
+                        <Font name="Book Antiqua" size="16.0" />
                      </font>
-                  </Label>
+                  </JFXButton>
+                  <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="18.0" layoutY="406.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../employess.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dash_form" layoutX="211.0" prefHeight="682.0" prefWidth="682.0" visible="false">
+      <AnchorPane fx:id="dash_form" layoutX="220.0" layoutY="1.0" prefHeight="727.0" prefWidth="1310.0" visible="false">
          <children>
-            <AnchorPane layoutX="10.0" layoutY="7.0" prefHeight="200.0" prefWidth="662.0" style="-fx-border-color: #468585;">
+            <AnchorPane layoutX="10.0" layoutY="7.0" prefHeight="200.0" prefWidth="1290.0" style="-fx-border-color: #468585;">
                <children>
-                  <AnchorPane layoutX="22.0" layoutY="11.0" prefHeight="170.0" prefWidth="184.0" style="-fx-background-color: #468585;">
+                  <AnchorPane layoutX="21.0" layoutY="7.0" prefHeight="178.0" prefWidth="296.0" style="-fx-background-color: #468585;">
                      <children>
                         <Label layoutX="25.0" layoutY="122.0" prefHeight="26.0" prefWidth="133.0" text="Number of customer">
                            <font>
@@ -74,7 +127,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="227.0" layoutY="14.0" prefHeight="164.0" prefWidth="196.0" style="-fx-background-color: #468585;">
+                  <AnchorPane layoutX="357.0" layoutY="6.0" prefHeight="178.0" prefWidth="296.0" style="-fx-background-color: #468585;">
                      <children>
                         <Label layoutX="39.0" layoutY="123.0" prefHeight="26.0" prefWidth="133.0" text="Today's income">
                            <font>
@@ -93,7 +146,7 @@
                         </Label>
                      </children>
                   </AnchorPane>
-                  <AnchorPane layoutX="444.0" layoutY="14.0" prefHeight="164.0" prefWidth="196.0" style="-fx-background-color: #468585;">
+                  <AnchorPane layoutX="691.0" layoutY="6.0" prefHeight="178.0" prefWidth="296.0" style="-fx-background-color: #468585;">
                      <children>
                         <Label layoutX="28.0" layoutY="124.0" prefHeight="26.0" prefWidth="133.0" text="Total incomes">
                            <font>
@@ -112,18 +165,107 @@
                         </Label>
                      </children>
                   </AnchorPane>
+                  <AnchorPane layoutX="1001.0" layoutY="6.0" prefHeight="178.0" prefWidth="274.0" style="-fx-background-color: #468585;">
+                     <children>
+                        <Label layoutX="28.0" layoutY="124.0" prefHeight="26.0" prefWidth="170.0" text="Number of sold product">
+                           <font>
+                              <Font name="Calisto MT" size="15.0" />
+                           </font>
+                        </Label>
+                        <Label layoutX="146.0" layoutY="49.0" prefHeight="26.0" prefWidth="38.0" text="0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="66.0" fitWidth="57.0" layoutX="14.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../../../shopping-cart.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </AnchorPane>
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="6.0" layoutY="217.0" prefHeight="458.0" prefWidth="669.0" style="-fx-border-color: #468585;" />
+            <AnchorPane layoutX="6.0" layoutY="217.0" prefHeight="458.0" prefWidth="1289.0" style="-fx-border-color: #468585;">
+               <children>
+                  <AnchorPane layoutX="14.0" layoutY="10.0" prefHeight="438.0" prefWidth="470.0">
+                     <children>
+                        <AreaChart layoutY="13.0" prefHeight="411.0" prefWidth="463.0" title="Income's chart">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </AreaChart>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane layoutX="656.0" layoutY="10.0" prefHeight="438.0" prefWidth="600.0">
+                     <children>
+                        <BarChart layoutX="14.0" prefHeight="438.0" prefWidth="742.0" title="Customer's chart" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="0.0">
+                          <xAxis>
+                            <CategoryAxis side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis side="LEFT" />
+                          </yAxis>
+                        </BarChart>
+                     </children>
+                  </AnchorPane>
+               </children></AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="inventor_form" layoutX="340.0" layoutY="52.0" prefHeight="495.0" prefWidth="509.0" visible="false">
+      <AnchorPane fx:id="add_form" layoutX="212.0" layoutY="35.0" prefHeight="689.0" prefWidth="682.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="invent" fitHeight="426.0" fitWidth="389.0" layoutX="43.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../CircleLogo.png" />
-               </image>
-            </ImageView>
+            <AnchorPane prefHeight="782.0" prefWidth="1301.0">
+               <children>
+                  <Label layoutX="33.0" layoutY="33.0" prefHeight="38.0" prefWidth="366.0" text="Add new Admin or  Employee">
+                     <font>
+                        <Font name="Bell MT" size="26.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="33.0" layoutY="129.0" prefHeight="47.0" prefWidth="80.0" text="Name">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="23.0" />
+                     </font>
+                  </Label>
+                  <TextField layoutX="121.0" layoutY="141.0" prefHeight="34.0" prefWidth="230.0" style="-fx-background-color: white; -fx-border-color: Black; -fx-text-inner-color: Black;" />
+                  <Label layoutX="33.0" layoutY="215.0" prefHeight="47.0" prefWidth="80.0" text="Role">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="23.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="33.0" layoutY="298.0" prefHeight="47.0" prefWidth="80.0" text="Email">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="23.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="33.0" layoutY="386.0" prefHeight="38.0" prefWidth="120.0" text="Hire date">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="23.0" />
+                     </font>
+                  </Label>
+                  <Label layoutX="33.0" layoutY="459.0" prefHeight="38.0" prefWidth="120.0" text="Salary">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="23.0" />
+                     </font>
+                  </Label>
+                  <TextField layoutX="147.0" layoutY="461.0" prefHeight="36.0" prefWidth="202.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
+                  <TextField layoutX="121.0" layoutY="304.0" prefHeight="36.0" prefWidth="230.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: black;" />
+                  <JFXComboBox fx:id="comboBox" layoutX="121.0" layoutY="219.0" onAction="#comboOptions" prefHeight="38.0" prefWidth="230.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
+                  <JFXButton layoutX="128.0" layoutY="663.0" prefHeight="57.0" prefWidth="263.0" style="-fx-background-radius: 90;" text="Add" textFill="WHITE">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="27.0" />
+                     </font>
+                  </JFXButton>
+                  <DatePicker layoutX="148.0" layoutY="387.0" prefHeight="36.0" prefWidth="201.0" style="-fx-background-color: #000000; -fx-border-color: #000000;" />
+                  <JFXButton fx:id="btAdd" layoutX="158.0" layoutY="579.0" prefHeight="66.0" prefWidth="202.0" style="-fx-background-radius: 90;" text="   Add    ">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="22.0" />
+                     </font>
+                  </JFXButton>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
    </children>
