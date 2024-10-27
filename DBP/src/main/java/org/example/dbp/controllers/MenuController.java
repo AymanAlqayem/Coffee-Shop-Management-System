@@ -74,7 +74,7 @@ public class MenuController extends Application {
     @FXML
     public void initialize() {
         loadMenuData();  // Load the menu data after FXML components are initialized
-//        addNewCategory();  // Configure the Add Category button
+        addNewCategory();  // Configure the Add Category button
 //        deleteCategory();
 
     }
@@ -240,9 +240,7 @@ public class MenuController extends Application {
     public void makeActionsToTrashButton(Category category, Item itemToDelete) {
         if (showConfirmationAlert("Confirm Delete", "Are you sure you want to delete this item?")) {
             //delete the item from UI.
-            deleteItemFromUI(category, itemToDelete);
-
-
+            deleteItem(category, itemToDelete);
         }
 
     }
@@ -264,7 +262,7 @@ public class MenuController extends Application {
             // Check if the entered item name is not null or empty, and does not already exist in the category
             if (itemName.isEmpty()) {
                 showErrorAlert("Invalid Item Name", "Item name cannot be empty.");
-            } else if (CategoryRepo.isItemInDatabase(itemName)) {
+            } else if (CategoryRepo.isItemInDB(itemName)) {
                 showErrorAlert("Item Exists", "This item already exists in this category!");
             } else {
                 // Second dialog to capture the price
@@ -376,9 +374,9 @@ public class MenuController extends Application {
     }
 
     /**
-     * deleteItemFromUI method that will remove the item from the UI.
+     * deleteItemFromUI method that will remove the item from the UI and the DB.
      * */
-    public void deleteItemFromUI(Category category, Item itemToDelete) {
+    public void deleteItem(Category category, Item itemToDelete) {
         for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
             TitledPane titledPane = menuAccordion.getPanes().get(i);
             if (titledPane.getText().equals(category.getCategoryName())) {
@@ -394,12 +392,13 @@ public class MenuController extends Application {
                     for (int j = 0; j < base.getChildren().size(); j++) {
                         HBox hBox = (HBox) base.getChildren().get(j); // each one contains 2 VBoxes: one for item info and another for the trash button.
 
-                        // Get the VBox that contains the item info (usually the first VBox)
+                        // Get the VBox that contains the item info
                         VBox infoVBox = (VBox) hBox.getChildren().get(0);
                         Label lbItemName = (Label) infoVBox.getChildren().get(0);
 
                         if (lbItemName.getText().equals(itemToDelete.getItemName())) {
-                            base.getChildren().remove(j);
+                            base.getChildren().remove(j);//remove item from UI
+                            CategoryRepo.deleteItem(itemToDelete.getItemName());
                             break;
                         }
                     }
@@ -409,6 +408,70 @@ public class MenuController extends Application {
         }
     }
 
+
+    /**
+     * addNewCategory method that will added the new category into DB and UI.
+     * */
+
+    public void addNewCategory() {
+
+        //make actions for added new category button.
+        btAddCategory.setOnAction(event -> {
+            TextInputDialog dialog = new TextInputDialog("");
+            dialog.setTitle("New Category");
+            dialog.setHeaderText("Add New Category");
+            dialog.setContentText("Category Name:");
+
+            // Show the dialog and capture the user's input
+            Optional<String> result = dialog.showAndWait();
+
+            result.ifPresent(categoryName -> {
+                //check if the entered category is not null, and does not exist.
+                if (categoryName.isEmpty()) {
+                    showErrorAlert("Invalid Category Name", "Category name cannot be empty.");
+                } else if (CategoryRepo.isCategoryInDB(categoryName)) {
+                    showErrorAlert("Invalid Category Name", "This Category already exist!.");
+                } else {
+                    //Add the new category to DB
+                    CategoryRepo.addCategory(categoryName);
+
+                    //Add the new category to UI.
+                    addCategoryToUI(categoryName);
+                }
+            });
+        });
+    }
+
+
+    public void addCategoryToUI(String categoryName) {
+        TitledPane titledPane = new TitledPane();
+        titledPane.setText(categoryName);
+        titledPane.setStyle("-fx-font-size: 15px");
+
+
+        VBox base = new VBox(2);
+        ScrollPane scrollPane = new ScrollPane(base);
+        scrollPane.setFitToWidth(true);
+        titledPane.setContent(scrollPane);
+        menuAccordion.getPanes().add(titledPane);
+
+        base.setPadding(new Insets(2, 2, 2, 2));
+        base.setStyle("-fx-background-color: Black;");
+
+        VBox addNewItemVBox = new VBox(2);
+        addNewItemVBox.setStyle("-fx-background-color: #f0f0f0;");
+
+        // Add a button to allow adding new items.
+        JFXButton btAddNewItem = new JFXButton("Add new Item");
+        btAddNewItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ;-fx-font-weight: bold ");
+        addNewItemVBox.getChildren().add(btAddNewItem);
+
+        btAddNewItem.setOnAction(e -> {
+
+        });
+
+        base.getChildren().add(addNewItemVBox);
+    }
 
     /**
      * showErrorAlert method that will show an error alert due to entered input.
@@ -466,132 +529,7 @@ public class MenuController extends Application {
     }
 
 
-//    public void deleteItem(Category category) {
-//        ObservableList<String> itemNames = FXCollections.observableArrayList();
-//
-//        for (int i = 0; i < category.getItems().size(); i++) {
-//            itemNames.add(category.getItems().get(i).getItemName());
-//        }
-//
-//        // Show a dialog to select an item to delete
-//        ChoiceDialog<String> dialog = new ChoiceDialog<>(itemNames.get(0), itemNames);
-//        dialog.setTitle("Delete Item");
-//        dialog.setHeaderText("Select an item to delete");
-//        dialog.setContentText("Item:");
-//
-//        Optional<String> result = dialog.showAndWait();
-//        result.ifPresent(itemNameToDelete -> {
-//            // Find the corresponding item in the category
-//            Item itemToDelete = null;
-//
-//            for (int i = 0; i < category.getItems().size(); i++) {
-//                if (category.getItems().get(i).getItemName().equalsIgnoreCase(itemNameToDelete)) {
-//                    itemToDelete = category.getItems().get(i);
-//                }
-//            }
-//
-//            // Show confirmation alert.
-//            if (itemToDelete != null) {
-//                Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
-//                confirmAlert.setTitle("Confirm Deletion");
-//                confirmAlert.setHeaderText("Are you sure you want to delete this item?");
-//                confirmAlert.setContentText("Item: " + itemToDelete.getItemName());
-//
-//                Optional<ButtonType> confirmationResult = confirmAlert.showAndWait();
-//                if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
-//
-//                    //delete the item from UI
-//                    deleteItemFromUI(category, itemToDelete);
-//
-//                    //delete item from DB.
-//                    CategoryRepo.deleteItem(itemToDelete.getItemName());
-//
-//                    //Update the choice Box
-//                    category.getItems().remove(itemToDelete); // Remove item from category
-//                    itemNames.remove(itemToDelete.getItemName()); // Remove item from the ObservableList
-//
-//                    Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-//                    successAlert.setTitle("Item Deleted");
-//                    successAlert.setHeaderText(null);
-//                    successAlert.setContentText("Item '" + itemToDelete.getItemName() + "' deleted successfully.");
-//                    successAlert.showAndWait();
-//                }
-//            }
-//        });
-//    }
-
-
     //
-//
-//    public void addNewCategory() {
-//        /**
-//         * make actions for added new category button.
-//         * */
-//
-//        btAddCategory.setOnAction(event -> {
-//            TextInputDialog dialog = new TextInputDialog("");
-//            dialog.setTitle("New Category");
-//            dialog.setHeaderText("Add New Category");
-//            dialog.setContentText("Category Name:");
-//
-//            // Show the dialog and capture the user's input
-//            Optional<String> result = dialog.showAndWait();
-//
-//            result.ifPresent(categoryName -> {
-//                //check if the entered category is not null, and does not exist.
-//
-//                if (categoryName.isEmpty()) {
-//                    Alert alert = new Alert(Alert.AlertType.ERROR);
-//                    alert.setTitle("Invalid Category Name");
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("Category name cannot be empty.");
-//                    alert.showAndWait();
-//                } else if (isCategoryExist(categoryName)) {
-//                    Alert alert = new Alert(Alert.AlertType.ERROR);
-//                    alert.setTitle("Invalid Category Name");
-//                    alert.setHeaderText(null);
-//                    alert.setContentText("This Category already exist!.");
-//                    alert.showAndWait();
-//                } else {
-//                    Category newCategory = new Category(categoryName);
-//                    //CategoryRepo.addCategory(newCategory); // Add category to the database
-//                    addCategoryToAccordion(newCategory); // Add category to the UI
-//                }
-//            });
-//        });
-//    }
-//
-//    public boolean isCategoryExist(String categoryName) {
-//
-//        ArrayList<Category> categories = CategoryRepo.getCategories();
-//
-//        for (int i = 0; i < categories.size(); i++) {
-//            if (categories.get(i).getCategoryName().equalsIgnoreCase(categoryName.trim())) {
-//                return true;
-//            }
-//        }
-//
-//        // Check in the Accordion (UI) using a normal loop
-//        for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
-//            TitledPane pane = menuAccordion.getPanes().get(i);
-//            if (pane.getText().equalsIgnoreCase(categoryName)) {
-//                return true; // Category already exists in the UI
-//            }
-//        }
-//
-//        return false;
-//    }
-//
-//    public void addCategoryToAccordion(Category category) {
-//        TitledPane titledPane = new TitledPane();
-//        titledPane.setText(category.getCategoryName());
-//        VBox vbox = new VBox(10);
-//        ScrollPane scrollPane = new ScrollPane(vbox);
-//        scrollPane.setFitToWidth(true);
-//        titledPane.setContent(scrollPane);
-//        menuAccordion.getPanes().add(titledPane);
-//    }
-//
 //    public void deleteCategory() {
 //
 //        btDeleteCategory.setOnMouseClicked(event -> {

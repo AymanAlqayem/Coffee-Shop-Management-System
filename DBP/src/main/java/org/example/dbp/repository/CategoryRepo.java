@@ -20,7 +20,7 @@ public class CategoryRepo {
      * */
 
     public static ArrayList<Category> getCategories() {
-        String query = "select * from category inner join item on category_id = category.id";
+        String query = "select * from category left join item on category_id = category.id";
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query);
@@ -64,47 +64,32 @@ public class CategoryRepo {
         return categories;
     }
 
-    //    public static void addCategory(Category category) {
-//        String query = "insert into category(category_name) values(?)";
-//        try (Connection connection = DataBase.getDBConnection()) {
-//            for (int i = 0; i < categories.size(); i++) {
-//                if (categories.get(i).getCategoryName().equals(category.getCategoryName())) {
-//                    return;
-//                }
-//            }
-//            PreparedStatement statement = connection.prepareStatement(query);
-//            statement.setString(1, category.getCategoryName());
-//            statement.executeUpdate();
-//
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-    public static void addCategory(Category category) {
-        String query = "INSERT INTO category (category_name) " +
-                "SELECT ? WHERE NOT EXISTS (SELECT 1 FROM category WHERE category_name = ?)";
 
-        try (Connection connection = DataBase.getDBConnection()) {
-            PreparedStatement statement = connection.prepareStatement(query);
-            statement.setString(1, category.getCategoryName());
-            statement.setString(2, category.getCategoryName());
+    /**
+     * addCategory method that will add the new category into DB.
+     * */
+    public static void addCategory(String categoryName) {
+        String query = "insert into category(category_name) values(?)";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1,categoryName);
             statement.executeUpdate();
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * addItem method that will add the item into DB.
+     * addItem method that will add an item into DB.
      * */
 
     public static void addItem(Category category, Item item) {
         String query = "insert into item(item_name,price,inventory_id, category_id) values(?,?,?,?)";
 
-        try (Connection conn = DataBase.getDBConnection();
-             PreparedStatement statement = conn.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, item.getItemName());
             statement.setDouble(2, item.getPrice());
             statement.setInt(3, item.getInventoryId());
@@ -128,15 +113,7 @@ public class CategoryRepo {
 
             statement.setString(1, itemName);
 
-
-            int rowsAffected = statement.executeUpdate();
-
-            // Optionally, you can check if the deletion was successful
-            if (rowsAffected > 0) {
-                System.out.println("Item deleted successfully.");
-            } else {
-                System.out.println("No item found with the specified ID.");
-            }
+            statement.executeUpdate();
 
         } catch (SQLException e) {
         }
@@ -146,17 +123,39 @@ public class CategoryRepo {
     /**
      * isItemInDatabase method to check if the item already exists in the DB
      * */
-    public static boolean isItemInDatabase(String itemName) {
+    public static boolean isItemInDB(String itemName) {
         String query = "SELECT COUNT(item_name) FROM item WHERE item_name = ?";
 
         try (Connection conn = DataBase.getDBConnection();
              PreparedStatement statement = conn.prepareStatement(query)) {
+
             statement.setString(1, itemName);
 
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getInt(1) > 0; // Returns true if count > 0
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * isCategoryInDB method that will check if the category in the DB.
+     * */
+    public static boolean isCategoryInDB(String categoryName) {
+        String query = "SELECT COUNT(category_name) FROM category WHERE category_name = ?";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, categoryName);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;// Returns true if count > 0
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
