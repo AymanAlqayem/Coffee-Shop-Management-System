@@ -5,14 +5,19 @@ import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.dbp.models.User;
 import org.example.dbp.repository.UserRepository;
 
+import javafx.scene.image.ImageView;
+
+import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class LoginController extends Application {
@@ -23,17 +28,18 @@ public class LoginController extends Application {
     @FXML
     JFXButton btLogin;
 
+
     UserRepository userRepo = new UserRepository();
 
     public void start(Stage stage) {
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/login.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 1378, 750);
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Login.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
             stage.setTitle("Log in");
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {
-            e.printStackTrace();  // This will help you identify issues during runtime.
+            e.printStackTrace();
         }
 
     }
@@ -47,23 +53,17 @@ public class LoginController extends Application {
             showAlert("Error", "Username and password cannot be empty.");
             return;
         }
-
-        User user = userRepo.getUserByUsernameAndPassword(tfUserName.getText(), tfPass.getText());
-
+        User user = UserRepository.getUserByUsernameAndPassword(tfUserName.getText(), tfPass.getText());
         if (user == null) {
             showAlert("Login Failed", "Invalid username or password.");
-        } else {
-
-//            if (user.getRole().equalsIgnoreCase("admin")) {
-//
-//
-//            } else if (user.getRole().equalsIgnoreCase("Cashier")) {
-//
-//
-//            }
+        } else if (user.getRole().equalsIgnoreCase("Admin")) {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/admin.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
+
+            // Get the AdminController and pass the username to it
+            AdminController adminController = fxmlLoader.getController();
+            adminController.setUserName(username);
 
             // Show the new stage
             Stage adminStage = new Stage();
@@ -74,8 +74,28 @@ public class LoginController extends Application {
             // Close the login stage
             Stage loginStage = (Stage) tfUserName.getScene().getWindow();
             loginStage.close();
+        } else {
+
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Cashier.fxml"));
+            Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
+
+            // Get the AdminController and pass the username to it
+            CashierController cashierController = fxmlLoader.getController();
+            cashierController.setUserName(username);
+
+            // Show the new stage
+            Stage adminStage = new Stage();
+            adminStage.setTitle("Cashier Stage");
+            adminStage.setScene(scene);
+            adminStage.show();
+
+            // Close the login stage
+            Stage loginStage = (Stage) tfUserName.getScene().getWindow();
+            loginStage.close();
+
         }
     }
+
 
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -88,4 +108,6 @@ public class LoginController extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
 }

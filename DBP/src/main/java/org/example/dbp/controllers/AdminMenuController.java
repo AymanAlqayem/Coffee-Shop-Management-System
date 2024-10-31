@@ -1,33 +1,22 @@
 package org.example.dbp.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import com.sun.jdi.InconsistentDebugInfoException;
-import javafx.application.Application;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
-import javafx.stage.Stage;
 import org.example.dbp.models.Category;
 import org.example.dbp.models.Item;
 import org.example.dbp.repository.CategoryRepo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
-public class MenuController extends Application {
+public class AdminMenuController {
     @FXML
     private Accordion menuAccordion;
     @FXML
@@ -35,47 +24,10 @@ public class MenuController extends Application {
     @FXML
     private JFXButton btDeleteCategory;
 
-
-//    @Override
-//    public void start(Stage stage) {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Menu.fxml"));
-//            Parent root = fxmlLoader.load();
-//
-//            // Get the controller from the loader (this step ensures FXML elements are linked)
-//            MenuController controller = fxmlLoader.getController();
-//
-//            // Load the menu data AFTER the FXML is loaded and injected
-//            controller.loadMenuData();
-//
-//            // Set the scene and show the stage
-//            Scene scene = new Scene(root, 1397, 750);
-//            stage.setTitle("Menu");
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-    @Override
-    public void start(Stage stage) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Menu.fxml"));
-            Scene scene = new Scene(fxmlLoader.load(), 700, 600);
-            stage.setTitle("Menu");
-            stage.setScene(scene);
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @FXML
     public void initialize() {
         loadMenuData();  // Load the menu data after FXML components are initialized
-        addNewCategory();  // Configure the Add Category button;
-//        btDeleteCategory.setOnAction(e -> deleteCategory());
+        addNewCategory();
     }
 
     /**
@@ -119,20 +71,12 @@ public class MenuController extends Application {
 
                 Label lbItemName = new Label(currentItem.getItemName());
                 Label lbItmePrice = new Label(currentItem.getPrice() + " NIS");
-                JFXButton btPurchaseItem = new JFXButton();
 
                 lbItemName.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 20px; -fx-text-fill: #090808;");
                 lbItmePrice.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 16px; -fx-text-fill: #e85c0d;");
 
 
-                btPurchaseItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ");
-
-                Image image = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\AddForMenu.png");
-                ImageView imageView = new ImageView(image);
-
-                btPurchaseItem.setGraphic(imageView);
-
-                itemInfoVBox.getChildren().addAll(lbItemName, lbItmePrice, btPurchaseItem);
+                itemInfoVBox.getChildren().addAll(lbItemName, lbItmePrice);
 
                 itemInfoVBox.setStyle("-fx-background-color: #f0f0f0;");
                 itemInfoVBox.setPadding(new Insets(10, 10, 10, 10));
@@ -155,13 +99,6 @@ public class MenuController extends Application {
                 hBox.setStyle("-fx-background-color: #f0f0f0;");
 
                 base.getChildren().add(hBox);
-
-                /**
-                 * make actions when the item button clicked.
-                 * */
-                btPurchaseItem.setOnMouseClicked(e -> {
-                    makeActionsToPurchaseButton(currentItem);
-                });
 
                 /**
                  * make actions for trash button that will delete the item.
@@ -207,37 +144,6 @@ public class MenuController extends Application {
             titledPane.setContent(scrollPane);
             menuAccordion.getPanes().add(titledPane); // Add TitledPane to the Accordion
         }
-    }
-
-    /**
-     * makeActionsToPurchaseButton that will show a text input dialog to enter the quantity of the item.
-     * */
-    public void makeActionsToPurchaseButton(Item item) {
-
-        TextInputDialog dialog = new TextInputDialog("1");
-        dialog.setTitle("Item Purchase");
-        dialog.setHeaderText("Enter the number of items to purchase");
-        dialog.setContentText("Quantity:");
-
-        // Show the dialog and capture the user's input
-        Optional<String> result = dialog.showAndWait();
-
-        result.ifPresent(quantity -> {
-            try {
-                int qty = Integer.parseInt(quantity); // Parse the input to an integer
-                if (qty > 0) {
-                    // Process the quantity entered by the user (e.g., add to bill)
-                    System.out.println("User wants to purchase " + qty + " of " + item.getItemName());
-                    // Handle logic to add the selected item and quantity to the bill
-                } else {
-                    // Show an error alert if the user entered a non-positive number.
-                    showErrorAlert("Invalid Quantity", "Please enter a valid quantity greater than 0.");
-                }
-            } catch (NumberFormatException e) {
-                // Show an error alert if the user entered an invalid number.
-                showErrorAlert("Invalid Input", "Please enter a valid number.");
-            }
-        });
     }
 
     /**
@@ -288,10 +194,9 @@ public class MenuController extends Application {
                         Item newItem = new Item(itemName, price, category.getCategoryId());
 
                         // Add item to the database
-                        CategoryRepo.addItem(category, newItem);
+                        CategoryRepo.addItem(newItem);
 
                         // Add the item to the UI
-//                        addItemToUI(category, newItem);
                         loadMenuData();
 
                         successAlert("Item Added", "New item '" + itemName + "' with price " + price + " added successfully.");
@@ -480,11 +385,8 @@ public class MenuController extends Application {
             Optional<ButtonType> confirmationResult = alert.showAndWait();
             if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
                 //remove the category from the DB.
-                if (CategoryRepo.deleteCategory(selectedCategory)){
-                    System.out.println("DELETE................");
-                    loadMenuData();
-                }
-
+                CategoryRepo.deleteCategory(selectedCategory);
+                loadMenuData();
             }
         });
     }
@@ -543,9 +445,5 @@ public class MenuController extends Application {
         successAlert.setContentText(context);
         successAlert.showAndWait();
 
-    }
-
-    public static void main(String[] args) {
-        launch(args);
     }
 }

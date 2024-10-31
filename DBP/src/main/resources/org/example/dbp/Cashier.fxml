@@ -2,14 +2,12 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Spinner?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.Employee">
+<AnchorPane prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.CashierController">
    <children>
       <AnchorPane layoutX="-2.0" prefHeight="784.0" prefWidth="226.0" style="-fx-background-color: #050505;">
          <children>
@@ -33,7 +31,7 @@
                   <Font name="Book Antiqua" size="14.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btSignOut" layoutX="71.0" layoutY="712.0" onAction="#handleSignOut" prefHeight="38.0" prefWidth="98.0" style="-fx-background-radius: 90;" text="Sign out" textFill="WHITE">
+            <JFXButton fx:id="btSignOut" layoutX="71.0" layoutY="712.0" onAction="#makeActionsForSignOutButton" prefHeight="38.0" prefWidth="98.0" style="-fx-background-radius: 90;" text="Sign out" textFill="WHITE">
                <font>
                   <Font name="Book Antiqua" size="19.0" />
                </font>
@@ -80,192 +78,12 @@
             </ImageView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="224.0" layoutY="-3.0" prefHeight="784.0" prefWidth="1302.0">
+      <AnchorPane fx:id="menuForm" layoutX="224.0" layoutY="-3.0" prefHeight="784.0" prefWidth="601.0" />
+      <AnchorPane fx:id="billForm" layoutX="797.0" prefHeight="784.0" prefWidth="726.0">
          <children>
-            <Label layoutX="14.0" prefHeight="66.0" prefWidth="1302.0" text="مشروبات باردة">
+            <Label layoutX="222.0" layoutY="22.0" prefHeight="38.0" prefWidth="423.0" text="Bill Information">
                <font>
-                  <Font name="DecoType Naskh Special" size="24.0" />
-               </font>
-            </Label>
-            <AnchorPane layoutX="14.0" layoutY="74.0" prefHeight="133.0" prefWidth="210.0" style="-fx-border-color: #798645; -fx-background-color: #F5F7F8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="65.0" text="Name :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="88.0" layoutY="20.0" prefHeight="22.0" prefWidth="120.0" text="برتقال">
-                     <font>
-                        <Font name="Times New Roman" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="9.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="Price :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="80.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="17 NIS">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Spinner layoutX="14.0" layoutY="93.0" prefHeight="30.0" prefWidth="162.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="241.0" layoutY="73.0" prefHeight="134.0" prefWidth="210.0" style="-fx-border-color: #798645; -fx-background-color: #F5F7F8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="65.0" text="Name :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="88.0" layoutY="20.0" prefHeight="22.0" prefWidth="120.0" text="ليمون و نعنع">
-                     <font>
-                        <Font name="Times New Roman" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="9.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="Price :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="80.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="17 NIS">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Spinner layoutX="14.0" layoutY="99.0" prefHeight="30.0" prefWidth="162.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="467.0" layoutY="73.0" prefHeight="126.0" prefWidth="210.0" style="-fx-border-color: #798645; -fx-background-color: #F5F7F8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="65.0" text="Name :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="88.0" layoutY="20.0" prefHeight="22.0" prefWidth="120.0" text="بطيخ">
-                     <font>
-                        <Font name="Times New Roman" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="9.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="Price :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="80.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="17 NIS">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Spinner layoutX="14.0" layoutY="102.0" prefHeight="30.0" prefWidth="162.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="693.0" layoutY="73.0" prefHeight="126.0" prefWidth="210.0" style="-fx-border-color: #798645; -fx-background-color: #F5F7F8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="65.0" text="Name :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="88.0" layoutY="20.0" prefHeight="22.0" prefWidth="120.0" text="منجا و برتقال">
-                     <font>
-                        <Font name="Times New Roman" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="9.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="Price :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="80.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="18 NIS">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Spinner layoutX="14.0" layoutY="91.0" prefHeight="30.0" prefWidth="162.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="918.0" layoutY="72.0" prefHeight="126.0" prefWidth="210.0" style="-fx-border-color: #798645; -fx-background-color: #F5F7F8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="65.0" text="Name :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="88.0" layoutY="20.0" prefHeight="22.0" prefWidth="120.0" text="موز و منجا">
-                     <font>
-                        <Font name="Times New Roman" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="9.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="Price :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="80.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="18 NIS">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Spinner layoutX="14.0" layoutY="95.0" prefHeight="30.0" prefWidth="162.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="241.0" layoutY="215.0" prefHeight="134.0" prefWidth="210.0" style="-fx-border-color: #798645; -fx-background-color: #F5F7F8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="65.0" text="Name :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="88.0" layoutY="20.0" prefHeight="22.0" prefWidth="120.0" text="فراوله وليمون">
-                     <font>
-                        <Font name="Times New Roman" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="9.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="Price :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="80.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="18 NIS">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Spinner layoutX="14.0" layoutY="105.0" prefHeight="30.0" prefWidth="162.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="217.0" prefHeight="134.0" prefWidth="210.0" style="-fx-border-color: #798645; -fx-background-color: #F5F7F8;">
-               <children>
-                  <Label layoutX="14.0" layoutY="21.0" prefHeight="18.0" prefWidth="65.0" text="Name :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="88.0" layoutY="20.0" prefHeight="22.0" prefWidth="120.0" text="موز و حليب">
-                     <font>
-                        <Font name="Times New Roman" size="25.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="9.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="Price :">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Label layoutX="80.0" layoutY="62.0" prefHeight="26.0" prefWidth="75.0" text="18 NIS">
-                     <font>
-                        <Font name="Bodoni MT" size="19.0" />
-                     </font>
-                  </Label>
-                  <Spinner layoutX="14.0" layoutY="100.0" prefHeight="30.0" prefWidth="162.0" />
-               </children>
-            </AnchorPane>
-            <AnchorPane layoutX="14.0" layoutY="392.0" prefHeight="6.0" prefWidth="1278.0" style="-fx-background-color: #185519;" />
-            <Label layoutX="12.0" layoutY="398.0" prefHeight="33.0" prefWidth="1278.0" text="مشروبات ساخنه">
-               <font>
-                  <Font name="DecoType Naskh Special" size="24.0" />
+                  <Font name="Constantia" size="38.0" />
                </font>
             </Label>
          </children>
