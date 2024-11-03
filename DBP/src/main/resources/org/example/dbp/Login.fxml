@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="609.0" prefWidth="1196.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.LoginController">
+   <children>
+      <ImageView fitHeight="916.0" fitWidth="1563.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../CoofeWallpaper.jpg" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="1032.0" prefHeight="914.0" prefWidth="530.0" style="-fx-background-color: #493628;">
+         <children>
+            <Label layoutX="123.0" layoutY="108.0" prefHeight="75.0" prefWidth="374.0" style="-fx-text-fill: black;" text="Welcome  Back" textFill="#050000">
+               <font>
+                  <Font name="Book Antiqua Bold" size="31.0" />
+               </font>
+            </Label>
+            <Label layoutX="93.0" layoutY="170.0" prefHeight="47.0" prefWidth="399.0" style="-fx-text-fill: #705C53;" text="Welcome Back,please enter your details" textFill="#050000">
+               <font>
+                  <Font name="Book Antiqua Bold" size="16.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="61.0" fitWidth="66.0" layoutX="46.0" layoutY="402.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../user.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="61.0" fitWidth="52.0" layoutX="50.0" layoutY="524.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../pass.png" />
+               </image>
+            </ImageView>
+            <AnchorPane layoutX="197.0" layoutY="307.0" prefHeight="6.0" prefWidth="120.0" style="-fx-background-color: FFDBB5;" />
+            <ImageView fitHeight="61.0" fitWidth="66.0" layoutX="227.0" layoutY="238.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../CircleLogo.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="tfUserName" layoutX="137.0" layoutY="417.0" prefHeight="40.0" prefWidth="302.0" style="-fx-background-color: #9A7E6F; -fx-text-inner-color: white;" />
+            <JFXButton fx:id="btLogin" layoutX="179.0" layoutY="702.0" onAction="#login" prefHeight="52.0" prefWidth="186.0" style="-fx-background-radius: 90; -fx-background-color: #9A7E6F;" text="login">
+               <font>
+                  <Font name="Book Antiqua" size="27.0" />
+               </font>
+            </JFXButton>
+            <PasswordField fx:id="tfPass" layoutX="130.0" layoutY="530.0" prefHeight="40.0" prefWidth="316.0" style="-fx-background-color: #9A7E6F; -fx-text-inner-color: white;" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

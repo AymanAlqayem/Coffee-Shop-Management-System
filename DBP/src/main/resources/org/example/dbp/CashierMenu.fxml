@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="715.0" prefWidth="570.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.CashierMenuController">
+   <children>
+      <AnchorPane layoutX="10.0" layoutY="7.0" prefHeight="714.0" prefWidth="559.0">
+         <children>
+            <ScrollPane fx:id="menuScrollPane" layoutX="6.0" layoutY="4.0" prefHeight="708.0" prefWidth="550.0">
+               <content>
+                  <Accordion fx:id="menuAccordion" prefWidth="574.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

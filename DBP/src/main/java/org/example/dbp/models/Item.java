@@ -4,7 +4,6 @@ public class Item {
     private int itemId;
     private String itemName;
     private double price;
-    private int inventoryId;
     private int categoryId;
 
     public Item(){}
@@ -13,17 +12,15 @@ public class Item {
         this.itemName = itemName;
     }
 
-    public Item(int itemId , String itemName, double price, int inventoryId, int categoryId) {
+    public Item(int itemId , String itemName, double price, int categoryId) {
         this.itemId = itemId;
         this.itemName = itemName;
         this.price = price;
-        this.inventoryId = inventoryId;
         this.categoryId = categoryId;
     }
-    public Item(String itemName, double price, int inventoryId, int categoryId) {
+    public Item(String itemName, double price, int categoryId) {
         this.itemName = itemName;
         this.price = price;
-        this.inventoryId = inventoryId;
         this.categoryId = categoryId;
     }
 
@@ -41,14 +38,6 @@ public class Item {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public int getInventoryId() {
-        return inventoryId;
-    }
-
-    public void setInventoryId(int inventoryId) {
-        this.inventoryId = inventoryId;
     }
 
     public int getCategoryId() {
@@ -74,7 +63,6 @@ public class Item {
                 "itemId=" + itemId +
                 ", itemName='" + itemName + '\'' +
                 ", price=" + price +
-                ", inventoryId=" + inventoryId +
                 ", categoryId=" + categoryId +
                 '}' + "/n";
     }
