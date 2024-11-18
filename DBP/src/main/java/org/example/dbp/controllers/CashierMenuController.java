@@ -1,22 +1,17 @@
 package org.example.dbp.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Application;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import org.example.dbp.models.Category;
-import org.example.dbp.models.Item;
+import org.example.dbp.models.MenuItem;
 import org.example.dbp.repository.CategoryRepo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -58,7 +53,7 @@ public class CashierMenuController {
 
             for (int j = 0; j < currentCategory.getItems().size(); j++) {
 
-                final Item currentItem = currentCategory.getItems().get(j);
+                final MenuItem currentItem = currentCategory.getItems().get(j);
 
                 VBox itemInfoVBox = new VBox(10);
                 itemInfoVBox.setAlignment(Pos.TOP_LEFT);
@@ -109,7 +104,7 @@ public class CashierMenuController {
     /**
      * makeActionsToPurchaseButton that will show a text input dialog to enter the quantity of the item.
      * */
-    public void makeActionsToPurchaseButton(Item item) {
+    public void makeActionsToPurchaseButton(MenuItem item) {
 
         TextInputDialog dialog = new TextInputDialog("1");
         dialog.setTitle("Item Purchase");

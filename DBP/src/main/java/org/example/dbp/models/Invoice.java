@@ -2,19 +2,20 @@ package org.example.dbp.models;
 
 import java.time.LocalDateTime;
 
-public class Order {
+public class Invoice {
     private LocalDateTime createdDateTime;
+    private double amount;
     private int cashierId;
-    private int CustomerId;
+    private int orderId;
 
-    public Order() {
-
+    public Invoice() {
     }
 
-    public Order(LocalDateTime createdDateTime, int cashierId, int CustomerId) {
+    public Invoice(LocalDateTime createdDateTime, double amount, int cashierId, int orderId) {
         this.createdDateTime = createdDateTime;
+        this.amount = amount;
         this.cashierId = cashierId;
-        this.CustomerId = CustomerId;
+        this.orderId = orderId;
     }
 
     public LocalDateTime getCreatedDateTime() {
@@ -25,12 +26,12 @@ public class Order {
         this.createdDateTime = createdDateTime;
     }
 
-    public int getCustomerId() {
-        return CustomerId;
+    public double getAmount() {
+        return amount;
     }
 
-    public void setCustomerId(int customerId) {
-        CustomerId = customerId;
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 
     public int getCashierId() {
@@ -41,12 +42,21 @@ public class Order {
         this.cashierId = cashierId;
     }
 
+    public int getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
+    }
+
     @Override
     public String toString() {
-        return "Order{" +
+        return "Invoice{" +
                 "createdDateTime=" + createdDateTime +
+                ", amount=" + amount +
                 ", cashierId=" + cashierId +
-                ", CustomerId=" + CustomerId +
+                ", orderId=" + orderId +
                 '}';
     }
 }

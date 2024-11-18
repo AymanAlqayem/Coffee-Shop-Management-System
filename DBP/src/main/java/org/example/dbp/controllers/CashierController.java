@@ -2,26 +2,15 @@ package org.example.dbp.controllers;
 
 
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.example.dbp.models.Category;
-import org.example.dbp.models.Item;
-import org.example.dbp.repository.CategoryRepo;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class CashierController  {
@@ -48,21 +37,6 @@ public class CashierController  {
 
     @FXML
     private AnchorPane billForm;
-
-
-//    @Override
-//    public void start(Stage stage) {
-//        try {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Cashier.fxml"));
-//            Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
-//            stage.setTitle("Cashier");
-//            stage.setScene(scene);
-//            stage.show();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
 
     /**
      * makeActionsForSignOutButton method that will make actions for sign-out button.
