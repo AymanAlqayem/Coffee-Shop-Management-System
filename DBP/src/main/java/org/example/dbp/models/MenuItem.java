@@ -1,24 +1,13 @@
 package org.example.dbp.models;
 
-public class Item {
-    private int itemId;
+public class MenuItem {
     private String itemName;
     private double price;
     private int categoryId;
 
-    public Item(){}
+    public MenuItem(){}
 
-    public Item(String itemName) {
-        this.itemName = itemName;
-    }
-
-    public Item(int itemId , String itemName, double price, int categoryId) {
-        this.itemId = itemId;
-        this.itemName = itemName;
-        this.price = price;
-        this.categoryId = categoryId;
-    }
-    public Item(String itemName, double price, int categoryId) {
+    public MenuItem(String itemName, double price, int categoryId) {
         this.itemName = itemName;
         this.price = price;
         this.categoryId = categoryId;
@@ -48,22 +37,12 @@ public class Item {
         this.categoryId = categoryId;
     }
 
-    public int getItemId() {
-        return itemId;
-    }
-
-    public void setItemId(int itemId) {
-        this.itemId = itemId;
-    }
-
-
     @Override
     public String toString() {
-        return "Item{" +
-                "itemId=" + itemId +
-                ", itemName='" + itemName + '\'' +
+        return "MenuItem{" +
+                "itemName='" + itemName + '\'' +
                 ", price=" + price +
                 ", categoryId=" + categoryId +
-                '}' + "/n";
+                '}';
     }
 }

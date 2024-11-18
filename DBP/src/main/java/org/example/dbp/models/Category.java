@@ -1,26 +1,29 @@
 package org.example.dbp.models;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Category {
     private int categoryId;
     private String categoryName;
-    ArrayList<Item> items = new ArrayList<Item>();
+    ArrayList<MenuItem> items = new ArrayList<MenuItem>();
 
 
     public Category() {
     }
 
-    public Category(int categoryId , String categoryName , ArrayList<Item> items) {
+    public Category(int categoryId, String categoryName, ArrayList<MenuItem> items) {
         this.categoryId = categoryId;
         this.categoryName = categoryName;
         this.items = items;
     }
-    public Category( String categoryName , ArrayList<Item> items) {
+
+    public Category(String categoryName, ArrayList<MenuItem> items) {
         this.categoryName = categoryName;
         this.items = items;
     }
-    public Category( String categoryName) {
+
+    public Category(String categoryName) {
         this.categoryName = categoryName;
         items = new ArrayList<>();
     }
@@ -33,11 +36,11 @@ public class Category {
         this.categoryName = categoryName;
     }
 
-    public ArrayList<Item> getItems() {
+    public ArrayList<MenuItem> getItems() {
         return items;
     }
 
-    public void setItems(ArrayList<Item> items) {
+    public void setItems(ArrayList<MenuItem> items) {
         this.items = items;
     }
 
@@ -57,7 +60,7 @@ public class Category {
                 .append(", categoryName='").append(categoryName).append('\'')
                 .append(", items=\n");
 
-        for (Item item : items) {
+        for (MenuItem item : items) {
             sb.append(item).append("\n"); // Assuming Item class has a proper toString() method
 
         }

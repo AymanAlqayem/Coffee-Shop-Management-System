@@ -1,48 +1,39 @@
 package org.example.dbp.models;
 
 public class Inventory {
-    private int inventoryId;
-    private String inventoryName;
-    private String userId;
+    private String name;
+    private int adminId;
 
-    public Inventory(){}
+    public Inventory() {
 
-    public Inventory(int inventoryId , String inventoryName, String userId){
-        this.inventoryId = inventoryId;
-        this.inventoryName = inventoryName;
-        this.userId = userId;
     }
 
-    public int getInventoryId() {
-        return inventoryId;
+    public Inventory(String name, int adminId) {
+        this.name = name;
+        this.adminId = adminId;
     }
 
-    public void setInventoryId(int inventoryId) {
-        this.inventoryId = inventoryId;
+    public String getName() {
+        return name;
     }
 
-    public String getInventoryName() {
-        return inventoryName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setInventoryName(String inventoryName) {
-        this.inventoryName = inventoryName;
+    public int getAdminId() {
+        return adminId;
     }
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setAdminId(int adminId) {
+        this.adminId = adminId;
     }
 
     @Override
     public String toString() {
         return "Inventory{" +
-                "inventoryId=" + inventoryId +
-                ", inventoryName='" + inventoryName + '\'' +
-                ", userId='" + userId + '\'' +
+                "name='" + name + '\'' +
+                ", adminId=" + adminId +
                 '}';
     }
 }

@@ -10,7 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.example.dbp.models.Category;
-import org.example.dbp.models.Item;
+import org.example.dbp.models.MenuItem;
 import org.example.dbp.repository.CategoryRepo;
 
 import java.util.ArrayList;
@@ -58,7 +58,7 @@ public class AdminMenuController {
 
             for (int j = 0; j < currentCategory.getItems().size(); j++) {
 
-                final Item currentItem = currentCategory.getItems().get(j);
+                final MenuItem currentItem = currentCategory.getItems().get(j);
 
 
                 HBox hBox = new HBox(10);// hold item info VBox and trash VBox.
@@ -149,7 +149,7 @@ public class AdminMenuController {
     /**
      * makeActionsToTrashButton method that will delete a specific item.
      * */
-    public void makeActionsToTrashButton(Category category, Item itemToDelete) {
+    public void makeActionsToTrashButton(Category category, MenuItem itemToDelete) {
         if (showConfirmationAlert("Confirm Delete", "Are you sure you want to delete this item?")) {
             //delete the item from UI.
             deleteItem(category, itemToDelete);
@@ -191,7 +191,7 @@ public class AdminMenuController {
                         double price = Double.parseDouble(priceStr);
 
                         // Create a new item
-                        Item newItem = new Item(itemName, price, category.getCategoryId());
+                        MenuItem newItem = new MenuItem(itemName, price, category.getCategoryId());
 
                         // Add item to the database
                         CategoryRepo.addItem(newItem);
@@ -288,7 +288,7 @@ public class AdminMenuController {
     /**
      * deleteItemFromUI method that will remove the item from the UI and the DB.
      * */
-    public void deleteItem(Category category, Item itemToDelete) {
+    public void deleteItem(Category category, MenuItem itemToDelete) {
         for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
             TitledPane titledPane = menuAccordion.getPanes().get(i);
             if (titledPane.getText().equals(category.getCategoryName())) {

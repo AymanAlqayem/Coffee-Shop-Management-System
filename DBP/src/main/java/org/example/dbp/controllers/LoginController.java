@@ -5,19 +5,14 @@ import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.example.dbp.models.User;
 import org.example.dbp.repository.UserRepository;
 
-import javafx.scene.image.ImageView;
-
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 
 public class LoginController extends Application {

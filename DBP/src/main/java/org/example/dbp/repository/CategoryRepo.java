@@ -2,9 +2,9 @@ package org.example.dbp.repository;
 
 import org.example.dbp.db.DataBase;
 import org.example.dbp.models.Category;
-import org.example.dbp.models.Item;
+import org.example.dbp.models.MenuItem;
 
-import javax.imageio.ImageIO;
+import java.awt.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,14 +23,14 @@ public class CategoryRepo {
         // Clear the existing categories list to prevent duplicates
         categories.clear();
 
-        String query = "SELECT * FROM category LEFT JOIN menu_item ON category_id = category.id";
+        String query = "SELECT * FROM category c  LEFT JOIN menu_item i  ON c.id = i.category_id";
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
-                int categoryId = resultSet.getInt("ID");
+                int categoryId = resultSet.getInt("id");
                 Category currentCategory = null;
 
                 // Check if the category already exists in the list
@@ -41,19 +41,18 @@ public class CategoryRepo {
                     }
                 }
 
-                // If the category does not exist, create a new one
+                // If the category does not exist, create a new one.
                 if (currentCategory == null) {
                     currentCategory = new Category();
                     currentCategory.setCategoryId(categoryId);
-                    currentCategory.setCategoryName(resultSet.getString("category_name"));
+                    currentCategory.setCategoryName(resultSet.getString("name"));
                     currentCategory.setItems(new ArrayList<>());
                     categories.add(currentCategory); // Add the new category to the list
                 }
 
                 // Add the current item to the category's item list
-                if (resultSet.getString("menu_item.id") != null) {
-                    Item item = new Item();
-                    item.setItemId(resultSet.getInt("menu_item.id"));
+                if (resultSet.getString("i.id") != null) {
+                    MenuItem item = new MenuItem();
                     item.setItemName(resultSet.getString("item_name"));
                     item.setPrice(resultSet.getDouble("price"));
                     item.setCategoryId(categoryId);
@@ -68,12 +67,11 @@ public class CategoryRepo {
         return categories;
     }
 
-
     /**
      * addCategory method that will add the new category into DB.
      * */
     public static void addCategory(String categoryName) {
-        String query = "insert into category(category_name) values(?)";
+        String query = "insert into category(name) values(?)";
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -89,7 +87,7 @@ public class CategoryRepo {
      * addItem method that will add an item into DB.
      * */
 
-    public static void addItem( Item item) {
+    public static void addItem(MenuItem item) {
         String query = "insert into menu_item(item_name,price, category_id) values(?,?,?)";
 
         try (Connection connection = DataBase.getDBConnection();
@@ -126,18 +124,16 @@ public class CategoryRepo {
      * deleteCategory method that will remove the category from the DB.
      * */
     public static void deleteCategory(String categoryName) {
-        String query = "delete from category where category_name = ?";
+        String query = "delete from category where name = ?";
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-
             statement.setString(1, categoryName);
             statement.executeUpdate();
 
         } catch (SQLException e) {
 
         }
-
     }
 
 //    public static boolean deleteCategory(String categoryName) {
@@ -165,7 +161,6 @@ public class CategoryRepo {
 //    }
 
 
-
     /**
      * isItemInDatabase method to check if the item already exists in the DB
      * */
@@ -191,7 +186,7 @@ public class CategoryRepo {
      * isCategoryInDB method that will check if the category in the DB.
      * */
     public static boolean isCategoryInDB(String categoryName) {
-        String query = "SELECT COUNT(category_name) FROM category WHERE category_name = ?";
+        String query = "SELECT COUNT(name) FROM category c WHERE c.name = ?";
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

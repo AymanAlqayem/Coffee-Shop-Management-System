@@ -3,7 +3,7 @@ create table User
     id           int primary key auto_increment,
     name         varchar(30),
     role         varchar(12) not null,
-    email        varchar(12) unique,
+    email        varchar(45) unique,
     hire_date    date,
     phone_number varchar(10),
     password     varchar(30),
@@ -154,3 +154,5 @@ values ("Mesflora smoothie", 18, 6),
        ("pineapple ", 18, 6),
        ("Strawberry  smoothie", 20, 6),
        ("Mango smoothie", 20, 6);
+
+
