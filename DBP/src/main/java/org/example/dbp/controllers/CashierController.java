@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Optional;
 
-public class CashierController  {
+public class CashierController {
 
     //Basic Controllers.
 
@@ -42,9 +42,9 @@ public class CashierController  {
      * makeActionsForSignOutButton method that will make actions for sign-out button.
      * */
     public void makeActionsForSignOutButton(ActionEvent event) {
-        closeConfirmation((Stage) lbName.getScene().getWindow());
-
-        // Load the login stage again
+        //close current stage.
+        ((Stage) lbName.getScene().getWindow()).close();
+        // Load the login stage again.
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Login.fxml"));
             Scene loginScene = new Scene(fxmlLoader.load(), 1525, 782);
@@ -55,25 +55,7 @@ public class CashierController  {
         } catch (IOException ex) {
             ex.printStackTrace();  // Handle loading errors
         }
-
     }
-
-
-    /**
-     * closeConfirmation method that will close the admin stage.
-     * */
-    private void closeConfirmation(Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Exit");
-        alert.setHeaderText("Are you sure you want to exit?");
-        alert.setContentText("Unsaved changes might be lost.");
-
-        // Handle the user's response
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            stage.close();
-        }
-    }
-
 
     /**
      * switchWin method that will witch between widows based a specific button.
@@ -82,11 +64,14 @@ public class CashierController  {
         if (e.getSource() == btMenu) {
             menuForm.setVisible(true);
             billForm.setVisible(true);
-            loadMenu();
+            loadCashierMenu();
         }
     }
 
-    private void loadMenu() {
+    /**
+     * loadCashierMenu method that will load the cashier menu.
+     * */
+    private void loadCashierMenu() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dbp/CashierMenu.fxml"));
             AnchorPane menuPane = loader.load(); // Load the menu content
@@ -98,10 +83,12 @@ public class CashierController  {
         }
     }
 
+    /**
+     * setUserName method that will set the username
+     * */
     public void setUserName(String userName) {
         lbName.setText(userName);
     }
-
 
     /**
      * showErrorAlert method that will show an error alert due to entered input.
@@ -157,10 +144,5 @@ public class CashierController  {
         successAlert.showAndWait();
 
     }
-
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
 }
 

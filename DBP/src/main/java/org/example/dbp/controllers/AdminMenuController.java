@@ -31,7 +31,7 @@ public class AdminMenuController {
     }
 
     /**
-     * loadMenuData method that will load all categories and items.
+     * loadMenuData method that will load all categories and its items.
      * */
 
     public void loadMenuData() {
@@ -51,7 +51,6 @@ public class AdminMenuController {
 
             final Category currentCategory = categories.get(i);
 
-
             /**
              *  Iterate over the items in the current category.
              * */
@@ -59,7 +58,6 @@ public class AdminMenuController {
             for (int j = 0; j < currentCategory.getItems().size(); j++) {
 
                 final MenuItem currentItem = currentCategory.getItems().get(j);
-
 
                 HBox hBox = new HBox(10);// hold item info VBox and trash VBox.
                 hBox.setAlignment(Pos.CENTER_LEFT);
@@ -81,7 +79,7 @@ public class AdminMenuController {
                 itemInfoVBox.setStyle("-fx-background-color: #f0f0f0;");
                 itemInfoVBox.setPadding(new Insets(10, 10, 10, 10));
 
-                Image trashImage = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\trash.png");
+                Image trashImage = new Image("C:\\Users\\a-z\\Desktop\\DB_PROJECT\\DBProject\\DBP\\src\\main\\resources\\trash.png");
                 ImageView trashImageView = new ImageView(trashImage);
 
 
@@ -105,7 +103,7 @@ public class AdminMenuController {
                  * */
 
                 btTrash.setOnMouseClicked(e -> {
-                    makeActionsToTrashButton(currentCategory, currentItem);
+                    makeActionsToTrashButton(currentItem);
                 });
             }
 
@@ -149,12 +147,11 @@ public class AdminMenuController {
     /**
      * makeActionsToTrashButton method that will delete a specific item.
      * */
-    public void makeActionsToTrashButton(Category category, MenuItem itemToDelete) {
+    public void makeActionsToTrashButton(MenuItem itemToDelete) {
         if (showConfirmationAlert("Confirm Delete", "Are you sure you want to delete this item?")) {
-            //delete the item from UI.
-            deleteItem(category, itemToDelete);
+            CategoryRepo.deleteItem(itemToDelete.getItemName());
+            loadMenuData();
         }
-
     }
 
     /**
@@ -196,7 +193,7 @@ public class AdminMenuController {
                         // Add item to the database
                         CategoryRepo.addItem(newItem);
 
-                        // Add the item to the UI
+                        // Reload Items.
                         loadMenuData();
 
                         successAlert("Item Added", "New item '" + itemName + "' with price " + price + " added successfully.");
@@ -211,123 +208,13 @@ public class AdminMenuController {
 
 
     /**
-     * addItemToCategory method that will add the new item into UI.
-     * */
-//    public void addItemToUI(Category category, Item newItem) {
-//        // Iterate over the panes in the accordion using a normal for loop
-//        for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
-//            TitledPane titledPane = menuAccordion.getPanes().get(i);
-//            if (titledPane.getText().equals(category.getCategoryName())) {
-//                // Get the ScrollPane that holds the VBox
-//                ScrollPane scrollPane = (ScrollPane) titledPane.getContent();
-//                VBox base;
-//
-//                // Check if the ScrollPane's content is already a VBox
-//                if (scrollPane.getContent() instanceof VBox) {
-//                    base = (VBox) scrollPane.getContent(); // Retrieve the existing VBox
-//                } else {
-//                    return;
-//                }
-//
-//                HBox hbox = new HBox(10);
-//
-//                VBox itemInfoVBox = new VBox(10);
-//                itemInfoVBox.setAlignment(Pos.TOP_LEFT);
-//                itemInfoVBox.setPrefWidth(250);
-//                itemInfoVBox.setPadding(new Insets(10, 10, 10, 10));
-//
-//                Label lbItemName = new Label(newItem.getItemName());
-//                Label lbItmePrice = new Label(newItem.getPrice() + " NIS");
-//                JFXButton btPurchaseItem = new JFXButton();
-//
-//                lbItemName.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 20px; -fx-text-fill: #090808;");
-//                lbItmePrice.setStyle("-fx-font-family: 'Times New Roman'; -fx-font-size: 16px; -fx-text-fill: #e85c0d;");
-//
-//
-//                btPurchaseItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ");
-//
-//                Image image = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\AddForMenu.png");
-//                ImageView imageView = new ImageView(image);
-//
-//                btPurchaseItem.setGraphic(imageView);
-//
-//                itemInfoVBox.getChildren().addAll(lbItemName, lbItmePrice, btPurchaseItem);
-//
-//                itemInfoVBox.setStyle("-fx-background-color: #f0f0f0;");
-//                itemInfoVBox.setPadding(new Insets(10, 10, 10, 10));
-//
-//                Image trashImage = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\trash.png");
-//                ImageView trashImageView = new ImageView(trashImage);
-//
-//                VBox trashVBox = new VBox();
-//                JFXButton btTrash = new JFXButton();
-//                btTrash.setStyle("-fx-background-radius: 90;");
-//
-//                btTrash.setGraphic(trashImageView);
-//
-//                trashVBox.getChildren().add(btTrash);
-//
-//                trashVBox.setAlignment(Pos.CENTER_LEFT);
-//
-//                btPurchaseItem.setOnMouseClicked(e -> {
-//                    makeActionsToPurchaseButton(newItem);
-//                });
-//
-//                btTrash.setOnMouseClicked(e -> {
-//                    makeActionsToTrashButton(category, newItem);
-//                });
-//
-//                hbox.getChildren().addAll(itemInfoVBox, trashVBox);
-//                hbox.setStyle("-fx-background-color: #f0f0f0;");
-//                base.getChildren().add(0, hbox);
-//                break;
-//            }
-//        }
-//    }
-
-    /**
-     * deleteItemFromUI method that will remove the item from the UI and the DB.
-     * */
-    public void deleteItem(Category category, MenuItem itemToDelete) {
-        for (int i = 0; i < menuAccordion.getPanes().size(); i++) {
-            TitledPane titledPane = menuAccordion.getPanes().get(i);
-            if (titledPane.getText().equals(category.getCategoryName())) {
-                // Get the ScrollPane that holds the VBox
-                ScrollPane scrollPane = (ScrollPane) titledPane.getContent();
-                VBox base; // base contains VBoxes
-
-                // Check if the ScrollPane's content is already a VBox
-                if (scrollPane.getContent() instanceof VBox) {
-                    base = (VBox) scrollPane.getContent();
-
-                    // Iterate through the children of the VBox to find the item
-                    for (int j = 0; j < base.getChildren().size(); j++) {
-                        HBox hBox = (HBox) base.getChildren().get(j); // each one contains 2 VBoxes: one for item info and another for the trash button.
-
-                        // Get the VBox that contains the item info
-                        VBox infoVBox = (VBox) hBox.getChildren().get(0);
-                        Label lbItemName = (Label) infoVBox.getChildren().get(0);
-
-                        if (lbItemName.getText().equals(itemToDelete.getItemName())) {
-                            base.getChildren().remove(j);//remove item from UI
-                            CategoryRepo.deleteItem(itemToDelete.getItemName());//remove item from the DB.
-                            break;
-                        }
-                    }
-                }
-                return; // Exit the method after processing the category
-            }
-        }
-    }
-
-
-    /**
      * addNewCategory method that will add the new category into DB.
      * */
 
     public void addNewCategory() {
-
-        //make actions for added new category button.
+        /**
+         * make actions for added new category button.
+         * */
         btAddCategory.setOnAction(event -> {
             TextInputDialog dialog = new TextInputDialog("");
             dialog.setTitle("New Category");
@@ -346,7 +233,6 @@ public class AdminMenuController {
                 } else {
                     //Add the new category to DB
                     CategoryRepo.addCategory(categoryName);
-
                     loadMenuData();
                 }
             });
@@ -391,7 +277,6 @@ public class AdminMenuController {
         });
     }
 
-
     /**
      * showErrorAlert method that will show an error alert due to entered input.
      * */
@@ -423,21 +308,8 @@ public class AdminMenuController {
     }
 
     /**
-     * showInfoAlert method that will show specific information.
-     * */
-
-    public void showInfoAlert(String title, String context) {
-        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
-        infoAlert.setTitle(title);
-        infoAlert.setHeaderText(null);
-        infoAlert.setContentText(context);
-        infoAlert.showAndWait();
-    }
-
-    /**
      * successAlert method that will show a success alert that the operation done successfully.
      * */
-
     public void successAlert(String title, String context) {
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
         successAlert.setTitle(title);

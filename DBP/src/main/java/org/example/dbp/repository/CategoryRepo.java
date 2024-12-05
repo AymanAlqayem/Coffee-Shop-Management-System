@@ -28,7 +28,6 @@ public class CategoryRepo {
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
-
             while (resultSet.next()) {
                 int categoryId = resultSet.getInt("c.id");
                 Category currentCategory = null;
@@ -60,7 +59,6 @@ public class CategoryRepo {
                     currentCategory.getItems().add(item); // Add the item to the current category
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

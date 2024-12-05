@@ -1,4 +1,3 @@
-
 create table User
 (
     id           int primary key auto_increment,
@@ -106,8 +105,6 @@ create table Invoice
 
 
 
-
-
 insert into category (name)
 values ("Hot Drinks")
      , ("Cold Drinks")
@@ -181,5 +178,11 @@ values ("Mesflora smoothie", 18, 6),
        ("pineapple ", 18, 6),
        ("Strawberry  smoothie", 20, 6),
        ("Mango smoothie", 20, 6);
+
+
+
+insert into user(name, role, email, hire_date, phone_number, password, salary)
+values ('Ayman', 'Admin', 'nabilA02@gmail.com', '2023-12-12', '0594276', 122, 3600),
+       ('sam', 'cashier', 'sam@gmail.com', '2023-12-12', '0594276', 122, 3200)
 
 

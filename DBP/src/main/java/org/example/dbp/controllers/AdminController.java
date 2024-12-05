@@ -67,17 +67,19 @@ public class AdminController {
         // Populate the combo box with options
         RoleComboBox.getItems().addAll("Admin", "Employee");
 
-
         // Add close request handler for the admin stage
-        Platform.runLater(() -> {
-            Stage stage = (Stage) lbUserName.getScene().getWindow();
-            stage.setOnCloseRequest(event -> {
-                event.consume();
-                closeConfirmation(stage);
-            });
-        });
+//        Platform.runLater(() -> {
+//            Stage stage = (Stage) lbUserName.getScene().getWindow();
+//            stage.setOnCloseRequest(event -> {
+//                event.consume();
+//                closeConfirmation(stage);
+//            });
+//        });
     }
 
+    /**
+     * comboOptions method that will set the Options in the combobox.
+     * */
     @FXML
     public void comboOptions(ActionEvent e) {
         // Get the selected option when an action occurs
@@ -90,8 +92,8 @@ public class AdminController {
      * */
 
     public void makeActionsForSignOutButton(ActionEvent event) {
-        closeConfirmation((Stage) lbUserName.getScene().getWindow());
-
+        //close current stage.
+        ((Stage) lbUserName.getScene().getWindow()).close();
         // Load the login stage again
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Login.fxml"));
@@ -102,22 +104,6 @@ public class AdminController {
             loginStage.show();
         } catch (IOException ex) {
             ex.printStackTrace();  // Handle loading errors
-        }
-
-    }
-
-    /**
-     * closeConfirmation method that will close the admin stage.
-     * */
-    private void closeConfirmation(Stage stage) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirm Exit");
-        alert.setHeaderText("Are you sure you want to exit?");
-        alert.setContentText("Unsaved changes might be lost.");
-
-        // Handle the user's response
-        if (alert.showAndWait().get() == ButtonType.OK) {
-            stage.close();
         }
     }
 
@@ -137,11 +123,14 @@ public class AdminController {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(false);
             menuForm.setVisible(true);
-            loadMenu(); // Call the method to load the Admin Menu FXML
+            loadAdminMenu(); // Call the method to load the Admin Menu FXML
         }
     }
 
-    private void loadMenu() {
+    /**
+     * loadAdminMenu method that will load the admin menu.
+     * */
+    private void loadAdminMenu() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dbp/AdminMenu.fxml"));
             AnchorPane menuPane = loader.load(); // Load the menu content
@@ -153,12 +142,10 @@ public class AdminController {
         }
     }
 
-
+    /**
+     * setUserName method that will set the username
+     * */
     public void setUserName(String userName) {
         lbUserName.setText(userName);
     }
-
-    public static void main(String[] args) {
-    }
-
 }
