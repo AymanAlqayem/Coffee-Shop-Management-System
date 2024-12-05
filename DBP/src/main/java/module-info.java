@@ -9,7 +9,7 @@ module org.example.dbp {
     requires java.desktop;
 
     opens org.example.dbp to javafx.fxml;
-    exports org.example.dbp;
+//    exports org.example.dbp;
     exports org.example.dbp.controllers;
     opens org.example.dbp.controllers to javafx.fxml;
     exports org.example.dbp.models;
