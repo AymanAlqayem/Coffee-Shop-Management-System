@@ -6,14 +6,14 @@ create table User
     email        varchar(45) unique,
     hire_date    date,
     phone_number varchar(10),
-    password     varchar(30),
-    salary       decimal
+    password     varchar(30) NOT NULL,
+    salary       real        NOT NULL
 );
 
 create table Customer
 (
     id            int primary key auto_increment,
-    customer_name varchar(25),
+    customer_name varchar(25) NOT NULL,
     phone_number  varchar(10)
 );
 
@@ -30,16 +30,26 @@ create table Order_table
 create table category
 (
     id   int primary key auto_increment,
-    name varchar(30) unique
+    name varchar(30) NOT NULL unique
 );
 
 create table Menu_item
 (
     id          int primary key auto_increment,
-    item_name   varchar(30) unique,
-    price       decimal not null,
+    item_name   varchar(30) NOT NULL UNIQUE,
+    price       real        not null,
     category_id int,
-    foreign key (category_id) references category (id)
+    foreign key (category_id) references category (id) ON DELETE CASCADE
+);
+
+create table Order_Line
+(
+    order_id         int,
+    menu_item_id     int,
+    ordered_Quantity int,
+    primary key (order_id, menu_item_id),
+    foreign key (order_id) references Order_table (id),
+    foreign key (menu_item_id) references menu_item (id)
 );
 
 create table Inventory
@@ -50,33 +60,47 @@ create table Inventory
     foreign key (admin_id) references User (id)
 );
 
+CREATE TABLE Purchase_Order
+(
+    id           int primary key auto_increment,
+    date         DATE NOT NULL,
+    total_amount real,
+    inventory_id int,
+    FOREIGN KEY (inventory_id) REFERENCES Inventory (id)
+);
+
 create table Inventory_item
 (
     id              int primary key auto_increment,
-    name            varchar(20),
-    Quantity        decimal,
+    name            varchar(20) NOT NULL UNIQUE,
+    Quantity        real,
     production_date date,
     expiry_date     date,
     inventory_id    int,
     foreign key (inventory_id) references Inventory (id)
 );
 
+CREATE TABLE Inventory_Order_Line
+(
+    id                INT PRIMARY KEY AUTO_INCREMENT,
+    purchase_order_id INT,
+    inventory_item_id INT,
+    quantity          INT NOT NULL,
+    unit_price        REAL,
+    FOREIGN KEY (purchase_order_id) REFERENCES Purchase_Order (id),
+    FOREIGN KEY (inventory_item_id) REFERENCES Inventory_item (id)
+);
+
+
 create table Invoice
 (
     id                int primary key auto_increment,
     created_date_time datetime,
-    amount            decimal,
+    amount            real,
     cashier_id        int,
     order_id          int,
     foreign key (cashier_id) references User (id),
     foreign key (order_id) references Order_table (id)
-);
-
-create table Order_MenuItem
-(
-    order_id     int,
-    menu_item_id int,
-    primary key (order_id, menu_item_id)
 );
 
 
@@ -154,5 +178,11 @@ values ("Mesflora smoothie", 18, 6),
        ("pineapple ", 18, 6),
        ("Strawberry  smoothie", 20, 6),
        ("Mango smoothie", 20, 6);
+
+
+
+insert into user(name, role, email, hire_date, phone_number, password, salary)
+values ('Ayman', 'Admin', 'nabilA02@gmail.com', '2023-12-12', '0594276', 122, 3600),
+       ('sam', 'cashier', 'sam@gmail.com', '2023-12-12', '0594276', 122, 3200)
 
 

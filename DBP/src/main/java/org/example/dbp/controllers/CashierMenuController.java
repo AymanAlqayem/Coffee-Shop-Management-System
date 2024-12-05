@@ -70,7 +70,7 @@ public class CashierMenuController {
 
                 btPurchaseItem.setStyle("-fx-font-family: 'Times New Roman';-fx-background-radius: 90 ; -fx-font-size: 21 ");
 
-                Image image = new Image("C:\\Users\\a-z\\Desktop\\DBProject\\DBP\\src\\main\\resources\\AddForMenu.png");
+                Image image = new Image("C:\\Users\\a-z\\Desktop\\DB_PROJECT\\DBProject\\DBP\\src\\main\\resources\\\\AddForMenu.png");
                 ImageView imageView = new ImageView(image);
 
                 btPurchaseItem.setGraphic(imageView);
@@ -105,7 +105,6 @@ public class CashierMenuController {
      * makeActionsToPurchaseButton that will show a text input dialog to enter the quantity of the item.
      * */
     public void makeActionsToPurchaseButton(MenuItem item) {
-
         TextInputDialog dialog = new TextInputDialog("1");
         dialog.setTitle("Item Purchase");
         dialog.setHeaderText("Enter the number of items to purchase");
@@ -186,5 +185,4 @@ public class CashierMenuController {
         successAlert.showAndWait();
 
     }
-
 }

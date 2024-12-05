@@ -23,7 +23,6 @@ public class LoginController extends Application {
     @FXML
     JFXButton btLogin;
 
-
     UserRepository userRepo = new UserRepository();
 
     public void start(Stage stage) {
@@ -39,7 +38,9 @@ public class LoginController extends Application {
 
     }
 
-
+    /**
+     * login method that login into admin stage or cashier stage based the role.
+     * */
     public void login() throws IOException {
         String username = tfUserName.getText();
         String password = tfPass.getText();
@@ -87,11 +88,12 @@ public class LoginController extends Application {
             // Close the login stage
             Stage loginStage = (Stage) tfUserName.getScene().getWindow();
             loginStage.close();
-
         }
     }
 
-
+    /**
+     * showAlert method that will show an alert.
+     * */
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -103,6 +105,4 @@ public class LoginController extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
-
 }

@@ -28,9 +28,8 @@ public class CategoryRepo {
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query);
              ResultSet resultSet = statement.executeQuery()) {
-
             while (resultSet.next()) {
-                int categoryId = resultSet.getInt("id");
+                int categoryId = resultSet.getInt("c.id");
                 Category currentCategory = null;
 
                 // Check if the category already exists in the list
@@ -60,7 +59,6 @@ public class CategoryRepo {
                     currentCategory.getItems().add(item); // Add the item to the current category
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -95,7 +93,6 @@ public class CategoryRepo {
             statement.setString(1, item.getItemName());
             statement.setDouble(2, item.getPrice());
             statement.setInt(3, item.getCategoryId());
-
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,11 +108,8 @@ public class CategoryRepo {
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
-
             statement.setString(1, itemName);
-
             statement.executeUpdate();
-
         } catch (SQLException e) {
         }
     }
@@ -130,36 +124,9 @@ public class CategoryRepo {
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, categoryName);
             statement.executeUpdate();
-
         } catch (SQLException e) {
-
         }
     }
-
-//    public static boolean deleteCategory(String categoryName) {
-//        String query = "DELETE FROM category WHERE category_name = ?";
-//
-//        // Validate input
-//        if (categoryName == null || categoryName.trim().isEmpty()) {
-//            System.out.println("Invalid category name provided.");
-//            return false; // Return false for invalid input
-//        }
-//
-//        try (Connection connection = DataBase.getDBConnection();
-//             PreparedStatement statement = connection.prepareStatement(query)) {
-//
-//            statement.setString(1, categoryName);
-//            int rowsAffected = statement.executeUpdate();
-//
-//            // Return true if at least one row was affected (deleted)
-//            return rowsAffected > 0;
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace(); // Log the exception
-//            return false; // Indicate failure
-//        }
-//    }
-
 
     /**
      * isItemInDatabase method to check if the item already exists in the DB
