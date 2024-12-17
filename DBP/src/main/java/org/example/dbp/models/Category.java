@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Category {
     private int categoryId;
     private String categoryName;
-    ArrayList<MenuItem> items = new ArrayList<MenuItem>();
+    ArrayList<MenuItem> items = new ArrayList<>();
 
 
     public Category() {

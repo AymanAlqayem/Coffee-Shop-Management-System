@@ -1,18 +1,20 @@
 package org.example.dbp.models;
 
+import java.util.Date;
+
 public class User {
     private String name;
     private String role;
     private String email;
-    private String hireDate;
+    private Date hireDate;
     private String phoneNumber;
     private String pass;
-    private String salary;
+    private double salary;
 
     public User() {
     }
 
-    public User(String name, String role, String email, String hireDate, String phoneNumber, String pass, String salary) {
+    public User(String name, String role, String email, Date hireDate, String phoneNumber, String pass, double salary) {
         this.name = name;
         this.role = role;
         this.email = email;
@@ -46,11 +48,11 @@ public class User {
         this.email = email;
     }
 
-    public String getHire_date() {
+    public Date getHire_date() {
         return hireDate;
     }
 
-    public void setHire_date(String hire_date) {
+    public void setHire_date(Date hire_date) {
         this.hireDate = hire_date;
     }
 
@@ -70,11 +72,11 @@ public class User {
         this.pass = pass;
     }
 
-    public String getSalary() {
+    public double getSalary() {
         return salary;
     }
 
-    public void setSalary(String salary) {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 

@@ -9,6 +9,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import org.example.dbp.models.Customer;
+import org.example.dbp.repository.CustomerRepository;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -33,10 +35,31 @@ public class CashierController {
     private JFXButton btAdd;
 
     @FXML
+    private JFXButton createBillButton;
+
+    //Forms.
+
+    @FXML
     private AnchorPane menuForm;
 
     @FXML
     private AnchorPane billForm;
+
+    @FXML
+    private AnchorPane addNewCustomer;
+
+
+
+    //Controllers in add a new customers form.
+    @FXML
+    private TextField customerName;
+
+    @FXML
+    private TextField customerPhoneNumber;
+
+    //Controllers for bill form.
+    Accordion billAccordion;
+
 
     /**
      * makeActionsForSignOutButton method that will make actions for sign-out button.
@@ -65,6 +88,11 @@ public class CashierController {
             menuForm.setVisible(true);
             billForm.setVisible(true);
             loadCashierMenu();
+            addNewCustomer.setVisible(false);
+        } else if (e.getSource() == btAdd) {
+            addNewCustomer.setVisible(true);
+            menuForm.setVisible(false);
+            billForm.setVisible(false);
         }
     }
 
@@ -84,11 +112,35 @@ public class CashierController {
     }
 
     /**
-     * setUserName method that will set the username
+     * addNewCustomer method that will add a new customer.
      * */
-    public void setUserName(String userName) {
-        lbName.setText(userName);
+    public void addNewCustomer(ActionEvent event) {
+        if (customerName.getText().isEmpty() || customerPhoneNumber.getText().isEmpty()) {
+            showErrorAlert("Invalid Input", "Please enter the name and the phone number");
+            return;
+        }
+        //Check if the customer already exists
+        if (CustomerRepository.isCustomerExist(customerPhoneNumber.getText())) {
+            showErrorAlert("Invalid Input", "Customer already exists");
+            return;
+        }
+
+        //Check if the password is valid.
+        if (customerPhoneNumber.getText().length() != 10) {
+            showErrorAlert("Invalid Input", "Please enter a valid phone number");
+            return;
+        }
+        //Add the new customer.
+        Customer newCustomer = new Customer(customerName.getText(), customerPhoneNumber.getText());
+        CustomerRepository.addNewCustomer(newCustomer);
+        successAlert("Customer added", "Customer successfully added");
+        customerName.clear();
+        customerPhoneNumber.clear();
+
     }
+
+
+
 
     /**
      * showErrorAlert method that will show an error alert due to entered input.
@@ -101,41 +153,10 @@ public class CashierController {
         alert.showAndWait();
     }
 
-    /**
-     * showConfirmationAlert that will show a confirmation alert to confirm an operation.
-     * */
-
-    public boolean showConfirmationAlert(String title, String context) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(context);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    /**
-     * showInfoAlert method that will show specific information.
-     * */
-
-    public void showInfoAlert(String title, String context) {
-        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
-        infoAlert.setTitle(title);
-        infoAlert.setHeaderText(null);
-        infoAlert.setContentText(context);
-        infoAlert.showAndWait();
-    }
 
     /**
      * successAlert method that will show a success alert that the operation done successfully.
      * */
-
     public void successAlert(String title, String context) {
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
         successAlert.setTitle(title);
@@ -143,6 +164,13 @@ public class CashierController {
         successAlert.setContentText(context);
         successAlert.showAndWait();
 
+    }
+
+    /**
+     * setUserName method that will set the username
+     * */
+    public void setUserName(String userName) {
+        lbName.setText(userName);
     }
 }
 

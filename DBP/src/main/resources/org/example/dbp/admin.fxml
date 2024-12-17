@@ -14,9 +14,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.AdminController">
+<AnchorPane fx:id="base" prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.AdminController">
    <children>
-      <AnchorPane layoutX="-2.0" prefHeight="687.0" prefWidth="210.0">
+      <AnchorPane fx:id="BlackList" layoutX="-2.0" prefHeight="687.0" prefWidth="210.0">
          <children>
             <AnchorPane layoutX="-1.0" layoutY="-1.0" prefHeight="775.0" prefWidth="215.0" style="-fx-background-color: #050505;">
                <children>
@@ -214,9 +214,9 @@
                </children></AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="addNewEmployee_form" layoutX="212.0" layoutY="35.0" prefHeight="689.0" prefWidth="682.0" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="addNewEmployee_form" layoutX="212.0" layoutY="35.0" prefHeight="689.0" prefWidth="682.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="782.0" prefWidth="1301.0">
+            <AnchorPane prefHeight="782.0" prefWidth="1301.0" visible="false">
                <children>
                   <Label layoutX="33.0" layoutY="33.0" prefHeight="38.0" prefWidth="366.0" text="Add new Admin or  Employee">
                      <font>
@@ -228,7 +228,7 @@
                         <Font name="Lucida Fax Regular" size="23.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="121.0" layoutY="141.0" prefHeight="34.0" prefWidth="230.0" style="-fx-background-color: white; -fx-border-color: Black; -fx-text-inner-color: Black;" />
+                  <TextField fx:id="tfEmployeeName" layoutX="121.0" layoutY="141.0" prefHeight="34.0" prefWidth="230.0" style="-fx-background-color: white; -fx-border-color: Black; -fx-text-inner-color: Black;" />
                   <Label layoutX="33.0" layoutY="215.0" prefHeight="47.0" prefWidth="80.0" text="Role">
                      <font>
                         <Font name="Lucida Fax Regular" size="23.0" />
@@ -244,29 +244,36 @@
                         <Font name="Lucida Fax Regular" size="23.0" />
                      </font>
                   </Label>
-                  <Label layoutX="33.0" layoutY="459.0" prefHeight="38.0" prefWidth="120.0" text="Salary">
+                  <Label layoutX="45.0" layoutY="550.0" prefHeight="38.0" prefWidth="120.0" text="Salary">
                      <font>
                         <Font name="Lucida Fax Regular" size="23.0" />
                      </font>
                   </Label>
-                  <TextField layoutX="147.0" layoutY="461.0" prefHeight="36.0" prefWidth="202.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
-                  <TextField layoutX="121.0" layoutY="304.0" prefHeight="36.0" prefWidth="230.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: black;" />
-                  <JFXComboBox fx:id="RoleComboBox" layoutX="121.0" layoutY="219.0" onAction="#comboOptions" prefHeight="38.0" prefWidth="230.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
-                  <JFXButton layoutX="128.0" layoutY="663.0" prefHeight="57.0" prefWidth="263.0" style="-fx-background-radius: 90;" text="Add" textFill="WHITE">
-                     <font>
-                        <Font name="Lucida Fax Regular" size="27.0" />
-                     </font>
-                  </JFXButton>
-                  <DatePicker layoutX="148.0" layoutY="387.0" prefHeight="36.0" prefWidth="201.0" style="-fx-background-color: #000000; -fx-border-color: #000000;" />
-                  <JFXButton fx:id="btAddNewEmployee" layoutX="158.0" layoutY="579.0" prefHeight="66.0" prefWidth="202.0" style="-fx-background-radius: 90;" text="   Add    ">
+                  <TextField fx:id="employeeSalary" layoutX="188.0" layoutY="552.0" prefHeight="36.0" prefWidth="202.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
+                  <TextField fx:id="employeeEmail" layoutX="121.0" layoutY="304.0" prefHeight="36.0" prefWidth="230.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: black;" />
+                  <JFXComboBox fx:id="roleComboBox" layoutX="121.0" layoutY="219.0" onAction="#comboOptions" prefHeight="38.0" prefWidth="230.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
+                  <DatePicker fx:id="employeeHireDate" layoutX="148.0" layoutY="387.0" prefHeight="36.0" prefWidth="201.0" style="-fx-background-color: #000000; -fx-border-color: #000000;" />
+                  <JFXButton fx:id="btAddNewEmployee" layoutX="203.0" layoutY="693.0" onAction="#addNewEmployee" prefHeight="66.0" prefWidth="202.0" style="-fx-background-radius: 90;" text="   Add    ">
                      <font>
                         <Font name="Lucida Fax Regular" size="22.0" />
                      </font>
                   </JFXButton>
+                  <Label layoutX="27.0" layoutY="471.0" prefHeight="38.0" prefWidth="190.0" text="Phone Number">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="23.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="employeePhoneNumber" layoutX="224.0" layoutY="472.0" prefHeight="36.0" prefWidth="202.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
+                  <Label layoutX="33.0" layoutY="622.0" prefHeight="47.0" prefWidth="143.0" text="Password">
+                     <font>
+                        <Font name="Lucida Fax Regular" size="23.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="employeePassword" layoutX="188.0" layoutY="628.0" prefHeight="36.0" prefWidth="202.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="menuForm" layoutX="212.0" layoutY="1.0" prefHeight="782.0" prefWidth="1318.0" />
+      <AnchorPane fx:id="menuForm" layoutX="212.0" layoutY="1.0" prefHeight="782.0" prefWidth="1318.0" visible="false" />
    </children>
 </AnchorPane>

@@ -6,19 +6,21 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import com.jfoenix.controls.JFXComboBox;
+import org.example.dbp.models.User;
+import org.example.dbp.repository.UserRepository;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 public class AdminController {
 
     //Forms.
-
     @FXML
     private AnchorPane dashBoard_form;
     @FXML
@@ -26,7 +28,6 @@ public class AdminController {
 
     @FXML
     private AnchorPane menuForm;
-
 
     // Basic Controllers.
 
@@ -54,18 +55,31 @@ public class AdminController {
     @FXML
     private Label lbUserName;
 
-
     //Controllers in addNewEmployee_form.
     @FXML
-    private JFXComboBox<String> RoleComboBox;
+    private JFXComboBox<String> roleComboBox;
 
     @FXML
     JFXButton btAddNewEmployee;
+    @FXML
+    private TextField tfEmployeeName;
+    @FXML
+    private TextField employeeEmail;
+
+    @FXML
+    private DatePicker employeeHireDate;
+
+    @FXML
+    private TextField employeeSalary;
+    @FXML
+    private TextField employeePhoneNumber;
+    @FXML
+    private TextField employeePassword;
 
 
     public void initialize() {
         // Populate the combo box with options
-        RoleComboBox.getItems().addAll("Admin", "Employee");
+        roleComboBox.getItems().addAll("Admin", "Employee");
 
         // Add close request handler for the admin stage
 //        Platform.runLater(() -> {
@@ -83,8 +97,8 @@ public class AdminController {
     @FXML
     public void comboOptions(ActionEvent e) {
         // Get the selected option when an action occurs
-        String selectedOption = RoleComboBox.getSelectionModel().getSelectedItem();
-        System.out.println("Selected option: " + selectedOption);
+        String selectedOption = roleComboBox.getSelectionModel().getSelectedItem();
+//        System.out.println("Selected option: " + selectedOption);
     }
 
     /**
@@ -143,9 +157,107 @@ public class AdminController {
     }
 
     /**
+     * addNewEmployee method that will add new Employee.
+     * */
+    public void addNewEmployee(ActionEvent event) {
+        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() ||
+                employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty()
+                || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty()
+                || employeePassword.getText().isEmpty()) {
+            showErrorAlert("Invalid Input", "Invalid Input,try again");
+            return;
+        }
+        //Check if the email already exists.
+        if (UserRepository.isEmailExist(employeeEmail.getText())) {
+            showErrorAlert("Invalid Input", "This Employee Email already exists!");
+            return;
+        }
+        //Check if the phone number is valid.
+        if (employeePhoneNumber.getText().length() != 10 || convertStringToInt(employeePhoneNumber.getText()) == -1) {
+            showErrorAlert("Invalid Input", "Invalid Phone Number,it should be 10 digit, and it should be a numbers.!");
+            return;
+        }
+
+        //Check if the salary is a valid number.
+        if (convertStringToDouble(employeeSalary.getText()) == null) {
+            showErrorAlert("Invalid Input", "Please enter a valid salary!");
+            return;
+        }
+
+        //Check if the password length is valid.
+        if (employeePassword.getText().length() < 8) {
+            showErrorAlert("Invalid Input", "Please enter a valid password(Must be 8 characters or longer. )!");
+            return;
+        }
+
+        //Convert hire date to Date.
+        LocalDate localDate = employeeHireDate.getValue();
+        Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        //Create new user.
+        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(),
+                hireDate, employeePhoneNumber.getText(), employeePassword.getText(),
+                convertStringToDouble(employeeSalary.getText()));
+
+        //Add the user to DB.
+        UserRepository.addNewEmployee(user);
+
+        successAlert("Add Successfully", "Employee added successfully!");
+        tfEmployeeName.clear();
+        employeeEmail.clear();
+        employeeHireDate.setValue(null);
+        employeeSalary.clear();
+        employeePhoneNumber.clear();
+        roleComboBox.getSelectionModel().clearSelection();
+
+    }
+
+    /**
+     * showErrorAlert method that will show an error alert due to entered input.
+     * */
+    public void showErrorAlert(String title, String context) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(context);
+        alert.showAndWait();
+    }
+
+
+    /**
+     * successAlert method that will show a success alert that the operation done successfully.
+     * */
+    public void successAlert(String title, String context) {
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+        successAlert.setTitle(title);
+        successAlert.setHeaderText(null);
+        successAlert.setContentText(context);
+        successAlert.showAndWait();
+
+    }
+
+    /**
      * setUserName method that will set the username
      * */
     public void setUserName(String userName) {
         lbUserName.setText(userName);
+    }
+
+    public static Double convertStringToDouble(String str) {
+        try {
+            // Try to parse the String to a double
+            return Double.parseDouble(str);
+        } catch (NumberFormatException e) {
+            return null; // Return null or handle as appropriate
+        }
+    }
+
+    public static int convertStringToInt(String str) {
+        try {
+            // Try to parse the String to a double
+            return Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return -1; // Return null or handle as appropriate
+        }
     }
 }
