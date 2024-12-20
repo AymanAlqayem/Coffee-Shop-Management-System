@@ -214,9 +214,9 @@
                </children></AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="addNewEmployee_form" layoutX="212.0" layoutY="35.0" prefHeight="689.0" prefWidth="682.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane layoutX="212.0" layoutY="35.0" prefHeight="689.0" prefWidth="682.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="212.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="782.0" prefWidth="1301.0" visible="false">
+            <AnchorPane fx:id="addNewEmployee_form" prefHeight="782.0" prefWidth="1301.0" visible="false">
                <children>
                   <Label layoutX="33.0" layoutY="33.0" prefHeight="38.0" prefWidth="366.0" text="Add new Admin or  Employee">
                      <font>
