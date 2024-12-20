@@ -2,14 +2,17 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.CashierController">
+<AnchorPane fx:id="base" prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.CashierController">
    <children>
-      <AnchorPane layoutX="-2.0" prefHeight="784.0" prefWidth="226.0" style="-fx-background-color: #050505;">
+      <AnchorPane fx:id="BlackList" layoutX="-2.0" prefHeight="784.0" prefWidth="226.0" style="-fx-background-color: #050505;">
          <children>
             <JFXButton fx:id="btInventory" layoutX="69.0" layoutY="218.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Inventory" textFill="WHITE">
                <font>
@@ -79,13 +82,91 @@
          </children>
       </AnchorPane>
       <AnchorPane fx:id="menuForm" layoutX="224.0" layoutY="-3.0" prefHeight="784.0" prefWidth="601.0" />
-      <AnchorPane fx:id="billForm" layoutX="797.0" prefHeight="784.0" prefWidth="726.0">
+      <AnchorPane fx:id="addNewCustomer" layoutX="226.0" layoutY="-2.0" prefHeight="784.0" prefWidth="1298.0" visible="false">
          <children>
-            <Label layoutX="222.0" layoutY="22.0" prefHeight="38.0" prefWidth="423.0" text="Bill Information">
+            <Label layoutX="33.0" layoutY="33.0" prefHeight="38.0" prefWidth="366.0" text="Add new Customer">
                <font>
-                  <Font name="Constantia" size="38.0" />
+                  <Font name="Bell MT" size="26.0" />
                </font>
             </Label>
+            <Label layoutX="33.0" layoutY="189.0" prefHeight="47.0" prefWidth="80.0" text="Name">
+               <font>
+                  <Font name="Lucida Fax Regular" size="23.0" />
+               </font>
+            </Label>
+            <TextField fx:id="customerName" layoutX="195.0" layoutY="196.0" prefHeight="34.0" prefWidth="230.0" style="-fx-background-color: white; -fx-border-color: Black; -fx-text-inner-color: Black;" />
+            <JFXButton fx:id="btAddNewEmployee" layoutX="196.0" layoutY="567.0" onAction="#addNewCustomer" prefHeight="66.0" prefWidth="202.0" style="-fx-background-radius: 90;" text="   Add    ">
+               <font>
+                  <Font name="Lucida Fax Regular" size="22.0" />
+               </font>
+            </JFXButton>
+            <Label layoutX="18.0" layoutY="353.0" prefHeight="38.0" prefWidth="190.0" text="Phone Number">
+               <font>
+                  <Font name="Lucida Fax Regular" size="23.0" />
+               </font>
+            </Label>
+            <TextField fx:id="customerPhoneNumber" layoutX="216.0" layoutY="354.0" prefHeight="36.0" prefWidth="247.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="billForm" layoutX="839.0" layoutY="-2.0" prefHeight="784.0" prefWidth="685.0">
+         <children>
+            <TableView layoutX="-3.0" layoutY="288.0" prefHeight="390.0" prefWidth="686.0">
+              <columns>
+                <TableColumn prefWidth="224.80010986328125" text="Item Name" />
+                <TableColumn prefWidth="219.9998779296875" text="item Quantity" />
+                  <TableColumn prefWidth="366.39990234375" text="Price" />
+              </columns>
+            </TableView>
+            <Label layoutX="99.0" prefHeight="66.0" prefWidth="490.0" text="======= Beit Ardi Invoice=======">
+               <font>
+                  <Font name="Bell MT" size="32.0" />
+               </font>
+            </Label>
+            <Label layoutX="6.0" layoutY="71.0" prefHeight="47.0" prefWidth="103.0" text="Order_no :">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="6.0" layoutY="118.0" prefHeight="47.0" prefWidth="150.0" text="Customer Name :">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="6.0" layoutY="176.0" prefHeight="38.0" prefWidth="172.0" text="Created Date Time:">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="13.0" layoutY="228.0" prefHeight="38.0" prefWidth="130.0" text="Cashier Name:">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="185.0" layoutY="223.0" prefHeight="47.0" prefWidth="120.0" text="F">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="185.0" layoutY="171.0" prefHeight="47.0" prefWidth="130.0" text="F">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="185.0" layoutY="118.0" prefHeight="47.0" prefWidth="120.0" text="F">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="185.0" layoutY="79.0" prefHeight="47.0" prefWidth="120.0" text="F">
+               <font>
+                  <Font name="Bell MT" size="20.0" />
+               </font>
+            </Label>
+            <JFXButton fx:id="createBillButton" layoutX="32.0" layoutY="705.0" prefHeight="60.0" prefWidth="226.0" style="-fx-background-radius: 90;" text="Generate the Invoice">
+               <font>
+                  <Font name="Tahoma" size="18.0" />
+               </font>
+            </JFXButton>
          </children>
       </AnchorPane>
    </children>

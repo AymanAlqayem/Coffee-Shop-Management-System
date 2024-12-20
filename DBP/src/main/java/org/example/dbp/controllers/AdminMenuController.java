@@ -206,7 +206,6 @@ public class AdminMenuController {
         });
     }
 
-
     /**
      * addNewCategory method that will add the new category into DB.
      * */

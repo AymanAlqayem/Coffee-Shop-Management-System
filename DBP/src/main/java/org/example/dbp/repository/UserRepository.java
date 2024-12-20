@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class UserRepository {
 
@@ -26,8 +29,8 @@ public class UserRepository {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = new User(resultSet.getString("name"), resultSet.getString("role"), resultSet.getString("email"),
-                            resultSet.getString("hire_date"), resultSet.getString("phone_number"),
-                            resultSet.getString("password"), resultSet.getString("salary"));
+                            convertFromStringToDate(resultSet.getString("hire_date")), resultSet.getString("phone_number"),
+                            resultSet.getString("password"), resultSet.getDouble("salary"));
                 }
             }
         } catch (SQLException e) {
@@ -57,4 +60,63 @@ public class UserRepository {
         }
         return null;
     }
+
+    /**
+     * isEmailExist method that will check if the given email already exists in the DB.
+     * */
+    public static boolean isEmailExist(String email) {
+        String query = "SELECT * FROM user WHERE email = ?";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, email);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return resultSet.getInt(1) > 0;// Returns true if count > 0
+            }
+
+        } catch (SQLException s) {
+
+        }
+        return false;
+    }
+
+    private static Date convertFromStringToDate(String str) {
+        SimpleDateFormat formatter = new SimpleDateFormat(str);
+        try {
+            return formatter.parse(str); // Converts the String to Date
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null; // Returns null if the date format is incorrect
+        }
+    }
+
+    /**
+     * addNewEmployee method that will add new employee to DB.
+     * */
+    public static void addNewEmployee(User user) {
+        String query = "insert into user(name , role , email , hire_date , phone_number , password , salary)" +
+                " values(?,?,?,?,?,?,?)";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getRole());
+            preparedStatement.setString(3, user.getEmail());
+
+            // Convert User's hire_date to java.sql.Date.
+            java.sql.Date sqlHireDate = new java.sql.Date(user.getHire_date().getTime());
+            preparedStatement.setDate(4, sqlHireDate);
+
+            preparedStatement.setString(5, user.getPhoneNumber());
+            preparedStatement.setString(6, user.getPass());
+            preparedStatement.setDouble(7, user.getSalary());
+
+            // Execute the update
+            preparedStatement.executeUpdate();
+        } catch (SQLException s) {
+            s.printStackTrace();
+        }
+    }
+
 }

@@ -7,17 +7,21 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import org.example.dbp.models.Category;
 import org.example.dbp.models.MenuItem;
 import org.example.dbp.repository.CategoryRepo;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class CashierMenuController {
     @FXML
     private Accordion menuAccordion;
+
+    private Accordion billAccordion;
 
 
     @FXML
@@ -131,6 +135,25 @@ public class CashierMenuController {
         });
     }
 
+    private VBox billVBox = new VBox(2);
+
+    public void addToBill(MenuItem item, int quantity, int price) {
+        billAccordion.getPanes().clear();
+//        billVBox.setPadding(new Insets(4, 4, 4, 4));
+        StringBuilder bill = new StringBuilder();
+        bill.append("======= Coffee Shop Bill =======\n\n");
+
+        //These three should be in same line.
+        bill.append("Item Name:");
+        bill.append("Item Quantity:");
+        bill.append("total price:");
+
+        //Now we should put the item.
+
+        HBox itemHBox = new HBox(20);
+
+    }
+
     /**
      * showErrorAlert method that will show an error alert due to entered input.
      * */
@@ -140,49 +163,5 @@ public class CashierMenuController {
         alert.setHeaderText(null);
         alert.setContentText(context);
         alert.showAndWait();
-    }
-
-    /**
-     * showConfirmationAlert that will show a confirmation alert to confirm an operation.
-     * */
-
-    public boolean showConfirmationAlert(String title, String context) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(context);
-
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-    /**
-     * showInfoAlert method that will show specific information.
-     * */
-
-    public void showInfoAlert(String title, String context) {
-        Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
-        infoAlert.setTitle(title);
-        infoAlert.setHeaderText(null);
-        infoAlert.setContentText(context);
-        infoAlert.showAndWait();
-    }
-
-    /**
-     * successAlert method that will show a success alert that the operation done successfully.
-     * */
-
-    public void successAlert(String title, String context) {
-        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
-        successAlert.setTitle(title);
-        successAlert.setHeaderText(null);
-        successAlert.setContentText(context);
-        successAlert.showAndWait();
-
     }
 }

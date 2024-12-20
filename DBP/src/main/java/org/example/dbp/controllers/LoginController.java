@@ -1,6 +1,5 @@
 package org.example.dbp.controllers;
 
-
 import com.jfoenix.controls.JFXButton;
 import javafx.application.Application;
 import javafx.fxml.FXML;
