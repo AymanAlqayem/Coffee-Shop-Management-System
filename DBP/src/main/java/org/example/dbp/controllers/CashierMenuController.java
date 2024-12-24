@@ -1,6 +1,10 @@
 package org.example.dbp.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,20 +17,49 @@ import org.example.dbp.models.Category;
 import org.example.dbp.models.MenuItem;
 import org.example.dbp.repository.CategoryRepo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.awt.event.ActionEvent;
+import java.util.*;
 
 public class CashierMenuController {
     @FXML
     private Accordion menuAccordion;
 
-    private Accordion billAccordion;
+    @FXML
+    JFXButton removeItemButton;
+
+    @FXML
+    JFXButton btDone;
+
+    private double totalBillAmount = 0.0;
+    @FXML
+    TextField amountTextFiled;
+
+
+    @FXML
+    private Label totalPriceLabel;
+
+    @FXML
+    private TableView<Map<String, Object>> billTableView;
+    @FXML
+    private TableColumn<Map<String, Object>, String> itemTableColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, Integer> quantityTableColumn;
+    @FXML
+    private TableColumn<Map<String, Object>, Double> priceTableColumn;
 
 
     @FXML
     public void initialize() {
         loadMenuData();  // Load the menu data after FXML components are initialized
+
+        itemTableColumn.setCellValueFactory(cellData ->
+                new SimpleStringProperty((String) cellData.getValue().get("itemName")));
+        quantityTableColumn.setCellValueFactory(cellData ->
+                new SimpleObjectProperty<>((Integer) cellData.getValue().get("quantity")));
+        priceTableColumn.setCellValueFactory(cellData ->
+                new SimpleObjectProperty<>((Double) cellData.getValue().get("price")));
+
+        billTableView.setItems(billItems);
     }
 
     /**
@@ -106,8 +139,66 @@ public class CashierMenuController {
     }
 
     /**
+     * removeSelectedItem method that will remove the selected item from the table view.
+     * */
+    @FXML
+    public void removeSelectedItem() {
+        // Get the selected item from the TableView
+        Map<String, Object> selectedItem = billTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null) {
+            // Get the price of the selected item
+            double itemPrice = (double) selectedItem.get("price");
+
+            // Subtract the item's price from the total bill amount
+            totalBillAmount -= itemPrice;
+
+            // Remove the selected item from the ObservableList
+            billItems.remove(selectedItem);
+
+            totalPriceLabel.setText("Price :" + totalBillAmount + "NIS");
+        } else {
+            // Show an alert if no item is selected
+            showErrorAlert("No Selection", "Please select an item to remove.");
+        }
+    }
+
+
+    @FXML
+    public void DoneMethod() {
+        if (amountTextFiled.getText().isEmpty()) {
+            showErrorAlert("Invalid Input", "Please enter a valid amount.");
+            return;
+        }
+
+        try {
+            double paidAmount = Double.parseDouble(amountTextFiled.getText());
+            if (paidAmount >= totalBillAmount) {
+                double change = paidAmount - totalBillAmount;
+//                String customerName = customerNameField.getText().isEmpty() ? "Customer" : customerNameField.getText();
+                successAlert("Transaction Complete", "!\nChange to Return: NIS " + String.format("%.2f", change));
+
+                // Clear all data
+                billItems.clear();
+                totalBillAmount = 0.0;
+                amountTextFiled.setText("Total: $0.00");
+                amountTextFiled.clear();
+            } else {
+                showErrorAlert("Insufficient Payment", "The paid amount is not enough to cover the total.");
+            }
+        } catch (NumberFormatException e) {
+            showErrorAlert("Input Error", "Please enter a valid amount for payment.");
+        }
+
+    }
+
+
+    /**
      * makeActionsToPurchaseButton that will show a text input dialog to enter the quantity of the item.
      * */
+
+    private ObservableList<Map<String, Object>> billItems = FXCollections.observableArrayList();
+
     public void makeActionsToPurchaseButton(MenuItem item) {
         TextInputDialog dialog = new TextInputDialog("1");
         dialog.setTitle("Item Purchase");
@@ -123,6 +214,11 @@ public class CashierMenuController {
                 if (qty > 0) {
                     // Process the quantity entered by the user (e.g., add to bill)
                     System.out.println("User wants to purchase " + qty + " of " + item.getItemName());
+
+                    //Add the item information to the tableview.
+
+                    addItemToBill(item.getItemName(), qty, item.getPrice());
+
                     // Handle logic to add the selected item and quantity to the bill
                 } else {
                     // Show an error alert if the user entered a non-positive number.
@@ -135,23 +231,16 @@ public class CashierMenuController {
         });
     }
 
-    private VBox billVBox = new VBox(2);
-
-    public void addToBill(MenuItem item, int quantity, int price) {
-        billAccordion.getPanes().clear();
-//        billVBox.setPadding(new Insets(4, 4, 4, 4));
-        StringBuilder bill = new StringBuilder();
-        bill.append("======= Coffee Shop Bill =======\n\n");
-
-        //These three should be in same line.
-        bill.append("Item Name:");
-        bill.append("Item Quantity:");
-        bill.append("total price:");
-
-        //Now we should put the item.
-
-        HBox itemHBox = new HBox(20);
-
+    public void addItemToBill(String itemName, int qty, double price) {
+        double totalPrice = price * qty; // Calculate total price
+        // Create a Map to represent the item
+        Map<String, Object> billItem = new HashMap<>();
+        billItem.put("itemName", itemName);
+        billItem.put("quantity", qty);
+        billItem.put("price", totalPrice);
+        billItems.add(billItem);
+        totalBillAmount += totalPrice;
+        totalPriceLabel.setText("Price :" + totalBillAmount + "NIS");
     }
 
     /**
@@ -163,5 +252,17 @@ public class CashierMenuController {
         alert.setHeaderText(null);
         alert.setContentText(context);
         alert.showAndWait();
+    }
+
+    /**
+     * successAlert method that will show a success alert that the operation done successfully.
+     * */
+    public void successAlert(String title, String context) {
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+        successAlert.setTitle(title);
+        successAlert.setHeaderText(null);
+        successAlert.setContentText(context);
+        successAlert.showAndWait();
+
     }
 }

@@ -38,16 +38,11 @@ public class CashierController {
     private JFXButton createBillButton;
 
     //Forms.
-
     @FXML
     private AnchorPane menuForm;
 
     @FXML
-    private AnchorPane billForm;
-
-    @FXML
     private AnchorPane addNewCustomer;
-
 
 
     //Controllers in add a new customers form.
@@ -57,8 +52,17 @@ public class CashierController {
     @FXML
     private TextField customerPhoneNumber;
 
-    //Controllers for bill form.
-    Accordion billAccordion;
+    //Controllers in add a new bill form.
+    @FXML
+    private Label cashNameTextFiled;
+
+    @FXML
+    private Label custNameTextFiled;
+
+    @FXML
+    private Label dateTimeTextFiled;
+    @FXML
+    private Label orderNoTextFiled;
 
 
     /**
@@ -86,13 +90,11 @@ public class CashierController {
     public void switchWin(ActionEvent e) {
         if (e.getSource() == btMenu) {
             menuForm.setVisible(true);
-            billForm.setVisible(true);
             loadCashierMenu();
             addNewCustomer.setVisible(false);
         } else if (e.getSource() == btAdd) {
             addNewCustomer.setVisible(true);
             menuForm.setVisible(false);
-            billForm.setVisible(false);
         }
     }
 
@@ -138,9 +140,6 @@ public class CashierController {
         customerPhoneNumber.clear();
 
     }
-
-
-
 
     /**
      * showErrorAlert method that will show an error alert due to entered input.
