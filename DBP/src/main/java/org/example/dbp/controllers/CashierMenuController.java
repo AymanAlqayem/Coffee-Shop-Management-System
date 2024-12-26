@@ -9,15 +9,21 @@ import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.example.dbp.models.Category;
+import org.example.dbp.models.InvoiceItems;
 import org.example.dbp.models.MenuItem;
 import org.example.dbp.repository.CategoryRepo;
+import org.example.dbp.repository.CustomerRepository;
+import org.example.dbp.repository.OrderRepo;
+import org.example.dbp.repository.UserRepository;
 
-import java.awt.event.ActionEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class CashierMenuController {
@@ -25,21 +31,27 @@ public class CashierMenuController {
     private Accordion menuAccordion;
 
     @FXML
-    JFXButton removeItemButton;
+    private JFXButton btDone;
+    @FXML
+    private TextField amountTextFiled;
 
     @FXML
-    JFXButton btDone;
+    private Label orderNoTextFiled;
+    @FXML
+    private Label cashNameTextFiled;
+    @FXML
+    private Label custNameTextFiled;
+    @FXML
+    private Label dateTimeTextFiled;
+
 
     private double totalBillAmount = 0.0;
-    @FXML
-    TextField amountTextFiled;
-
 
     @FXML
     private Label totalPriceLabel;
 
     @FXML
-    private TableView<Map<String, Object>> billTableView;
+    private TableView<InvoiceItems> billTableView;
     @FXML
     private TableColumn<Map<String, Object>, String> itemTableColumn;
     @FXML
@@ -47,25 +59,40 @@ public class CashierMenuController {
     @FXML
     private TableColumn<Map<String, Object>, Double> priceTableColumn;
 
+    @FXML
+    private ListView<String> searchResultsListView;
+
+    private ObservableList<String> customerNames;
+    @FXML
+    private TextField searchTextField;
+
+    private ObservableList<InvoiceItems> itemsObservableList = FXCollections.observableArrayList();
+
 
     @FXML
     public void initialize() {
-        loadMenuData();  // Load the menu data after FXML components are initialized
+        loadMenuData(); // Load the menu data
+        itemsObservableList = FXCollections.observableArrayList();
 
-        itemTableColumn.setCellValueFactory(cellData ->
-                new SimpleStringProperty((String) cellData.getValue().get("itemName")));
-        quantityTableColumn.setCellValueFactory(cellData ->
-                new SimpleObjectProperty<>((Integer) cellData.getValue().get("quantity")));
-        priceTableColumn.setCellValueFactory(cellData ->
-                new SimpleObjectProperty<>((Double) cellData.getValue().get("price")));
+        // Set up the columns
+        itemTableColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        quantityTableColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        priceTableColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
-        billTableView.setItems(billItems);
+        // Set bill items in the bill table view.
+        billTableView.setItems(itemsObservableList);
+
+        // Initialize a customer names list.
+        customerNames = FXCollections.observableArrayList(CustomerRepository.getAllCustomers());
+
+        // Add event handlers
+        searchTextField.addEventHandler(KeyEvent.KEY_RELEASED, e -> searchCustomer());
+        searchResultsListView.setOnMouseClicked(e -> handleSelectCustomer());
     }
 
     /**
      * loadMenuData method that will load all categories and items.
      * */
-
     public void loadMenuData() {
         menuAccordion.getPanes().clear();
         ArrayList<Category> categories = CategoryRepo.getCategories();  // Fetch categories from the repository.
@@ -139,66 +166,34 @@ public class CashierMenuController {
     }
 
     /**
-     * removeSelectedItem method that will remove the selected item from the table view.
+     * searchCustomer method that will allow users to search for a customers.
      * */
-    @FXML
-    public void removeSelectedItem() {
-        // Get the selected item from the TableView
-        Map<String, Object> selectedItem = billTableView.getSelectionModel().getSelectedItem();
-
-        if (selectedItem != null) {
-            // Get the price of the selected item
-            double itemPrice = (double) selectedItem.get("price");
-
-            // Subtract the item's price from the total bill amount
-            totalBillAmount -= itemPrice;
-
-            // Remove the selected item from the ObservableList
-            billItems.remove(selectedItem);
-
-            totalPriceLabel.setText("Price :" + totalBillAmount + "NIS");
+    private void searchCustomer() {
+        String result = searchTextField.getText().toLowerCase();
+        if (result.isEmpty()) {
+            searchResultsListView.setVisible(false);
         } else {
-            // Show an alert if no item is selected
-            showErrorAlert("No Selection", "Please select an item to remove.");
+            ObservableList<String> filtered = customerNames.filtered(name -> name.toLowerCase().contains(result));
+            searchResultsListView.setItems(filtered);
+            searchResultsListView.setVisible(!filtered.isEmpty());
         }
     }
 
-
-    @FXML
-    public void DoneMethod() {
-        if (amountTextFiled.getText().isEmpty()) {
-            showErrorAlert("Invalid Input", "Please enter a valid amount.");
-            return;
+    /**
+     * handleSelectCustomer method that will allow users to select a customer after searching.
+     * */
+    private void handleSelectCustomer() {
+        String selectedName = searchResultsListView.getSelectionModel().getSelectedItem();
+        if (selectedName != null) {
+            custNameTextFiled.setText(selectedName);
+            searchResultsListView.setVisible(false);
+            searchTextField.clear();
         }
-
-        try {
-            double paidAmount = Double.parseDouble(amountTextFiled.getText());
-            if (paidAmount >= totalBillAmount) {
-                double change = paidAmount - totalBillAmount;
-//                String customerName = customerNameField.getText().isEmpty() ? "Customer" : customerNameField.getText();
-                successAlert("Transaction Complete", "!\nChange to Return: NIS " + String.format("%.2f", change));
-
-                // Clear all data
-                billItems.clear();
-                totalBillAmount = 0.0;
-                amountTextFiled.setText("Total: $0.00");
-                amountTextFiled.clear();
-            } else {
-                showErrorAlert("Insufficient Payment", "The paid amount is not enough to cover the total.");
-            }
-        } catch (NumberFormatException e) {
-            showErrorAlert("Input Error", "Please enter a valid amount for payment.");
-        }
-
     }
-
 
     /**
      * makeActionsToPurchaseButton that will show a text input dialog to enter the quantity of the item.
      * */
-
-    private ObservableList<Map<String, Object>> billItems = FXCollections.observableArrayList();
-
     public void makeActionsToPurchaseButton(MenuItem item) {
         TextInputDialog dialog = new TextInputDialog("1");
         dialog.setTitle("Item Purchase");
@@ -212,14 +207,11 @@ public class CashierMenuController {
             try {
                 int qty = Integer.parseInt(quantity); // Parse the input to an integer
                 if (qty > 0) {
-                    // Process the quantity entered by the user (e.g., add to bill)
+                    // Process the quantity entered by the user
                     System.out.println("User wants to purchase " + qty + " of " + item.getItemName());
 
                     //Add the item information to the tableview.
-
                     addItemToBill(item.getItemName(), qty, item.getPrice());
-
-                    // Handle logic to add the selected item and quantity to the bill
                 } else {
                     // Show an error alert if the user entered a non-positive number.
                     showErrorAlert("Invalid Quantity", "Please enter a valid quantity greater than 0.");
@@ -231,16 +223,109 @@ public class CashierMenuController {
         });
     }
 
+    /**
+     * addItemToBill method that will add the given item and calculate its total price.
+     * */
     public void addItemToBill(String itemName, int qty, double price) {
+
         double totalPrice = price * qty; // Calculate total price
-        // Create a Map to represent the item
-        Map<String, Object> billItem = new HashMap<>();
-        billItem.put("itemName", itemName);
-        billItem.put("quantity", qty);
-        billItem.put("price", totalPrice);
-        billItems.add(billItem);
+
+        InvoiceItems itemInfo = new InvoiceItems(itemName, qty, totalPrice);
+
+        // Add the BillItem to the observable list
+        itemsObservableList.add(itemInfo);
+
+        // Update the total bill amount.
         totalBillAmount += totalPrice;
-        totalPriceLabel.setText("Price :" + totalBillAmount + "NIS");
+
+        // Update the total amount price.
+        totalPriceLabel.setText("Price: " + totalBillAmount + " NIS");
+    }
+
+    /**
+     * removeSelectedItem method that will remove the selected item from the table view.
+     * */
+    @FXML
+    public void removeSelectedItem() {
+        // Get the selected item from the TableView
+        InvoiceItems selectedItem = billTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null) {
+            // Get the price of the selected item
+            double itemPrice = selectedItem.getPrice();
+
+            // Subtract the item's price from the total bill amount
+            totalBillAmount -= itemPrice;
+
+            // Remove the selected item from the ObservableList
+            itemsObservableList.remove(selectedItem);
+
+            totalPriceLabel.setText("Price :" + totalBillAmount + " NIS");
+        } else {
+            // Show an alert if no item is selected
+            showErrorAlert("No Selection", "Please select an item to remove.");
+        }
+    }
+
+    /**
+     * finishBill method that will end the current order.
+     * */
+    @FXML
+    public void finishBill() {
+        if (amountTextFiled.getText().isEmpty()) {
+            showErrorAlert("Invalid Input", "Please enter a valid amount.");
+            return;
+        }
+
+        try {
+            double paidAmount = Double.parseDouble(amountTextFiled.getText());
+            if (paidAmount >= totalBillAmount) {
+                double change = paidAmount - totalBillAmount;
+                successAlert("Transaction Complete", "Change to Return: " + String.format("%.2f", change) + " NIS");
+            } else {
+                showErrorAlert("Insufficient Payment", "The paid amount is not enough to cover the total.");
+            }
+        } catch (NumberFormatException e) {
+            showErrorAlert("Input Error", "Please enter a valid amount for payment.");
+        }
+
+    }
+
+    static String cashierName = null;
+
+    @FXML
+    public void generateBill() {
+        //Set customer name.
+        if (custNameTextFiled.getText().equalsIgnoreCase("F")) {
+            showAlert("Enter customer name", "You should choose the customer.");
+            return;
+        }
+
+        int cashierId = UserRepository.getCashierId(cashierName);
+        int customerId = CustomerRepository.getCustomerId(custNameTextFiled.getText());
+
+        System.out.println(cashierId + ",,,,," + customerId);
+
+        //Add the order to the database.
+        int orderNo = OrderRepo.addOrder(cashierId, customerId,
+                totalBillAmount, itemsObservableList);
+
+        orderNoTextFiled.setText(orderNo + " ");
+
+
+        //Set the current data time.
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        dateTimeTextFiled.setText(now.format(formatter));
+
+        //Set cashier name.
+        cashNameTextFiled.setText(cashierName);
+
+//        //clear order content
+//        itemsObservableList.clear();
+//        totalBillAmount = 0.0;
+//        amountTextFiled.setText("Total:0.00 NIS");
+//        amountTextFiled.clear();
     }
 
     /**
@@ -264,5 +349,12 @@ public class CashierMenuController {
         successAlert.setContentText(context);
         successAlert.showAndWait();
 
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 }

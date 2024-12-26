@@ -1,148 +1,3 @@
-//package org.example.dbp.controllers;
-//
-//import javafx.application.Application;
-//import javafx.collections.FXCollections;
-//import javafx.collections.ObservableList;
-//import javafx.geometry.Insets;
-//import javafx.scene.Scene;
-//import javafx.scene.control.*;
-//import javafx.scene.layout.BorderPane;
-//import javafx.scene.layout.HBox;
-//import javafx.scene.layout.VBox;
-//import javafx.stage.Stage;
-//
-//import java.time.LocalDateTime;
-//import java.time.format.DateTimeFormatter;
-//
-//public class Test extends Application {
-//    private Label changeLabel; // Label to display the change
-//    private TextField paidAmountField; // Input for paid amount
-//    private TextField customerNameField; // Input for customer name
-//    private TableView<BillItem> tableView; // TableView to display bill items
-//
-//    public static void main(String[] args) {
-//        launch(args);
-//    }
-//
-//    @Override
-//    public void start(Stage primaryStage) {
-//        // Header Section
-//        Label headerLabel = new Label("======= Beit Ardi Bill =======");
-//        headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
-//
-//        // Date and Order Info
-//        LocalDateTime now = LocalDateTime.now();
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-//        Label dateLabel = new Label("Created Date Time: " + now.format(formatter));
-//        Label orderLabel = new Label("Order No: 10");
-//
-//        // Customer Name Input
-//        Label customerNameLabel = new Label("Customer Name:");
-//        customerNameField = new TextField();
-//        customerNameField.setPromptText("Enter customer name");
-//
-//        HBox customerBox = new HBox(10, customerNameLabel, customerNameField);
-//        VBox headerBox = new VBox(10, headerLabel, customerBox, dateLabel, orderLabel);
-//        headerBox.setPadding(new Insets(10));
-//
-//        // TableView for Bill Items
-//        tableView = new TableView<>();
-//        TableColumn<BillItem, String> itemColumn = new TableColumn<>("Item Name");
-//        itemColumn.setMinWidth(150);
-//        itemColumn.setCellValueFactory(data -> data.getValue().itemNameProperty());
-//
-//        TableColumn<BillItem, Integer> quantityColumn = new TableColumn<>("Quantity");
-//        quantityColumn.setMinWidth(100);
-//        quantityColumn.setCellValueFactory(data -> data.getValue().quantityProperty().asObject());
-//
-//        TableColumn<BillItem, Double> priceColumn = new TableColumn<>("Price");
-//        priceColumn.setMinWidth(100);
-//        priceColumn.setCellValueFactory(data -> data.getValue().priceProperty().asObject());
-//
-//        tableView.getColumns().addAll(itemColumn, quantityColumn, priceColumn);
-//
-//        // Add Sample Data to Table
-//        ObservableList<BillItem> billItems = FXCollections.observableArrayList(
-//                new BillItem("Coffee", 2, 5.50),
-//                new BillItem("Sandwich", 1, 8.00),
-//                new BillItem("Juice", 3, 4.75)
-//        );
-//        tableView.setItems(billItems);
-//
-//        // Total Price Calculation
-//        double total = billItems.stream().mapToDouble(item -> item.getQuantity() * item.getPrice()).sum();
-//        Label totalLabel = new Label("Total: $" + String.format("%.2f", total));
-//        totalLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
-//
-//        // Paid Amount Input
-//        Label paidAmountLabel = new Label("Paid Amount:");
-//        paidAmountField = new TextField();
-//        paidAmountField.setPromptText("Enter paid amount");
-//
-//        Button doneButton = new Button("Done");
-//        doneButton.setOnAction(e -> handleDoneButton(total));
-//
-//        HBox paymentBox = new HBox(10, paidAmountLabel, paidAmountField, doneButton);
-//        VBox centerBox = new VBox(10, tableView, totalLabel, paymentBox);
-//        centerBox.setPadding(new Insets(10));
-//
-//        // Layout Setup
-//        BorderPane root = new BorderPane();
-//        root.setTop(headerBox);
-//        root.setCenter(centerBox);
-//
-//        // Scene Setup
-//        Scene scene = new Scene(root, 500, 500);
-//        primaryStage.setTitle("Beit Ardi Bill");
-//        primaryStage.setScene(scene);
-//        primaryStage.show();
-//    }
-//
-//    /**
-//     * Handles the Done button click:
-//     * - Calculates change.
-//     * - Displays an alert with the change amount.
-//     * - Clears the TableView content.
-//     */
-//    private void handleDoneButton(double total) {
-//        try {
-//            double paidAmount = Double.parseDouble(paidAmountField.getText());
-//            if (paidAmount >= total) {
-//                double change = paidAmount - total;
-//
-//                String customerName = customerNameField.getText().isEmpty() ? "Customer" : customerNameField.getText();
-//
-//                // Show Alert with Change
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("Transaction Complete");
-//                alert.setHeaderText("Thank you, " + customerName + "!");
-//                alert.setContentText("Change to Return: $" + String.format("%.2f", change));
-//                alert.showAndWait();
-//
-//                // Clear TableView content
-//                tableView.getItems().clear();
-//                paidAmountField.clear();
-//                customerNameField.clear();
-//            } else {
-//                // Insufficient amount alert
-//                Alert alert = new Alert(Alert.AlertType.ERROR);
-//                alert.setTitle("Error");
-//                alert.setHeaderText("Insufficient Payment");
-//                alert.setContentText("The amount paid is not enough to cover the total.");
-//                alert.showAndWait();
-//            }
-//        } catch (NumberFormatException e) {
-//            // Invalid input alert
-//            Alert alert = new Alert(Alert.AlertType.ERROR);
-//            alert.setTitle("Input Error");
-//            alert.setHeaderText("Invalid Input");
-//            alert.setContentText("Please enter a valid number for the paid amount.");
-//            alert.showAndWait();
-//        }
-//    }
-//}
-
-
 package org.example.dbp.controllers;
 
 import javafx.application.Application;
@@ -152,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -159,15 +15,17 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class Test extends Application {
-    private TextField paidAmountField; // Input for paid amount
-    private TextField quantityField; // Input for quantity
-    private ComboBox<String> itemComboBox; // Item selector
-    private TextField customerNameField; // Input for customer name
-    private TableView<BillItem> tableView; // Table to display items
-    private ObservableList<BillItem> billItems; // List to hold bill items
-    private Label totalLabel; // Total price label
-
-    private double totalAmount = 0.0; // Total price
+    private TextField paidAmountField;
+    private TextField quantityField;
+    private ComboBox<String> itemComboBox;
+    private TextField searchTextField;
+    private ListView<String> searchResultsListView;
+    private ObservableList<String> customerNames;
+    private TableView<BillItem> tableView;
+    private ObservableList<BillItem> billItems;
+    private Label totalLabel;
+    private double totalAmount = 0.0;
+    private TextField customerNameField;
 
     public static void main(String[] args) {
         launch(args);
@@ -175,26 +33,38 @@ public class Test extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        // Header Section
+        customerNames = FXCollections.observableArrayList(
+                "John Doe", "Jane Smith", "Alice Johnson", "Bob Brown", "Charlie White"
+        );
+
         Label headerLabel = new Label("======= Beit Ardi Bill =======");
         headerLabel.setStyle("-fx-font-size: 20px; -fx-font-weight: bold;");
 
-        // Date and Order Info
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         Label dateLabel = new Label("Created Date Time: " + now.format(formatter));
         Label orderLabel = new Label("Order No: 10");
 
-        // Customer Name Input
         Label customerNameLabel = new Label("Customer Name:");
         customerNameField = new TextField();
-        customerNameField.setPromptText("Enter customer name");
-        HBox customerBox = new HBox(10, customerNameLabel, customerNameField);
+        customerNameField.setPromptText("Selected customer");
 
-        // Item Selection and Quantity Input
+        searchTextField = new TextField();
+        searchTextField.setPromptText("Search customer...");///..............
+        
+        
+        searchResultsListView = new ListView<>();
+        searchResultsListView.setVisible(false);
+
+
+        searchTextField.addEventHandler(KeyEvent.KEY_RELEASED, e -> handleSearch());
+        searchResultsListView.setOnMouseClicked(e -> handleSelectCustomer());
+
+        VBox customerBox = new VBox(5, customerNameLabel, searchTextField, searchResultsListView, customerNameField);
+
         Label itemLabel = new Label("Select Item:");
         itemComboBox = new ComboBox<>();
-        itemComboBox.getItems().addAll("Coffee", "Sandwich", "Juice", "Cake", "Tea"); // Items to choose
+        itemComboBox.getItems().addAll("Coffee", "Sandwich", "Juice", "Cake", "Tea");
 
         Label quantityLabel = new Label("Quantity:");
         quantityField = new TextField();
@@ -205,7 +75,6 @@ public class Test extends Application {
 
         HBox itemBox = new HBox(10, itemLabel, itemComboBox, quantityLabel, quantityField, addItemButton);
 
-        // TableView for Bill Items
         tableView = new TableView<>();
         TableColumn<BillItem, String> itemColumn = new TableColumn<>("Item Name");
         itemColumn.setMinWidth(150);
@@ -223,15 +92,12 @@ public class Test extends Application {
         billItems = FXCollections.observableArrayList();
         tableView.setItems(billItems);
 
-        // Total Price Label
         totalLabel = new Label("Total: $0.00");
         totalLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold;");
 
-        // Remove Item Button
         Button removeItemButton = new Button("Remove Item");
         removeItemButton.setOnAction(e -> handleRemoveItem());
 
-        // Paid Amount Input and Done Button
         Label paidAmountLabel = new Label("Paid Amount:");
         paidAmountField = new TextField();
         paidAmountField.setPromptText("Enter paid amount");
@@ -240,9 +106,8 @@ public class Test extends Application {
         doneButton.setOnAction(e -> handleDoneButton());
 
         HBox paymentBox = new HBox(10, paidAmountLabel, paidAmountField, doneButton);
-        HBox buttonBox = new HBox(10, removeItemButton); // Holds the Remove Item button
+        HBox buttonBox = new HBox(10, removeItemButton);
 
-        // Layout Setup
         VBox headerBox = new VBox(10, headerLabel, customerBox, dateLabel, orderLabel, itemBox);
         VBox centerBox = new VBox(10, tableView, totalLabel, buttonBox, paymentBox);
         centerBox.setPadding(new Insets(10));
@@ -251,33 +116,49 @@ public class Test extends Application {
         root.setTop(headerBox);
         root.setCenter(centerBox);
 
-        // Scene Setup
         Scene scene = new Scene(root, 700, 600);
         primaryStage.setTitle("Beit Ardi Bill");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    // Handle adding items to the table
+    private void handleSearch() {
+        String query = searchTextField.getText().toLowerCase();
+        if (query.isEmpty()) {
+            searchResultsListView.setVisible(false);
+//            searchResultsListView.getItems().clear();
+        } else {
+            ObservableList<String> filtered = customerNames.filtered(name -> name.toLowerCase().contains(query));
+            searchResultsListView.setItems(filtered);
+            searchResultsListView.setVisible(!filtered.isEmpty());
+        }
+    }
+
+    /////
+    private void handleSelectCustomer() {
+        String selectedName = searchResultsListView.getSelectionModel().getSelectedItem();
+        if (selectedName != null) {
+            customerNameField.setText(selectedName);
+            searchResultsListView.setVisible(false);
+//            searchResultsListView.getItems().clear();
+        }
+    }
+
     private void handleAddItem() {
         try {
             String selectedItem = itemComboBox.getValue();
             int quantity = Integer.parseInt(quantityField.getText());
 
-            if (selectedItem == null || quantity <= 0) {
-                throw new Exception();
-            }
+            if (selectedItem == null || quantity <= 0) throw new Exception();
 
-            double price = getItemPrice(selectedItem); // Get item price
+            double price = getItemPrice(selectedItem);
             double totalItemPrice = price * quantity;
 
-            // Add item to the table
             billItems.add(new BillItem(selectedItem, quantity, totalItemPrice));
             totalAmount += totalItemPrice;
 
             totalLabel.setText("Total: $" + String.format("%.2f", totalAmount));
 
-            // Clear input fields
             quantityField.clear();
             itemComboBox.getSelectionModel().clearSelection();
         } catch (Exception e) {
@@ -285,20 +166,17 @@ public class Test extends Application {
         }
     }
 
-    // Handle removing an item from the table
     private void handleRemoveItem() {
         BillItem selectedItem = tableView.getSelectionModel().getSelectedItem();
         if (selectedItem != null) {
             totalAmount -= selectedItem.getPrice();
             totalLabel.setText("Total: $" + String.format("%.2f", totalAmount));
-
             billItems.remove(selectedItem);
         } else {
             showAlert("No Selection", "Please select an item to remove.");
         }
     }
 
-    // Handle Done button click
     private void handleDoneButton() {
         try {
             double paidAmount = Double.parseDouble(paidAmountField.getText());
@@ -308,7 +186,6 @@ public class Test extends Application {
 
                 showAlert("Transaction Complete", "Thank you, " + customerName + "!\nChange to Return: $" + String.format("%.2f", change));
 
-                // Clear all data
                 billItems.clear();
                 totalAmount = 0.0;
                 totalLabel.setText("Total: $0.00");
@@ -322,7 +199,6 @@ public class Test extends Application {
         }
     }
 
-    // Helper to get item price
     private double getItemPrice(String item) {
         switch (item) {
             case "Coffee": return 5.50;
@@ -334,7 +210,6 @@ public class Test extends Application {
         }
     }
 
-    // Show alert
     private void showAlert(String title, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
@@ -342,7 +217,6 @@ public class Test extends Application {
         alert.showAndWait();
     }
 
-    // BillItem Class (Nested)
     public static class BillItem {
         private final StringProperty itemName;
         private final IntegerProperty quantity;
@@ -357,7 +231,6 @@ public class Test extends Application {
         public StringProperty itemNameProperty() { return itemName; }
         public IntegerProperty quantityProperty() { return quantity; }
         public DoubleProperty priceProperty() { return price; }
-
         public double getPrice() { return price.get(); }
     }
 }

@@ -79,7 +79,7 @@ public class AdminController {
 
     public void initialize() {
         // Populate the combo box with options
-        roleComboBox.getItems().addAll("Admin", "Employee");
+        roleComboBox.getItems().addAll("Admin", "Cashier");
 
         // Add close request handler for the admin stage
 //        Platform.runLater(() -> {
@@ -98,7 +98,6 @@ public class AdminController {
     public void comboOptions(ActionEvent e) {
         // Get the selected option when an action occurs
         String selectedOption = roleComboBox.getSelectionModel().getSelectedItem();
-//        System.out.println("Selected option: " + selectedOption);
     }
 
     /**
@@ -243,6 +242,9 @@ public class AdminController {
         lbUserName.setText(userName);
     }
 
+    /**
+     * convertStringToDouble method that will convert from string to double.
+     * */
     public static Double convertStringToDouble(String str) {
         try {
             // Try to parse the String to a double
@@ -252,6 +254,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * convertStringToInt method that will convert from Sting to int.
+     * */
     public static int convertStringToInt(String str) {
         try {
             // Try to parse the String to a double

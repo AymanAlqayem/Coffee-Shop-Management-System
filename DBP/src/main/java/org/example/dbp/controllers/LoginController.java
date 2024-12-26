@@ -70,7 +70,6 @@ public class LoginController extends Application {
             Stage loginStage = (Stage) tfUserName.getScene().getWindow();
             loginStage.close();
         } else {
-
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Cashier.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
 

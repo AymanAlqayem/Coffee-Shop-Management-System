@@ -1,5 +1,6 @@
 package org.example.dbp.repository;
 
+import com.mysql.cj.xdevapi.UpdateResult;
 import org.example.dbp.db.DataBase;
 import org.example.dbp.models.User;
 
@@ -81,6 +82,9 @@ public class UserRepository {
         return false;
     }
 
+    /**
+     * convertFromStringToDate method that will convert from String to date.
+     * */
     private static Date convertFromStringToDate(String str) {
         SimpleDateFormat formatter = new SimpleDateFormat(str);
         try {
@@ -119,4 +123,27 @@ public class UserRepository {
         }
     }
 
+    /**
+     * getCashierId method that will get the cashier id.
+     * */
+    public static int getCashierId(String cashierName) {
+        String query = "SELECT id FROM user WHERE name = ?";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            // Set the parameter for the prepared statement
+            statement.setString(1, cashierName);
+
+            // Execute the query
+            ResultSet resultSet = statement.executeQuery();
+
+            // Check if there is a result and return the ID
+            if (resultSet.next()) {
+                return resultSet.getInt("id");
+            }
+
+        } catch (SQLException e) {
+        }
+        return -1; // Return -1 if no matching cashier is found
+    }
 }

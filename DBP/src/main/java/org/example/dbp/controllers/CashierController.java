@@ -103,6 +103,7 @@ public class CashierController {
      * */
     private void loadCashierMenu() {
         try {
+            CashierMenuController.cashierName = lbName.getText();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dbp/CashierMenu.fxml"));
             AnchorPane menuPane = loader.load(); // Load the menu content
             // Clear existing content and add the menu pane to menuForm
@@ -170,6 +171,10 @@ public class CashierController {
      * */
     public void setUserName(String userName) {
         lbName.setText(userName);
+    }
+
+    public String getUserName() {
+        return lbName != null ? lbName.getText() : null;
     }
 }
 
