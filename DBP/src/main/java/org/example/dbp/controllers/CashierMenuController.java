@@ -17,10 +17,7 @@ import javafx.scene.layout.VBox;
 import org.example.dbp.models.Category;
 import org.example.dbp.models.InvoiceItems;
 import org.example.dbp.models.MenuItem;
-import org.example.dbp.repository.CategoryRepo;
-import org.example.dbp.repository.CustomerRepository;
-import org.example.dbp.repository.OrderRepo;
-import org.example.dbp.repository.UserRepository;
+import org.example.dbp.repository.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,9 +47,7 @@ public class CashierMenuController {
     @FXML
     private Label dateTimeTextFiled;
 
-
     private double totalBillAmount = 0.0;
-
     @FXML
     private Label totalPriceLabel;
 
@@ -74,7 +69,6 @@ public class CashierMenuController {
     private TextField searchTextField;
 
     private ObservableList<InvoiceItems> itemsObservableList = FXCollections.observableArrayList();
-
 
     @FXML
     public void initialize() {
@@ -299,8 +293,11 @@ public class CashierMenuController {
 
     static String cashierName = null;
 
+    /**
+     * generateBill method that will set up the Invoice with customer info.
+     * */
     @FXML
-    public void generateBill() {
+    public void generateInvoice() {
         //Set customer name.
         if (custNameTextFiled.getText().equalsIgnoreCase("F")) {
             showAlert("Enter customer name", "You should choose the customer.");
@@ -334,8 +331,11 @@ public class CashierMenuController {
         printInvoiceButton.setDisable(false);
     }
 
+    /**
+     * printBill method that will print the Invoice, then clear its content.
+     * */
     @FXML
-    public void printBill() {
+    public void printInvoice() {
         showAlert("Printing Bill", "bill printed.");
         printInvoiceButton.setDisable(true);
         createBillButton.setDisable(false);
@@ -349,8 +349,6 @@ public class CashierMenuController {
         totalBillAmount = 0.0;
         amountTextFiled.setText("Total:0.00 NIS");
         amountTextFiled.clear();
-
-
     }
 
     /**

@@ -1,22 +1,28 @@
 package org.example.dbp.controllers;
 
 import com.jfoenix.controls.JFXButton;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import com.jfoenix.controls.JFXComboBox;
 import org.example.dbp.models.User;
+import org.example.dbp.repository.InvoiceRepo;
+import org.example.dbp.repository.OrderRepo;
 import org.example.dbp.repository.UserRepository;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 public class AdminController {
 
@@ -76,19 +82,88 @@ public class AdminController {
     @FXML
     private TextField employeePassword;
 
+    //Dashboard
+    @FXML
+    private Label numberOfCustomerLabel;
+    @FXML
+    private Label numberOfSoldProductLabel;
+    @FXML
+    private Label todayIncomeLabel;
+    @FXML
+    private Label totalIncomeLabel;
+
+    @FXML
+    private BarChart<String, Number> customerBarChart;
+
+    @FXML
+    private LineChart<String, Number> incomeChart;
+
 
     public void initialize() {
         // Populate the combo box with options
         roleComboBox.getItems().addAll("Admin", "Cashier");
 
-        // Add close request handler for the admin stage
-//        Platform.runLater(() -> {
-//            Stage stage = (Stage) lbUserName.getScene().getWindow();
-//            stage.setOnCloseRequest(event -> {
-//                event.consume();
-//                closeConfirmation(stage);
-//            });
-//        });
+        //get the total number of customers for the last day.
+        numberOfCustomerLabel.setText(OrderRepo.totalNumberOfCustomers() + " ");
+
+        //get the total amount.
+        totalIncomeLabel.setText(InvoiceRepo.getTotalAmount() + " NIS");
+
+        //get the last day total income.
+        todayIncomeLabel.setText(InvoiceRepo.getLastDayTotalAmount() + " NIS");
+
+        //get the unique number of sold products.
+        numberOfSoldProductLabel.setText(OrderRepo.numberOfSoldProduct() + "");
+
+        this.setupCustomerBarChart();
+        this.setupIncomeChart();
+    }
+
+    /**
+     * setupCustomerBarChart method that will initialize the customer Bar chart.
+     * */
+    public void setupCustomerBarChart() {
+        // Clear previous data
+        customerBarChart.getData().clear();
+        customerBarChart.setTitle("Daily Customer Statistics");
+
+        // Create a new series for the chart
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Number of Customers");
+
+        // Get data from the database
+        List<Map.Entry<String, Integer>> customerDataList = OrderRepo.customerPerDate();
+        for (Map.Entry<String, Integer> entry : customerDataList) {
+            String date = entry.getKey();
+            int customerCount = entry.getValue();
+            // Add data points to the series
+            series.getData().add(new XYChart.Data<>(date, customerCount));
+        }
+
+        // Add the series to the chart
+        customerBarChart.getData().add(series);
+    }
+
+    /**
+     * setupIncomeChart method that will initialize the income line chart.
+     * */
+    public void setupIncomeChart() {
+        incomeChart.getData().clear();
+        incomeChart.setTitle("Daily Income Trends");
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Income");
+
+        // Get data from the database
+        List<Map.Entry<String, Double>> customerDataList = InvoiceRepo.amountPerDate();
+
+        for (Map.Entry<String, Double> entry : customerDataList) {
+            String date = entry.getKey();
+            double amount = entry.getValue();
+            series.getData().add(new XYChart.Data<>(date, amount));
+        }
+
+        incomeChart.getData().add(series);
     }
 
     /**
@@ -224,7 +299,6 @@ public class AdminController {
         alert.setContentText(context);
         alert.showAndWait();
     }
-
 
     /**
      * successAlert method that will show a success alert that the operation done successfully.

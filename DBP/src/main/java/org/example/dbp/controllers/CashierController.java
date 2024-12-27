@@ -13,7 +13,6 @@ import org.example.dbp.models.Customer;
 import org.example.dbp.repository.CustomerRepository;
 
 import java.io.IOException;
-import java.util.Optional;
 
 public class CashierController {
 
