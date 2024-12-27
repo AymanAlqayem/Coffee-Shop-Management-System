@@ -234,10 +234,7 @@ public class AdminController {
      * addNewEmployee method that will add new Employee.
      * */
     public void addNewEmployee(ActionEvent event) {
-        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() ||
-                employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty()
-                || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty()
-                || employeePassword.getText().isEmpty()) {
+        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() || employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty() || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty() || employeePassword.getText().isEmpty()) {
             showErrorAlert("Invalid Input", "Invalid Input,try again");
             return;
         }
@@ -271,9 +268,7 @@ public class AdminController {
         Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         //Create new user.
-        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(),
-                hireDate, employeePhoneNumber.getText(), hashedPassword,
-                convertStringToDouble(employeeSalary.getText()));
+        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, employeePhoneNumber.getText(), hashedPassword, convertStringToDouble(employeeSalary.getText()));
 
         //Add the user to DB.
         UserRepository.addNewEmployee(user);
