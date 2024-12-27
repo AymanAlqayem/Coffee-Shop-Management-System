@@ -15,7 +15,7 @@ public class CustomerRepository {
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, customer.getCustomerName());
-            statement.setString(2, customer.getCustomerPhone());
+            statement.setLong(2, customer.getCustomerPhone());
             statement.executeUpdate();
 
         } catch (SQLException e) {

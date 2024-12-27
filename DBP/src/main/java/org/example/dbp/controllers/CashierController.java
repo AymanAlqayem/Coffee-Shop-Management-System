@@ -131,7 +131,7 @@ public class CashierController {
             return;
         }
         //Add the new customer.
-        Customer newCustomer = new Customer(customerName.getText(), customerPhoneNumber.getText());
+        Customer newCustomer = new Customer(customerName.getText(), Long.parseLong(customerPhoneNumber.getText()));
         CustomerRepository.addNewCustomer(newCustomer);
         successAlert("Customer added", "Customer successfully added");
         customerName.clear();

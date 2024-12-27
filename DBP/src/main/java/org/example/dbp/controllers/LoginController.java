@@ -14,6 +14,8 @@ import org.example.dbp.repository.UserRepository;
 
 import java.io.IOException;
 
+
+
 public class LoginController extends Application {
     @FXML
     TextField tfUserName;
@@ -21,6 +23,7 @@ public class LoginController extends Application {
     PasswordField tfPass;
     @FXML
     JFXButton btLogin;
+
 
     UserRepository userRepo = new UserRepository();
 
@@ -55,6 +58,7 @@ public class LoginController extends Application {
 
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/admin.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
+
 
             // Get the AdminController and pass the username to it
             AdminController adminController = fxmlLoader.getController();

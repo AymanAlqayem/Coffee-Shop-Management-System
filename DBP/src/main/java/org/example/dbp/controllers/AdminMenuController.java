@@ -79,7 +79,8 @@ public class AdminMenuController {
                 itemInfoVBox.setStyle("-fx-background-color: #f0f0f0;");
                 itemInfoVBox.setPadding(new Insets(10, 10, 10, 10));
 
-                Image trashImage = new Image("C:\\Users\\a-z\\Desktop\\DB_PROJECT\\DBProject\\DBP\\src\\main\\resources\\trash.png");
+                Image trashImage = new Image("C:\\Users\\abdal\\Downloads\\DBProject\\DBP\\src\\main\\resources\\trash.png");
+
                 ImageView trashImageView = new ImageView(trashImage);
 
 
