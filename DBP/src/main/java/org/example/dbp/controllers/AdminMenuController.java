@@ -261,6 +261,7 @@ public class AdminMenuController {
         // Get the user's selection
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(selectedCategory -> {
+            System.out.println("Selected Category : " + selectedCategory);
             // Confirm deletion with the user
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Category");
@@ -269,6 +270,7 @@ public class AdminMenuController {
 
             Optional<ButtonType> confirmationResult = alert.showAndWait();
             if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
+                System.out.println("Accepted for remove....");
                 //remove the category from the DB.
                 CategoryRepo.deleteCategory(selectedCategory);
                 loadMenuData();

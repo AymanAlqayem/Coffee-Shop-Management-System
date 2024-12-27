@@ -6,7 +6,7 @@ create table User
     email        varchar(45) unique,
     hire_date    date,
     phone_number varchar(10),
-    password     varchar(30) NOT NULL,
+    password     varchar(64) NOT NULL,
     salary       real        NOT NULL
 );
 
@@ -43,7 +43,9 @@ create table Menu_item
 );
 
 create table Order_Line
-(
+(ayman
+    122
+
     order_id         int,
     menu_item_id     int,
     ordered_Quantity int,
