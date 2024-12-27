@@ -17,7 +17,7 @@ public class UserRepository {
     /**
      * getUserByUsernameAndPassword method that will get a specific user based the name and password.
      * */
-    public static User getUserByUsernameAndPassword(String name, String password) {
+    public static User getUserByUsernameAndPassword(String name, String hashedPassword) {
         User user = null;
         String query = "SELECT * FROM user WHERE name = ? AND password = ?";
 
@@ -25,7 +25,7 @@ public class UserRepository {
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, name);
-            preparedStatement.setString(2, password);
+            preparedStatement.setString(2, hashedPassword);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -44,13 +44,13 @@ public class UserRepository {
     /**
      * getUserRole method that will get the role for a specific user.
      * */
-    public static String getUserRole(String username, String password) {
+    public static String getUserRole(String username, String hashedPassword) {
         String query = "SELECT * FROM user WHERE name = ? AND password = ?";
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
-            statement.setString(2, password);
+            statement.setString(2, hashedPassword);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 return resultSet.getString("role");

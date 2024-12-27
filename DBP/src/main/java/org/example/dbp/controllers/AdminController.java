@@ -178,8 +178,8 @@ public class AdminController {
         }
 
         //Check if the salary is a valid number.
-        if (convertStringToDouble(employeeSalary.getText()) == null) {
-            showErrorAlert("Invalid Input", "Please enter a valid salary!");
+        if (convertStringToDouble(employeeSalary.getText()) == null || convertStringToDouble(employeeSalary.getText()) <= 0) {
+            showErrorAlert("Invalid Input", "Please enter a valid positive salary!");
             return;
         }
 
@@ -189,13 +189,15 @@ public class AdminController {
             return;
         }
 
+        String hashedPassword = PasswordHash.hashPassword(employeePassword.getText());
+
         //Convert hire date to Date.
         LocalDate localDate = employeeHireDate.getValue();
         Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         //Create new user.
         User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(),
-                hireDate, employeePhoneNumber.getText(), employeePassword.getText(),
+                hireDate, employeePhoneNumber.getText(), hashedPassword,
                 convertStringToDouble(employeeSalary.getText()));
 
         //Add the user to DB.
@@ -207,6 +209,7 @@ public class AdminController {
         employeeHireDate.setValue(null);
         employeeSalary.clear();
         employeePhoneNumber.clear();
+        employeePassword.clear();
         roleComboBox.getSelectionModel().clearSelection();
 
     }

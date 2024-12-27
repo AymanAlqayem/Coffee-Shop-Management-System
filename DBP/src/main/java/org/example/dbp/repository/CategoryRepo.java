@@ -25,9 +25,7 @@ public class CategoryRepo {
 
         String query = "SELECT * FROM category c  LEFT JOIN menu_item i  ON c.id = i.category_id";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 int categoryId = resultSet.getInt("c.id");
                 Category currentCategory = null;
@@ -71,8 +69,7 @@ public class CategoryRepo {
     public static void addCategory(String categoryName) {
         String query = "insert into category(name) values(?)";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, categoryName);
             statement.executeUpdate();
@@ -88,8 +85,7 @@ public class CategoryRepo {
     public static void addItem(MenuItem item) {
         String query = "insert into menu_item(item_name,price, category_id) values(?,?,?)";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, item.getItemName());
             statement.setDouble(2, item.getPrice());
             statement.setInt(3, item.getCategoryId());
@@ -106,8 +102,7 @@ public class CategoryRepo {
     public static void deleteItem(String itemName) {
         String query = "delete from menu_item where item_name = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, itemName);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -120,10 +115,12 @@ public class CategoryRepo {
     public static void deleteCategory(String categoryName) {
         String query = "delete from category where name = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        System.out.println("Delete Method.......");
+
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, categoryName);
             statement.executeUpdate();
+            System.out.println("Deleted .....");
         } catch (SQLException e) {
         }
     }
@@ -134,8 +131,7 @@ public class CategoryRepo {
     public static boolean isItemInDB(String itemName) {
         String query = "SELECT COUNT(item_name) FROM menu_item WHERE item_name = ?";
 
-        try (Connection conn = DataBase.getDBConnection();
-             PreparedStatement statement = conn.prepareStatement(query)) {
+        try (Connection conn = DataBase.getDBConnection(); PreparedStatement statement = conn.prepareStatement(query)) {
 
             statement.setString(1, itemName);
 
@@ -155,8 +151,7 @@ public class CategoryRepo {
     public static boolean isCategoryInDB(String categoryName) {
         String query = "SELECT COUNT(name) FROM category c WHERE c.name = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
 
             statement.setString(1, categoryName);
             ResultSet resultSet = statement.executeQuery();

@@ -32,7 +32,6 @@ public class OrderRepo {
                 try (ResultSet resultSet = stmtOrder.getGeneratedKeys()) {
                     if (resultSet.next()) {
                         orderId = resultSet.getInt(1); // Get the generated order ID
-                        System.out.println("The generated order ID is " + orderId);
                     }
                 }
             }
@@ -44,9 +43,6 @@ public class OrderRepo {
                     for (InvoiceItems item : itemsObservableList) {
                         Integer menuItemId = MenuItemRepo.getMenuItemId(item.getItemName()); // Get menu_item_id
                         Integer orderedQuantity = item.getQuantity(); // Get ordered_quantity
-
-                        System.out.println(menuItemId + "....");
-                        System.out.println(orderedQuantity + "...");
 
                         stmtOrderLine.setInt(1, orderId); // Set order_id
                         stmtOrderLine.setInt(2, menuItemId); // Set menu_item_id
