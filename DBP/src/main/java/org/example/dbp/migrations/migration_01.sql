@@ -103,6 +103,60 @@ create table Invoice
     foreign key (order_id) references Order_table (id)
 );
 
+INSERT INTO User (name, role, email, hire_date, phone_number, password, salary)
+VALUES ('John Doe', 'admin', 'john.doe@example.com', '2024-01-01', '1234567890', 'password123', 5000),
+       ('Jane Smith', 'admin', 'jane.smith@example.com', '2024-01-02', '0987654321', 'password123', 5000),
+       ('Alice Johnson', 'cashier', 'alice.johnson@example.com', '2024-02-01', '2345678901', 'password123', 3000),
+       ('Bob Brown', 'cashier', 'bob.brown@example.com', '2024-03-01', '3456789012', 'password123', 3000),
+       ('Charlie White', 'cashier', 'charlie.white@example.com', '2024-04-01', '4567890123', 'password123', 3000),
+       ('Diana Green', 'cashier', 'diana.green@example.com', '2024-05-01', '5678901234', 'password123', 3000),
+       ('Ethan Black', 'cashier', 'ethan.black@example.com', '2024-06-01', '6789012345', 'password123', 3000),
+       ('Liam Carter', 'admin', 'liam.carter@example.com', '2024-07-01', '7890123456', 'password123', 5000),
+       ('Sophia Taylor', 'admin', 'sophia.taylor@example.com', '2024-08-01', '8901234567', 'password123', 5000),
+       ('Isabella Harris', 'cashier', 'isabella.harris@example.com', '2024-09-01', '9012345678', 'password123', 3000),
+       ('Mason Turner', 'cashier', 'mason.turner@example.com', '2024-10-01', '9123456789', 'password123', 3000),
+       ('Ava Lopez', 'cashier', 'ava.lopez@example.com', '2024-11-01', '9234567890', 'password123', 3000),
+       ('Lucas Walker', 'admin', 'lucas.walker@example.com', '2024-12-01', '9345678901', 'password123', 5000),
+       ('Ayman', 'admin', 'Ayman@gmail.com', '2024-01-01', '1234567890', '1220040', 5000);
+
+
+
+INSERT INTO Customer (customer_name, phone_number)
+VALUES ('Michael Davis', '1111111111'),
+       ('Emily Garcia', '2222222222'),
+       ('Daniel Harris', '3333333333'),
+       ('Sophia Martinez', '4444444444'),
+       ('Matthew Clark', '5555555555'),
+       ('Olivia Rodriguez', '6666666666'),
+       ('Lucas Lewis', '7777777777'),
+       ('Emma Walker', '8888888888'),
+       ('Jack Allen', '9999999999'),
+       ('Chloe Hall', '1010101010'),
+       ('Henry Young', '1212121212'),
+       ('Ella King', '1313131313'),
+       ('Alexander Wright', '1414141414'),
+       ('Amelia Scott', '1515151515'),
+       ('William Turner', '1616161616'),
+       ('Isabella Hill', '1717171717'),
+       ('Benjamin Moore', '1818181818'),
+       ('Mia Baker', '1919191919'),
+       ('James Carter', '2020202020'),
+       ('Charlotte Adams', '2121212121'),
+       ('Jacob Nelson', '2222222222'),
+       ('Lily Torres', '2323232323'),
+       ('Elijah Lee', '2424242424'),
+       ('Sophie Ramirez', '2525252525'),
+       ('Mason Perez', '2626262626'),
+       ('Grace Collins', '2727272727'),
+       ('Logan Murphy', '2828282828'),
+       ('Hannah Barnes', '2929292929'),
+       ('Sebastian Reed', '3030303030'),
+       ('Zoe Sanders', '3131313131'),
+       ('Noah Foster', '3232323232'),
+       ('Ava Brooks', '3333333333'),
+       ('Ethan Bennett', '3434343434'),
+       ('Harper Howard', '3535353535');
+
 
 
 insert into category (name)
@@ -181,12 +235,160 @@ values ('Mesflora smoothie', 18, 6),
 
 
 
-insert into user(name, role, email, hire_date, phone_number, password, salary)
-values ('Ayman', 'Admin', 'nabilA02@gmail.com', '2023-12-12', '0594276', 122, 3600),
-       ('sam', 'cashier', 'sam@gmail.com', '2023-12-12', '0594276', 122, 3200);
+INSERT INTO Order_Table (created_date_time, customer_id, cashier_id)
+VALUES ('2024-11-01 12:30:00', 1, 3),
+       ('2024-11-02 14:15:00', 2, 4),
+       ('2024-11-03 16:00:00', 3, 5),
+       ('2024-11-04 10:45:00', 4, 6),
+       ('2024-11-05 13:20:00', 5, 7),
+       ('2024-11-06 15:00:00', 6, 3),
+       ('2024-11-07 09:30:00', 7, 4),
+       ('2024-11-08 11:45:00', 8, 5),
+       ('2024-11-09 14:00:00', 9, 6),
+       ('2024-11-10 12:20:00', 10, 7),
+       ('2024-11-11 16:30:00', 11, 3),
+       ('2024-11-12 18:00:00', 12, 4),
+       ('2024-11-13 10:00:00', 13, 5),
+       ('2024-11-14 15:30:00', 14, 6),
+       ('2024-11-15 19:15:00', 15, 7),
+       ('2024-11-16 12:45:00', 16, 3),
+       ('2024-11-17 09:15:00', 17, 4),
+       ('2024-11-18 17:00:00', 18, 5),
+       ('2024-11-19 13:00:00', 19, 6),
+       ('2024-11-20 11:00:00', 20, 7),
+       ('2024-12-01 12:30:00', 1, 3),
+       ('2024-12-02 14:15:00', 2, 4),
+       ('2024-12-03 16:00:00', 3, 5),
+       ('2024-12-04 10:45:00', 4, 6),
+       ('2024-12-05 13:20:00', 5, 7),
+       ('2024-12-06 15:00:00', 6, 3),
+       ('2024-12-07 09:30:00', 7, 4),
+       ('2024-12-08 11:45:00', 8, 5),
+       ('2024-12-09 14:00:00', 9, 6),
+       ('2024-12-10 12:20:00', 10, 7),
+       ('2024-12-11 16:30:00', 11, 3),
+       ('2024-12-12 18:00:00', 12, 4),
+       ('2024-12-13 10:00:00', 13, 5),
+       ('2024-12-14 15:30:00', 14, 6),
+       ('2024-12-15 19:15:00', 15, 7);
+
+
+
+INSERT INTO Order_Line (order_id, menu_item_id, ordered_quantity)
+VALUES (1, 1, 2),
+       (1, 2, 1),
+       (2, 3, 1),
+       (2, 4, 2),
+       (3, 5, 1),
+       (3, 6, 3),
+       (4, 7, 2),
+       (4, 8, 1),
+       (5, 9, 1),
+       (5, 10, 4),
+       (6, 11, 2),
+       (6, 12, 1),
+       (7, 13, 3),
+       (7, 14, 2),
+       (8, 15, 1),
+       (8, 16, 2),
+       (9, 17, 1),
+       (9, 18, 3),
+       (10, 19, 2),
+       (10, 20, 1),
+       (11, 21, 3),
+       (11, 22, 1),
+       (12, 23, 2),
+       (12, 24, 4),
+       (13, 25, 1),
+       (13, 26, 3),
+       (14, 27, 2),
+       (14, 28, 1),
+       (15, 29, 1),
+       (15, 30, 2),
+       (16, 1, 3),
+       (16, 2, 1),
+       (17, 3, 2),
+       (17, 4, 1),
+       (18, 5, 3),
+       (18, 6, 1),
+       (19, 7, 2),
+       (19, 8, 1),
+       (20, 9, 3),
+       (20, 10, 1),
+       (21, 11, 2),
+       (21, 12, 1),
+       (22, 13, 1),
+       (22, 14, 2),
+       (23, 15, 3),
+       (23, 16, 1),
+       (24, 17, 1),
+       (24, 18, 3),
+       (25, 19, 2),
+       (25, 20, 1),
+       (26, 21, 1),
+       (26, 22, 2),
+       (27, 23, 3),
+       (27, 24, 1),
+       (28, 25, 2),
+       (28, 26, 1),
+       (29, 27, 3),
+       (29, 28, 1),
+       (30, 29, 2),
+       (30, 30, 1),
+       (31, 1, 2),
+       (31, 2, 3),
+       (32, 3, 1),
+       (32, 4, 2),
+       (33, 5, 3),
+       (33, 6, 1),
+       (34, 7, 2),
+       (34, 8, 1),
+       (35, 9, 3),
+       (35, 10, 2);
+
+
+
+INSERT INTO Invoice (created_date_time, amount, cashier_id, order_id)
+VALUES ('2024-11-01 12:35:00', 20.50, 3, 1),
+       ('2024-11-02 14:20:00', 32.00, 4, 2),
+       ('2024-11-03 16:05:00', 15.75, 5, 3),
+       ('2024-11-04 10:50:00', 45.00, 6, 4),
+       ('2024-11-05 13:25:00', 25.00, 7, 5),
+       ('2024-11-06 15:05:00', 18.25, 3, 6),
+       ('2024-11-07 09:35:00', 22.50, 4, 7),
+       ('2024-11-08 11:50:00', 35.00, 5, 8),
+       ('2024-11-09 14:05:00', 40.00, 6, 9),
+       ('2024-11-10 12:25:00', 19.50, 7, 10),
+       ('2024-11-11 16:35:00', 27.00, 3, 11),
+       ('2024-11-12 18:05:00', 31.75, 4, 12),
+       ('2024-11-13 10:05:00', 50.00, 5, 13),
+       ('2024-11-14 15:35:00', 20.00, 6, 14),
+       ('2024-11-15 19:20:00', 44.00, 7, 15),
+       ('2024-11-16 12:50:00', 33.00, 3, 16),
+       ('2024-11-17 09:20:00', 25.00, 4, 17),
+       ('2024-11-18 17:05:00', 38.00, 5, 18),
+       ('2024-11-19 13:05:00', 42.50, 6, 19),
+       ('2024-11-20 11:05:00', 19.75, 7, 20),
+       ('2024-12-01 12:35:00', 20.50, 3, 21),
+       ('2024-12-02 14:20:00', 32.00, 4, 22),
+       ('2024-12-03 16:05:00', 15.75, 5, 23),
+       ('2024-12-04 10:50:00', 45.00, 6, 24),
+       ('2024-12-05 13:25:00', 25.00, 7, 25),
+       ('2024-12-06 15:05:00', 18.25, 3, 26),
+       ('2024-12-07 09:35:00', 22.50, 4, 27),
+       ('2024-12-08 11:50:00', 35.00, 5, 28),
+       ('2024-12-09 14:05:00', 40.00, 6, 29),
+       ('2024-12-10 12:25:00', 19.50, 7, 30),
+       ('2024-12-11 16:35:00', 27.00, 3, 31),
+       ('2024-12-12 18:05:00', 31.75, 4, 32),
+       ('2024-12-13 10:05:00', 50.00, 5, 33),
+       ('2024-12-14 15:35:00', 20.00, 6, 34),
+       ('2024-12-15 19:20:00', 44.00, 7, 35);
+
+
 
 INSERT INTO Inventory (name, admin_id)
-VALUES ('Main Inventory', 1);
+VALUES ('Main Inventory', 14);
 
 INSERT INTO Purchase_Order (date, total_amount, inventory_id)
 VALUES ('2024-01-01', 500.00, 1),
@@ -241,154 +443,6 @@ VALUES (1, 1, 10, 2.50),
        (14, 15, 20, 6.00);
 
 
--- Users (Admins and Cashiers)
-INSERT INTO User (name, role, email, hire_date, phone_number, password, salary)
-VALUES ('John Doe', 'Cashier', 'john.doe@email.com', '2023-05-01', '1234567890', 'hashedpassword1', 2500.0),
-       ('Jane Smith', 'Cashier', 'jane.smith@email.com', '2023-06-02', '1234567891', 'hashedpassword2', 2700.0),
-       ('Mark Johnson', 'Cashier', 'mark.johnson@email.com', '2023-07-01', '1234567892', 'hashedpassword3', 2600.0),
-       ('Emily Davis', 'Cashier', 'emily.davis@email.com', '2023-07-15', '1234567893', 'hashedpassword4', 2800.0),
-       ('Michael Brown', 'Cashier', 'michael.brown@email.com', '2023-08-01', '1234567894', 'hashedpassword5', 2500.0),
-       ('Sarah Miller', 'Cashier', 'sarah.miller@email.com', '2023-08-15', '1234567895', 'hashedpassword6', 2650.0),
-       ('David Wilson', 'Cashier', 'david.wilson@email.com', '2023-09-01', '1234567896', 'hashedpassword7', 2900.0),
-       ('Olivia White', 'Cashier', 'olivia.white@email.com', '2023-09-15', '1234567897', 'hashedpassword8', 2750.0),
-       ('James Taylor', 'Cashier', 'james.taylor@email.com', '2023-10-01', '1234567898', 'hashedpassword9', 2600.0),
-       ('Lily Harris', 'Cashier', 'lily.harris@email.com', '2023-10-10', '1234567899', 'hashedpassword10', 2800.0),
-       ('Daniel Clark', 'Cashier', 'daniel.clark@email.com', '2023-11-01', '1234567900', 'hashedpassword11', 2700.0),
-       ('Sophie Lewis', 'Cashier', 'sophie.lewis@email.com', '2023-11-10', '1234567901', 'hashedpassword12', 2650.0),
-       ('Aaron Walker', 'Cashier', 'aaron.walker@email.com', '2023-12-01', '1234567902', 'hashedpassword13', 2500.0),
-       ('Zoe Scott', 'Cashier', 'zoe.scott@email.com', '2023-12-05', '1234567903', 'hashedpassword14', 2750.0),
-       ('Chris Adams', 'Cashier', 'chris.adams@email.com', '2023-12-15', '1234567904', 'hashedpassword15', 2700.0),
-       ('Grace Parker', 'Cashier', 'grace.parker@email.com', '2023-12-20', '1234567905', 'hashedpassword16', 2650.0),
-       ('Tom Mitchell', 'Admin', 'tom.mitchell@email.com', '2024-01-01', '1234567906', 'hashedpassword17', 3500.0),
-       ('Ella Perez', 'Admin', 'ella.perez@email.com', '2024-01-10', '1234567907', 'hashedpassword18', 3600.0),
-       ('Lucas Gonzalez', 'Admin', 'lucas.gonzalez@email.com', '2024-01-15', '1234567908', 'hashedpassword19', 3700.0),
-       ('Charlotte Nelson', 'Admin', 'charlotte.nelson@email.com', '2024-02-01', '1234567909', 'hashedpassword20',
-        3800.0),
-       ('Isaac Roberts', 'Admin', 'isaac.roberts@email.com', '2024-02-10', '1234567910', 'hashedpassword21', 3900.0),
-       ('Hannah Carter', 'Admin', 'hannah.carter@email.com', '2024-03-01', '1234567911', 'hashedpassword22', 4000.0),
-       ('Ethan Phillips', 'Admin', 'ethan.phillips@email.com', '2024-03-10', '1234567912', 'hashedpassword23', 4200.0),
-       ('Mason Cooper', 'Admin', 'mason.cooper@email.com', '2024-03-15', '1234567913', 'hashedpassword24', 4300.0),
-       ('Chloe Evans', 'Admin', 'chloe.evans@email.com', '2024-03-20', '1234567914', 'hashedpassword25', 4400.0);
-
-
--- Customers
-INSERT INTO Customer (customer_name, phone_number)
-VALUES ('Alice Walker', '9876543210'),
-       ('Bob Johnson', '9876543211'),
-       ('Charlie Lee', '9876543212'),
-       ('David Kim', '9876543213'),
-       ('Eva White', '9876543214'),
-       ('Fiona Green', '9876543215'),
-       ('George Brown', '9876543216'),
-       ('Hannah King', '9876543217'),
-       ('Isaac Moore', '9876543218'),
-       ('Julia Scott', '9876543219'),
-       ('Katherine Harris', '9876543220'),
-       ('Leo Turner', '9876543221'),
-       ('Megan Clark', '9876543222'),
-       ('Noah Davis', '9876543223'),
-       ('Olivia Martinez', '9876543224'),
-       ('Paul Young', '9876543225'),
-       ('Quincy Allen', '9876543226'),
-       ('Rachel Harris', '9876543227'),
-       ('Sophia Adams', '9876543228'),
-       ('Thomas Walker', '9876543229'),
-       ('Uma Lewis', '9876543230'),
-       ('Victor Wright', '9876543231'),
-       ('Wendy Hall', '9876543232'),
-       ('Xander Lee', '9876543233'),
-       ('Yara Green', '9876543234'),
-       ('Zachary Moore', '9876543235');
-
--- Orders (with varying dates in 2024)
-INSERT INTO Order_table (created_date_time, cashier_id, customer_id)
-VALUES ('2024-01-05 08:30:00', 1, 1),
-       ('2024-01-10 09:00:00', 2, 2),
-       ('2024-02-01 10:30:00', 3, 3),
-       ('2024-02-03 11:00:00', 4, 4),
-       ('2024-02-15 12:00:00', 5, 5),
-       ('2024-03-01 13:30:00', 6, 6),
-       ('2024-03-10 14:00:00', 7, 7),
-       ('2024-04-01 10:30:00', 8, 8),
-       ('2024-04-05 11:30:00', 9, 9),
-       ('2024-04-15 15:00:00', 10, 10),
-       ('2024-05-01 16:00:00', 11, 11),
-       ('2024-05-10 17:00:00', 12, 12),
-       ('2024-05-20 18:00:00', 13, 13),
-       ('2024-06-01 08:45:00', 14, 14),
-       ('2024-06-10 09:30:00', 15, 15),
-       ('2024-06-15 10:00:00', 16, 16),
-       ('2024-07-01 11:15:00', 17, 17),
-       ('2024-07-05 12:15:00', 18, 18),
-       ('2024-07-10 14:30:00', 19, 19),
-       ('2024-08-01 15:00:00', 20, 20),
-       ('2024-08-05 16:30:00', 21, 21),
-       ('2024-08-15 17:30:00', 22, 22),
-       ('2024-09-01 08:00:00', 23, 23),
-       ('2024-09-10 09:15:00', 24, 24),
-       ('2024-09-20 10:30:00', 25, 25);
-
-
--- Order Lines (each order has different menu items and quantities)
-INSERT INTO Order_Line (order_id, menu_item_id, ordered_Quantity)
-VALUES (1, 1, 2),
-       (1, 2, 1),
-       (2, 3, 3),
-       (2, 4, 1),
-       (3, 5, 2),
-       (3, 6, 1),
-       (4, 7, 2),
-       (4, 8, 3),
-       (5, 9, 1),
-       (5, 10, 2),
-       (6, 11, 2),
-       (6, 12, 1),
-       (7, 13, 3),
-       (7, 14, 1),
-       (8, 15, 2),
-       (8, 16, 2),
-       (9, 17, 1),
-       (9, 18, 2),
-       (10, 19, 1),
-       (10, 20, 3),
-       (11, 21, 2),
-       (11, 22, 1),
-       (12, 23, 3),
-       (12, 24, 2),
-       (13, 25, 1),
-       (13, 26, 2),
-       (14, 27, 2);
-
-
--- Invoices (related to orders)
-INSERT INTO Invoice (created_date_time, amount, cashier_id, order_id)
-VALUES ('2024-01-05 08:45:00', 50.00, 1, 1),
-       ('2024-01-10 09:30:00', 60.00, 2, 2),
-       ('2024-02-01 11:00:00', 90.00, 3, 3),
-       ('2024-02-03 11:30:00', 80.00, 4, 4),
-       ('2024-02-15 12:30:00', 120.00, 5, 5),
-       ('2024-03-01 13:45:00', 75.00, 6, 6),
-       ('2024-03-10 14:15:00', 95.00, 7, 7),
-       ('2024-04-01 10:45:00', 110.00, 8, 8),
-       ('2024-04-05 12:00:00', 105.00, 9, 9),
-       ('2024-04-15 15:30:00', 135.00, 10, 10),
-       ('2024-05-01 16:15:00', 80.00, 11, 11),
-       ('2024-05-10 17:30:00', 85.00, 12, 12),
-       ('2024-05-20 18:30:00', 95.00, 13, 13),
-       ('2024-06-01 08:55:00', 70.00, 14, 14),
-       ('2024-06-10 09:45:00', 75.00, 15, 15),
-       ('2024-06-15 10:30:00', 120.00, 16, 16),
-       ('2024-07-01 11:30:00', 100.00, 17, 17),
-       ('2024-07-05 12:45:00', 115.00, 18, 18),
-       ('2024-07-10 14:45:00', 125.00, 19, 19),
-       ('2024-08-01 15:15:00', 90.00, 20, 20),
-       ('2024-08-05 16:45:00', 105.00, 21, 21),
-       ('2024-08-15 17:45:00', 110.00, 22, 22),
-       ('2024-09-01 08:30:00', 130.00, 23, 23),
-       ('2024-09-10 09:30:00', 120.00, 24, 24),
-       ('2024-09-20 10:45:00', 115.00, 25, 25);
-
-
 
 SELECT *
 FROM User;
@@ -408,5 +462,7 @@ SELECT *
 FROM inventory;
 SELECT *
 FROM inventory_item;
+SELECT *
+FROM Inventory_Order_Line;
 SELECT *
 FROM purchase_order;

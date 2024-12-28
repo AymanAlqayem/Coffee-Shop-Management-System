@@ -32,13 +32,7 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
-
-    public static void printTotalSalesPerCashier(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
+    }  //Used
 
     public static List<String> getMostPopularMenuItems() {
         List<String> resultList = new ArrayList<>();
@@ -62,13 +56,8 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
+    } //Used
 
-    public static void printMostPopularMenuItems(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
 
     public static List<String> getTotalRevenuePerCategoryIn2024() {
         List<String> resultList = new ArrayList<>();
@@ -96,13 +85,8 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
+    } // Used
 
-    public static void printTotalRevenuePerCategoryIn2024(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
 
     public static List<String> getTotalOrdersAndRevenuePerCustomer() {
         List<String> resultList = new ArrayList<>();
@@ -130,13 +114,8 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
+    } //Used
 
-    public static void printTotalOrdersAndRevenuePerCustomer(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
 
     public static List<String> getCashierWithHighestAverageInvoiceAmount() {
         List<String> resultList = new ArrayList<>();
@@ -161,46 +140,8 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
+    } //Used
 
-    public static void printCashierWithHighestAverageInvoiceAmount(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
-
-    public static List<String> getMenuItemsOrderedByFrequentCustomers() {
-        List<String> resultList = new ArrayList<>();
-        String query = "SELECT m.item_name, COUNT(ol.menu_item_id) AS order_count "
-                + "FROM Order_Line ol "
-                + "JOIN Order_table o ON ol.order_id = o.id "
-                + "JOIN menu_item m ON ol.menu_item_id = m.id "
-                + "JOIN Customer c ON o.customer_id = c.id "
-                + "GROUP BY m.item_name "
-                + "ORDER BY order_count DESC "
-                + "LIMIT 10";
-
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                String itemName = resultSet.getString("item_name");
-                int orderCount = resultSet.getInt("order_count");
-                resultList.add(itemName + ": " + orderCount);
-            }
-
-        } catch (SQLException e) {
-        }
-
-        return resultList;
-    }
-
-    public static void printMenuItemsOrderedByFrequentCustomers(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
 
     public static List<String> getOrdersAndRevenuePerDay() {
         List<String> resultList = new ArrayList<>();
@@ -228,13 +169,8 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
+    }//Used
 
-    public static void printOrdersAndRevenuePerDay(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
 
     public static List<String> getCustomersWithNoPurchases() {
         List<String> resultList = new ArrayList<>();
@@ -256,13 +192,8 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
+    } //Used
 
-    public static void printCustomersWithNoPurchases(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
 
     public static List<String> getTopSellingMenuItemsByRevenue() {
         List<String> resultList = new ArrayList<>();
@@ -290,13 +221,9 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
+    } //Used
 
-    public static void printTopSellingMenuItemsByRevenue(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
+
 
 
     public static List<String> getMostActiveCashierByDate() {
@@ -403,6 +330,4 @@ public class SpecialRepo {
             System.out.println(result);
         }
     }
-
-
 }
