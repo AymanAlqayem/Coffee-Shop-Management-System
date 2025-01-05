@@ -10,11 +10,14 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import com.jfoenix.controls.JFXComboBox;
 import org.example.dbp.models.User;
 import org.example.dbp.repository.InvoiceRepo;
 import org.example.dbp.repository.OrderRepo;
+import org.example.dbp.repository.SpecialRepo;
 import org.example.dbp.repository.UserRepository;
 
 import java.io.IOException;
@@ -34,6 +37,10 @@ public class AdminController {
 
     @FXML
     private AnchorPane menuForm;
+
+    @FXML
+    private AnchorPane specialInfoForm;
+
 
     // Basic Controllers.
 
@@ -59,6 +66,9 @@ public class AdminController {
     private JFXButton btSignOut;
 
     @FXML
+    private JFXButton btSpecialInfo;
+
+    @FXML
     private Label lbUserName;
 
     //Controllers in addNewEmployee_form.
@@ -82,7 +92,7 @@ public class AdminController {
     @FXML
     private TextField employeePassword;
 
-    //Dashboard
+    //Controllers in Dashboard form.
     @FXML
     private Label numberOfCustomerLabel;
     @FXML
@@ -97,6 +107,26 @@ public class AdminController {
 
     @FXML
     private LineChart<String, Number> incomeChart;
+
+    //Controllers in special Info form.
+    @FXML
+    JFXButton totalSalesPerCahierButton;
+    @FXML
+    JFXButton cashierWithHighestInvoiceButton;
+    @FXML
+    JFXButton mostPopularMenuItemButton;
+    @FXML
+    JFXButton totalRevenuePerCategory2024Button;
+    @FXML
+    JFXButton totalOrdersPerCustomerButton;
+    @FXML
+    JFXButton topSellingMenuItemButton;
+    @FXML
+    JFXButton customerWithNoPurchasesButton;
+    @FXML
+    JFXButton ordersRevenuePerDayButton;
+    @FXML
+    TextArea resultTextArea;
 
 
     public void initialize() {
@@ -115,6 +145,7 @@ public class AdminController {
         //get the unique number of sold products.
         numberOfSoldProductLabel.setText(OrderRepo.numberOfSoldProduct() + "");
 
+        resultTextArea.setEditable(false);
         this.setupCustomerBarChart();
         this.setupIncomeChart();
     }
@@ -203,15 +234,92 @@ public class AdminController {
             dashBoard_form.setVisible(true);
             addNewEmployee_form.setVisible(false);
             menuForm.setVisible(false);
+            specialInfoForm.setVisible(false);
         } else if (e.getSource() == btAddNewRole) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(true);
             menuForm.setVisible(false);
+            specialInfoForm.setVisible(false);
         } else if (e.getSource() == btMenu) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(false);
             menuForm.setVisible(true);
+            specialInfoForm.setVisible(false);
             loadAdminMenu(); // Call the method to load the Admin Menu FXML
+        } else if (e.getSource() == btSpecialInfo) {
+            dashBoard_form.setVisible(false);
+            menuForm.setVisible(false);
+            addNewEmployee_form.setVisible(false);
+            specialInfoForm.setVisible(true);
+        }
+    }
+
+
+    /**
+     * switchInSpecialInfoForm method that will switch the buttons in the special info form.
+     * */
+    public void switchInSpecialInfoForm(ActionEvent e) {
+        resultTextArea.setFont(Font.font("Book Antiqua", FontWeight.BOLD, 20));
+
+        if (e.getSource() == totalSalesPerCahierButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTotalSalesPerCashier();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == cashierWithHighestInvoiceButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getCashierWithHighestAverageInvoiceAmount();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == mostPopularMenuItemButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getMostPopularMenuItems();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == totalRevenuePerCategory2024Button) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTotalRevenuePerCategoryIn2024();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == totalOrdersPerCustomerButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTotalOrdersAndRevenuePerCustomer();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+        } else if (e.getSource() == topSellingMenuItemButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTopSellingMenuItemsByRevenue();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+        } else if (e.getSource() == customerWithNoPurchasesButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getCustomersWithNoPurchases();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+        } else if (e.getSource() == ordersRevenuePerDayButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getOrdersAndRevenuePerDay();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
         }
     }
 
@@ -234,10 +342,7 @@ public class AdminController {
      * addNewEmployee method that will add new Employee.
      * */
     public void addNewEmployee(ActionEvent event) {
-        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() ||
-                employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty()
-                || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty()
-                || employeePassword.getText().isEmpty()) {
+        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() || employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty() || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty() || employeePassword.getText().isEmpty()) {
             showErrorAlert("Invalid Input", "Invalid Input,try again");
             return;
         }
@@ -271,9 +376,7 @@ public class AdminController {
         Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         //Create new user.
-        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(),
-                hireDate, employeePhoneNumber.getText(), hashedPassword,
-                convertStringToDouble(employeeSalary.getText()));
+        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, employeePhoneNumber.getText(), hashedPassword, convertStringToDouble(employeeSalary.getText()));
 
         //Add the user to DB.
         UserRepository.addNewEmployee(user);

@@ -115,12 +115,9 @@ public class CategoryRepo {
     public static void deleteCategory(String categoryName) {
         String query = "delete from category where name = ?";
 
-        System.out.println("Delete Method.......");
-
         try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, categoryName);
             statement.executeUpdate();
-            System.out.println("Deleted .....");
         } catch (SQLException e) {
         }
     }

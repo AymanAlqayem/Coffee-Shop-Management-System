@@ -270,7 +270,6 @@ public class AdminMenuController {
 
             Optional<ButtonType> confirmationResult = alert.showAndWait();
             if (confirmationResult.isPresent() && confirmationResult.get() == ButtonType.OK) {
-                System.out.println("Accepted for remove....");
                 //remove the category from the DB.
                 CategoryRepo.deleteCategory(selectedCategory);
                 loadMenuData();
