@@ -1,6 +1,7 @@
 package org.example.dbp.repository;
 
 import org.example.dbp.db.DataBase;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +58,6 @@ public class SpecialRepo {
 
         return resultList;
     } //Used
-
 
     public static List<String> getTotalRevenuePerCategoryIn2024() {
         List<String> resultList = new ArrayList<>();
@@ -223,9 +223,6 @@ public class SpecialRepo {
         return resultList;
     } //Used
 
-
-
-
     public static List<String> getMostActiveCashierByDate() {
         List<String> resultList = new ArrayList<>();
         String query = "SELECT DATE(i.created_date_time) AS order_date, u.name AS cashier_name, "
@@ -258,7 +255,6 @@ public class SpecialRepo {
             System.out.println(result);
         }
     }
-
 
     public static List<String> getCustomerWhoSpentMostIn2024() {
         List<String> resultList = new ArrayList<>();
