@@ -1,38 +1,101 @@
 package org.example.dbp.controllers;
 
 import com.jfoenix.controls.JFXButton;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
 import org.example.dbp.models.Category;
+import org.example.dbp.models.InvoiceItems;
 import org.example.dbp.models.MenuItem;
-import org.example.dbp.repository.CategoryRepo;
+import org.example.dbp.repository.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class CashierMenuController {
     @FXML
     private Accordion menuAccordion;
 
-    private Accordion billAccordion;
+    @FXML
+    private JFXButton btDone;
 
+    @FXML
+    private JFXButton createBillButton;
+
+    @FXML
+    private JFXButton printInvoiceButton;
+    @FXML
+    private TextField amountTextFiled;
+
+    @FXML
+    private Label orderNoTextFiled;
+    @FXML
+    private Label cashNameTextFiled;
+    @FXML
+    private Label custNameTextFiled;
+    @FXML
+    private Label dateTimeTextFiled;
+
+    private double totalBillAmount = 0.0;
+    @FXML
+    private Label totalPriceLabel;
+
+    @FXML
+    private TableView<InvoiceItems> billTableView;
+
+    @FXML
+    private TableColumn<InvoiceItems, String> itemTableColumn; // Change type to InvoiceItems
+    @FXML
+    private TableColumn<InvoiceItems, Integer> quantityTableColumn; // Change type to InvoiceItems
+    @FXML
+    private TableColumn<InvoiceItems, Double> priceTableColumn; // Change
+
+    @FXML
+    private ListView<String> searchResultsListView;
+
+    private ObservableList<String> customerNamesList;
+    @FXML
+    private TextField searchTextField;
+
+    private ObservableList<InvoiceItems> itemsObservableList = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
-        loadMenuData();  // Load the menu data after FXML components are initialized
+        loadMenuData(); // Load the menu data
+        itemsObservableList = FXCollections.observableArrayList();
+
+        // Set up the columns with correct bindings
+        itemTableColumn.setCellValueFactory(new PropertyValueFactory<>("itemName"));
+        quantityTableColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        priceTableColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
+
+        // Set bill items in the bill table view.
+        billTableView.setItems(itemsObservableList);
+
+        // Initialize a customer names list.
+        customerNamesList = FXCollections.observableArrayList(CustomerRepository.getAllCustomers());
+
+        // Add event handlers
+        searchTextField.addEventHandler(KeyEvent.KEY_RELEASED, e -> searchCustomer());
+        searchResultsListView.setOnMouseClicked(e -> handleSelectCustomer());
+
+        printInvoiceButton.setDisable(true);
     }
 
     /**
      * loadMenuData method that will load all categories and items.
      * */
-
     public void loadMenuData() {
         menuAccordion.getPanes().clear();
         ArrayList<Category> categories = CategoryRepo.getCategories();  // Fetch categories from the repository.
@@ -106,6 +169,32 @@ public class CashierMenuController {
     }
 
     /**
+     * searchCustomer method that will allow users to search for a customers.
+     * */
+    private void searchCustomer() {
+        String result = searchTextField.getText().toLowerCase();
+        if (result.isEmpty()) {
+            searchResultsListView.setVisible(false);
+        } else {
+            ObservableList<String> filtered = customerNamesList.filtered(name -> name.toLowerCase().contains(result));
+            searchResultsListView.setItems(filtered);
+            searchResultsListView.setVisible(!filtered.isEmpty());
+        }
+    }
+
+    /**
+     * handleSelectCustomer method that will allow users to select a customer after searching.
+     * */
+    private void handleSelectCustomer() {
+        String selectedName = searchResultsListView.getSelectionModel().getSelectedItem();
+        if (selectedName != null) {
+            custNameTextFiled.setText(selectedName);
+            searchResultsListView.setVisible(false);
+            searchTextField.clear();
+        }
+    }
+
+    /**
      * makeActionsToPurchaseButton that will show a text input dialog to enter the quantity of the item.
      * */
     public void makeActionsToPurchaseButton(MenuItem item) {
@@ -121,9 +210,8 @@ public class CashierMenuController {
             try {
                 int qty = Integer.parseInt(quantity); // Parse the input to an integer
                 if (qty > 0) {
-                    // Process the quantity entered by the user (e.g., add to bill)
-                    System.out.println("User wants to purchase " + qty + " of " + item.getItemName());
-                    // Handle logic to add the selected item and quantity to the bill
+                    //Add the item information to the tableview.
+                    addItemToBill(item.getItemName(), qty, item.getPrice());
                 } else {
                     // Show an error alert if the user entered a non-positive number.
                     showErrorAlert("Invalid Quantity", "Please enter a valid quantity greater than 0.");
@@ -135,23 +223,132 @@ public class CashierMenuController {
         });
     }
 
-    private VBox billVBox = new VBox(2);
+    /**
+     * addItemToBill method that will add the given item and calculate its total price.
+     * */
+    public void addItemToBill(String itemName, int qty, double price) {
 
-    public void addToBill(MenuItem item, int quantity, int price) {
-        billAccordion.getPanes().clear();
-//        billVBox.setPadding(new Insets(4, 4, 4, 4));
-        StringBuilder bill = new StringBuilder();
-        bill.append("======= Coffee Shop Bill =======\n\n");
+        double totalPrice = price * qty; // Calculate total price
 
-        //These three should be in same line.
-        bill.append("Item Name:");
-        bill.append("Item Quantity:");
-        bill.append("total price:");
+        InvoiceItems itemInfo = new InvoiceItems(itemName, qty, totalPrice);
 
-        //Now we should put the item.
+        // Add the BillItem to the observable list
+        itemsObservableList.add(itemInfo);
 
-        HBox itemHBox = new HBox(20);
+        // Update the total bill amount.
+        totalBillAmount += totalPrice;
 
+        // Update the total amount price.
+        totalPriceLabel.setText("Price: " + totalBillAmount + " NIS");
+    }
+
+    /**
+     * removeSelectedItem method that will remove the selected item from the table view.
+     * */
+    @FXML
+    public void removeSelectedItem() {
+        // Get the selected item from the TableView
+        InvoiceItems selectedItem = billTableView.getSelectionModel().getSelectedItem();
+
+        if (selectedItem != null) {
+            // Get the price of the selected item
+            double itemPrice = selectedItem.getPrice();
+
+            // Subtract the item's price from the total bill amount
+            totalBillAmount -= itemPrice;
+
+            // Remove the selected item from the ObservableList
+            itemsObservableList.remove(selectedItem);
+
+            totalPriceLabel.setText("Price :" + totalBillAmount + " NIS");
+        } else {
+            // Show an alert if no item is selected
+            showErrorAlert("No Selection", "Please select an item to remove.");
+        }
+    }
+
+    /**
+     * finishBill method that will end the current order.
+     * */
+    @FXML
+    public void finishBill() {
+        if (amountTextFiled.getText().isEmpty()) {
+            showErrorAlert("Invalid Input", "Please enter a valid amount.");
+            return;
+        }
+
+        try {
+            double paidAmount = Double.parseDouble(amountTextFiled.getText());
+            if (paidAmount >= totalBillAmount) {
+                double change = paidAmount - totalBillAmount;
+                successAlert("Transaction Complete", "Change to Return: " + String.format("%.2f", change) + " NIS");
+            } else {
+                showErrorAlert("Insufficient Payment", "The paid amount is not enough to cover the total.");
+            }
+        } catch (NumberFormatException e) {
+            showErrorAlert("Input Error", "Please enter a valid amount for payment.");
+        }
+
+    }
+
+    static String cashierName = null;
+
+    /**
+     * generateBill method that will set up the Invoice with customer info.
+     * */
+    @FXML
+    public void generateInvoice() {
+        //Set customer name.
+        if (custNameTextFiled.getText().equalsIgnoreCase("F")) {
+            showAlert("Enter customer name", "You should choose the customer.");
+            return;
+        }
+
+        if (itemsObservableList.isEmpty()) {
+            showAlert("No items selected", "Please select an item.");
+            return;
+        }
+
+        int cashierId = UserRepository.getCashierId(cashierName);
+        int customerId = CustomerRepository.getCustomerId(custNameTextFiled.getText());
+
+        //Add the order to the database.
+        int orderNo = OrderRepo.addOrder(cashierId, customerId,
+                totalBillAmount, itemsObservableList);
+
+        orderNoTextFiled.setText(orderNo + " ");
+
+
+        //Set the current data time.
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        dateTimeTextFiled.setText(now.format(formatter));
+
+        //Set cashier name.
+        cashNameTextFiled.setText(cashierName);
+
+        createBillButton.setDisable(true);
+        printInvoiceButton.setDisable(false);
+    }
+
+    /**
+     * printBill method that will print the Invoice, then clear its content.
+     * */
+    @FXML
+    public void printInvoice() {
+        showAlert("Printing Bill", "bill printed.");
+        printInvoiceButton.setDisable(true);
+        createBillButton.setDisable(false);
+
+        //clear order content
+        orderNoTextFiled.setText("F");
+        custNameTextFiled.setText("F");
+        dateTimeTextFiled.setText("F");
+        cashNameTextFiled.setText("F");
+        itemsObservableList.clear();
+        totalBillAmount = 0.0;
+        amountTextFiled.setText("Total:0.00 NIS");
+        amountTextFiled.clear();
     }
 
     /**
@@ -162,6 +359,25 @@ public class CashierMenuController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(context);
+        alert.showAndWait();
+    }
+
+    /**
+     * successAlert method that will show a success alert that the operation done successfully.
+     * */
+    public void successAlert(String title, String context) {
+        Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
+        successAlert.setTitle(title);
+        successAlert.setHeaderText(null);
+        successAlert.setContentText(context);
+        successAlert.showAndWait();
+
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setContentText(message);
         alert.showAndWait();
     }
 }

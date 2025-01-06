@@ -13,7 +13,6 @@ import org.example.dbp.models.Customer;
 import org.example.dbp.repository.CustomerRepository;
 
 import java.io.IOException;
-import java.util.Optional;
 
 public class CashierController {
 
@@ -38,16 +37,11 @@ public class CashierController {
     private JFXButton createBillButton;
 
     //Forms.
-
     @FXML
     private AnchorPane menuForm;
 
     @FXML
-    private AnchorPane billForm;
-
-    @FXML
     private AnchorPane addNewCustomer;
-
 
 
     //Controllers in add a new customers form.
@@ -57,8 +51,17 @@ public class CashierController {
     @FXML
     private TextField customerPhoneNumber;
 
-    //Controllers for bill form.
-    Accordion billAccordion;
+    //Controllers in add a new bill form.
+    @FXML
+    private Label cashNameTextFiled;
+
+    @FXML
+    private Label custNameTextFiled;
+
+    @FXML
+    private Label dateTimeTextFiled;
+    @FXML
+    private Label orderNoTextFiled;
 
 
     /**
@@ -86,13 +89,11 @@ public class CashierController {
     public void switchWin(ActionEvent e) {
         if (e.getSource() == btMenu) {
             menuForm.setVisible(true);
-            billForm.setVisible(true);
             loadCashierMenu();
             addNewCustomer.setVisible(false);
         } else if (e.getSource() == btAdd) {
             addNewCustomer.setVisible(true);
             menuForm.setVisible(false);
-            billForm.setVisible(false);
         }
     }
 
@@ -101,6 +102,7 @@ public class CashierController {
      * */
     private void loadCashierMenu() {
         try {
+            CashierMenuController.cashierName = lbName.getText();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dbp/CashierMenu.fxml"));
             AnchorPane menuPane = loader.load(); // Load the menu content
             // Clear existing content and add the menu pane to menuForm
@@ -139,9 +141,6 @@ public class CashierController {
 
     }
 
-
-
-
     /**
      * showErrorAlert method that will show an error alert due to entered input.
      * */
@@ -171,6 +170,10 @@ public class CashierController {
      * */
     public void setUserName(String userName) {
         lbName.setText(userName);
+    }
+
+    public String getUserName() {
+        return lbName != null ? lbName.getText() : null;
     }
 }
 

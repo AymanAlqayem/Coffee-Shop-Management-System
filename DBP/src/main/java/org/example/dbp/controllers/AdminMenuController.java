@@ -262,6 +262,7 @@ public class AdminMenuController {
         // Get the user's selection
         Optional<String> result = dialog.showAndWait();
         result.ifPresent(selectedCategory -> {
+            System.out.println("Selected Category : " + selectedCategory);
             // Confirm deletion with the user
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Delete Category");

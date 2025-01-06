@@ -7,6 +7,7 @@ module org.example.dbp {
     requires com.jfoenix;
     requires jdk.jdi;
     requires java.desktop;
+    requires mysql.connector.j;
 
     opens org.example.dbp to javafx.fxml;
     exports org.example.dbp.controllers;

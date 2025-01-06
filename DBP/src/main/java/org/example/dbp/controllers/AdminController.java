@@ -9,6 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -16,19 +19,26 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import com.jfoenix.controls.JFXComboBox;
 import org.example.dbp.models.User;
+import org.example.dbp.repository.InvoiceRepo;
+import org.example.dbp.repository.OrderRepo;
+import org.example.dbp.repository.SpecialRepo;
 import org.example.dbp.repository.UserRepository;
 import javafx.util.StringConverter;
 import org.example.dbp.models.Customer;
-import org.example.dbp.repository.CustomerRepo;
+import org.example.dbp.repository.CustomerRepository;
 
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
@@ -56,6 +66,10 @@ public class AdminController {
     @FXML
     private AnchorPane tableUserPane;
 
+    @FXML
+    private AnchorPane specialInfoForm;
+
+
     // Basic Controllers.
 
     @FXML
@@ -78,6 +92,9 @@ public class AdminController {
 
     @FXML
     private JFXButton btSignOut;
+
+    @FXML
+    private JFXButton btSpecialInfo;
 
     @FXML
     private Label lbUserName;
@@ -104,19 +121,109 @@ public class AdminController {
     @FXML
     private TextField employeePassword;
 
+    //Controllers in Dashboard form.
+    @FXML
+    private Label numberOfCustomerLabel;
+    @FXML
+    private Label numberOfSoldProductLabel;
+    @FXML
+    private Label todayIncomeLabel;
+    @FXML
+    private Label totalIncomeLabel;
+
+    @FXML
+    private BarChart<String, Number> customerBarChart;
+
+    @FXML
+    private LineChart<String, Number> incomeChart;
+
+    //Controllers in special Info form.
+    @FXML
+    JFXButton totalSalesPerCahierButton;
+    @FXML
+    JFXButton cashierWithHighestInvoiceButton;
+    @FXML
+    JFXButton mostPopularMenuItemButton;
+    @FXML
+    JFXButton totalRevenuePerCategory2024Button;
+    @FXML
+    JFXButton totalOrdersPerCustomerButton;
+    @FXML
+    JFXButton topSellingMenuItemButton;
+    @FXML
+    JFXButton customerWithNoPurchasesButton;
+    @FXML
+    JFXButton ordersRevenuePerDayButton;
+    @FXML
+    TextArea resultTextArea;
+
 
     public void initialize() {
         // Populate the combo box with options
-        roleComboBox.getItems().addAll("Admin", "Employee");
+        roleComboBox.getItems().addAll("Admin", "Cashier");
 
-        // Add close request handler for the admin stage
-//        Platform.runLater(() -> {
-//            Stage stage = (Stage) lbUserName.getScene().getWindow();
-//            stage.setOnCloseRequest(event -> {
-//                event.consume();
-//                closeConfirmation(stage);
-//            });
-//        });
+        //get the total number of customers for the last day.
+        numberOfCustomerLabel.setText(OrderRepo.totalNumberOfCustomers() + " ");
+
+        //get the total amount.
+        totalIncomeLabel.setText(InvoiceRepo.getTotalAmount() + " NIS");
+
+        //get the last day total income.
+        todayIncomeLabel.setText(InvoiceRepo.getLastDayTotalAmount() + " NIS");
+
+        //get the unique number of sold products.
+        numberOfSoldProductLabel.setText(OrderRepo.numberOfSoldProduct() + "");
+
+        resultTextArea.setEditable(false);
+        this.setupCustomerBarChart();
+        this.setupIncomeChart();
+    }
+
+    /**
+     * setupCustomerBarChart method that will initialize the customer Bar chart.
+     * */
+    public void setupCustomerBarChart() {
+        // Clear previous data
+        customerBarChart.getData().clear();
+        customerBarChart.setTitle("Daily Customer Statistics");
+
+        // Create a new series for the chart
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Number of Customers");
+
+        // Get data from the database
+        List<Map.Entry<String, Integer>> customerDataList = OrderRepo.customerPerDate();
+        for (Map.Entry<String, Integer> entry : customerDataList) {
+            String date = entry.getKey();
+            int customerCount = entry.getValue();
+            // Add data points to the series
+            series.getData().add(new XYChart.Data<>(date, customerCount));
+        }
+
+        // Add the series to the chart
+        customerBarChart.getData().add(series);
+    }
+
+    /**
+     * setupIncomeChart method that will initialize the income line chart.
+     * */
+    public void setupIncomeChart() {
+        incomeChart.getData().clear();
+        incomeChart.setTitle("Daily Income Trends");
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        series.setName("Income");
+
+        // Get data from the database
+        List<Map.Entry<String, Double>> customerDataList = InvoiceRepo.amountPerDate();
+
+        for (Map.Entry<String, Double> entry : customerDataList) {
+            String date = entry.getKey();
+            double amount = entry.getValue();
+            series.getData().add(new XYChart.Data<>(date, amount));
+        }
+
+        incomeChart.getData().add(series);
     }
 
     /**
@@ -126,7 +233,6 @@ public class AdminController {
     public void comboOptions(ActionEvent e) {
         // Get the selected option when an action occurs
         String selectedOption = roleComboBox.getSelectionModel().getSelectedItem();
-//        System.out.println("Selected option: " + selectedOption);
     }
 
     /**
@@ -165,6 +271,7 @@ public class AdminController {
             menuForm.setVisible(false);
             tableUserPane.setVisible(false);
 
+            specialInfoForm.setVisible(false);
         } else if (e.getSource() == btAddNewRole) {
             tableUserPane.setVisible(false);
             tableCustomerPane.setVisible(false);
@@ -176,6 +283,7 @@ public class AdminController {
             menuForm.setVisible(false);
             tableUserPane.setVisible(false);
 
+            specialInfoForm.setVisible(false);
         } else if (e.getSource() == btMenu) {
             tableUserPane.setVisible(false);
             tableCustomerPane.setVisible(false);
@@ -186,13 +294,82 @@ public class AdminController {
             addNewEmployee_form.setVisible(false);
             menuForm.setVisible(true);
             tableUserPane.setVisible(false);
+            specialInfoForm.setVisible(false);
             loadAdminMenu(); // Call the method to load the Admin Menu FXML
-        } else if (e.getSource() == btEmployees) {
-//            dashBoard_form.setVisible(false);
-//            addNewEmployee_form.setVisible(false);
-//            menuForm.setVisible(false);
-//            tableUserPane.setVisible(true);
-//            showUsers(e);
+        } else if (e.getSource() == btSpecialInfo) {
+            dashBoard_form.setVisible(false);
+            menuForm.setVisible(false);
+            addNewEmployee_form.setVisible(false);
+            specialInfoForm.setVisible(true);
+        }
+    }
+
+
+    /**
+     * switchInSpecialInfoForm method that will switch the buttons in the special info form.
+     * */
+    public void switchInSpecialInfoForm(ActionEvent e) {
+        resultTextArea.setFont(Font.font("Book Antiqua", FontWeight.BOLD, 20));
+
+        if (e.getSource() == totalSalesPerCahierButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTotalSalesPerCashier();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == cashierWithHighestInvoiceButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getCashierWithHighestAverageInvoiceAmount();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == mostPopularMenuItemButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getMostPopularMenuItems();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == totalRevenuePerCategory2024Button) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTotalRevenuePerCategoryIn2024();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+
+        } else if (e.getSource() == totalOrdersPerCustomerButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTotalOrdersAndRevenuePerCustomer();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+        } else if (e.getSource() == topSellingMenuItemButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTopSellingMenuItemsByRevenue();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+        } else if (e.getSource() == customerWithNoPurchasesButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getCustomersWithNoPurchases();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
+
+        } else if (e.getSource() == ordersRevenuePerDayButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getOrdersAndRevenuePerDay();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+            }
         }
     }
 
@@ -227,7 +404,7 @@ public class AdminController {
 
         tableCustomerPane.setPadding(new Insets(10, 10, 10, 10));
 
-        ObservableList<Customer> dataList = FXCollections.observableArrayList(CustomerRepo.getAllCustomers());
+        ObservableList<Customer> dataList = FXCollections.observableArrayList(CustomerRepository.getAllCustomers());
 
         Label label = new Label("Customer Table");
         label.setFont(new Font("Arial", 20));
@@ -291,7 +468,7 @@ public class AdminController {
                 if (confirmed) {
                     Customer selectedCustomer = row.getItem();
                     if (selectedCustomer != null) {
-                        Customer deletedCustomer = CustomerRepo.deleteRowByKey(selectedCustomer.getId());
+                        Customer deletedCustomer = CustomerRepository.deleteRowByKey(selectedCustomer.getId());
                         if (deletedCustomer != null) {
                             // Remove the deleted user from the TableView's observable list
                             tableCustomer.getItems().remove(selectedCustomer);
@@ -492,7 +669,7 @@ public class AdminController {
     }
 
     public void updateRowByKeyCustomer(int id, String col, String val) {
-        CustomerRepo.updateRowByKey(id, col, val);
+        CustomerRepository.updateRowByKey(id, col, val);
     }
 
 
@@ -595,10 +772,7 @@ public class AdminController {
      * addNewEmployee method that will add new Employee.
      * */
     public void addNewEmployee(ActionEvent event) {
-        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() ||
-                employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty()
-                || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty()
-                || employeePassword.getText().isEmpty()) {
+        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() || employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty() || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty() || employeePassword.getText().isEmpty()) {
             showErrorAlert("Invalid Input", "Invalid Input,try again");
             return;
         }
@@ -614,8 +788,8 @@ public class AdminController {
         }
 
         //Check if the salary is a valid number.
-        if (convertStringToDouble(employeeSalary.getText()) == null) {
-            showErrorAlert("Invalid Input", "Please enter a valid salary!");
+        if (convertStringToDouble(employeeSalary.getText()) == null || convertStringToDouble(employeeSalary.getText()) <= 0) {
+            showErrorAlert("Invalid Input", "Please enter a valid positive salary!");
             return;
         }
 
@@ -625,14 +799,14 @@ public class AdminController {
             return;
         }
 
+        String hashedPassword = PasswordHash.hashPassword(employeePassword.getText());
+
         //Convert hire date to Date.
         LocalDate localDate = employeeHireDate.getValue();
         Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         //Create new user.
-        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(),
-                hireDate, Long.parseLong(employeePhoneNumber.getText()), employeePassword.getText(),
-                convertStringToDouble(employeeSalary.getText()));
+        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, employeePhoneNumber.getText(), hashedPassword, convertStringToDouble(employeeSalary.getText()));
 
         //Add the user to DB.
         UserRepository.addNewEmployee(user);
@@ -643,6 +817,7 @@ public class AdminController {
         employeeHireDate.setValue(null);
         employeeSalary.clear();
         employeePhoneNumber.clear();
+        employeePassword.clear();
         roleComboBox.getSelectionModel().clearSelection();
 
     }
@@ -657,7 +832,6 @@ public class AdminController {
         alert.setContentText(context);
         alert.showAndWait();
     }
-
 
     /**
      * successAlert method that will show a success alert that the operation done successfully.
@@ -678,6 +852,9 @@ public class AdminController {
         lbUserName.setText(userName);
     }
 
+    /**
+     * convertStringToDouble method that will convert from string to double.
+     * */
     public static Double convertStringToDouble(String str) {
         try {
             // Try to parse the String to a double
@@ -687,6 +864,9 @@ public class AdminController {
         }
     }
 
+    /**
+     * convertStringToInt method that will convert from Sting to int.
+     * */
     public static int convertStringToInt(String str) {
         try {
             // Try to parse the String to a double
