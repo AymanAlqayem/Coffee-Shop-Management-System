@@ -7,19 +7,20 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.scene.text.Font;
+
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import com.jfoenix.controls.JFXComboBox;
@@ -28,6 +29,8 @@ import org.example.dbp.repository.InvoiceRepo;
 import org.example.dbp.repository.OrderRepo;
 import org.example.dbp.repository.SpecialRepo;
 import org.example.dbp.repository.UserRepository;
+import org.example.dbp.models.*;
+import org.example.dbp.repository.*;
 import javafx.util.StringConverter;
 import org.example.dbp.models.Customer;
 import org.example.dbp.repository.CustomerRepository;
@@ -47,6 +50,42 @@ import java.util.Optional;
 import static javafx.scene.control.cell.TextFieldTableCell.forTableColumn;
 
 public class AdminController {
+
+    @FXML
+    private AnchorPane PurchaseOrderTablePane;
+    @FXML
+    private TableView<PurchaseOrder> purchaseOrderTable = new TableView<>();
+    @FXML
+    private TableView<PurchaseOrderLine> purchaseOrderLineTable = new TableView<>();
+
+    ObservableList<PurchaseOrderLine> dataPurchaseOrderLine = FXCollections.observableArrayList();
+    ObservableList<PurchaseOrder> dataPurchaseOrder = FXCollections.observableArrayList();
+
+    @FXML
+    private Label warning;
+    @FXML
+    private Button addPO;
+    @FXML
+    private AnchorPane inventoryPane;
+
+    @FXML
+    private Button btPurchaseOrderTable;
+
+
+    @FXML
+    private TextField cost;
+
+    @FXML
+    private ComboBox<String> ingredient;
+    @FXML
+    private Button placePurchaseOrder;
+    @FXML
+    private TableView<PurchaseOrderLine> purchasingOrderTable;
+
+    @FXML
+    private TextField quantity;
+    @FXML
+    private ComboBox<String> vendor;
 
     //Forms.
     @FXML
@@ -394,23 +433,23 @@ public class AdminController {
         //    tableCustomerPane.getChildren().clear();
         tableCustomer.getColumns().clear();
         tableCustomer.setVisible(true);
+        tableCustomerPane.setVisible(true);
 
+        tableUserPane.setVisible(false);
+        tableUser.setVisible(false);
 
+        inventoryPane.setVisible(false);
         dashBoard_form.setVisible(false);
         addNewEmployee_form.setVisible(false);
         menuForm.setVisible(false);
-        tableUserPane.setVisible(false);
-        tableCustomerPane.setVisible(true);
+
+        PurchaseOrderTablePane.setVisible(false);
+        purchaseOrderTable.setVisible(false);
+        PurchaseOrderTablePane.setVisible(false);
 
         tableCustomerPane.setPadding(new Insets(10, 10, 10, 10));
 
         ObservableList<Customer> dataList = FXCollections.observableArrayList(CustomerRepository.getAllCustomers());
-
-        Label label = new Label("Customer Table");
-        label.setFont(new Font("Arial", 20));
-        label.setTextFill(Color.BLUE);
-        BorderPane.setAlignment(label, Pos.CENTER);
-
 
         tableCustomer.setEditable(true);
         tableCustomer.setMaxHeight(4000);
@@ -493,28 +532,62 @@ public class AdminController {
 
     }
 
+    private TableColumn<Customer, String> buildTableColumnStringCustomer(String colname, boolean editable, int width) {
+        TableColumn<Customer, String> someCol = new TableColumn<>(colname);
+        someCol.setMinWidth(width);
+        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+        if (editable) {
+            someCol.setCellFactory(forTableColumn());
+            someCol.setOnEditCommit((TableColumn.CellEditEvent<Customer, String> t) -> {
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
+                updateRowByKeyCustomer((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
+            });
+        }
+        return someCol;
+    }
+    private TableColumn<Customer, Long> buildTableColumnLongUCustomer(String colname, boolean editable, int width) {
+        TableColumn<Customer, Long> someCol = new TableColumn<>(colname);
+        someCol.setMinWidth(width);
+        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+        if (editable) {
+
+            someCol.setOnEditCommit((TableColumn.CellEditEvent<Customer, Long> t) -> {
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
+                updateRowByKeyCustomer((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
+            });
+        }
+        return someCol;
+    }
 
     public void showUsers(ActionEvent e) throws IOException {
         // tableUserPane.getChildren().clear();
+
+
         tableUser.getColumns().clear();
         tableUser.setVisible(true);
+        tableUserPane.setVisible(true);
 
+        tableCustomerPane.setVisible(false);
+        tableCustomer.setVisible(false);
+
+        inventoryPane.setVisible(false);
         dashBoard_form.setVisible(false);
         addNewEmployee_form.setVisible(false);
         menuForm.setVisible(false);
-        tableCustomerPane.setVisible(false);
-        tableUserPane.setVisible(true);
 
+        PurchaseOrderTablePane.setVisible(false);
+        purchaseOrderTable.setVisible(false);
+        PurchaseOrderTablePane.setVisible(false);
 
         tableUserPane.setPadding(new Insets(10, 10, 10, 10));
 
         ObservableList<User> dataList = FXCollections.observableArrayList(UserRepository.getAllUsers());
 
-        Label label = new Label("User Table");
-        label.setFont(new Font("Arial", 20));
-        label.setTextFill(Color.BLUE);
+//        Label label = new Label("User Table");
+//        label.setFont(new Font("Arial", 20));
+//        label.setTextFill(Color.BLUE);
         // tableUserPane.setTop(label);
-        BorderPane.setAlignment(label, Pos.CENTER);
+//        BorderPane.setAlignment(label, Pos.CENTER);
 
 
         tableUser.setEditable(true);
@@ -530,7 +603,7 @@ public class AdminController {
         TableColumn<User, String> emailCol = buildTableColumnStringUser("email", true, 140);
         emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
-        TableColumn<User, Date> hireDateCol = buildTableColumnDate("hireDate", true, 100);
+        TableColumn<User, Date> hireDateCol = buildTableColumnDateUser("hireDate", true, 100);
         hireDateCol.setCellFactory(column -> new TableCell<>() {
             private final DatePicker datePicker = new DatePicker();
 
@@ -651,21 +724,13 @@ public class AdminController {
             });
 
             row.contextMenuProperty().bind(
-                    javafx.beans.binding.Bindings.when(
-                                    javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
-                            .then(contextMenu)
-                            .otherwise((ContextMenu) null)
+                    javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null)
             );
 
             return row;
         });
 
 
-
-    }
-
-    public void updateRowByKeyUser(int id, String col, String val) {
-        UserRepository.updateRowByKey(id, col, val);
     }
 
     public void updateRowByKeyCustomer(int id, String col, String val) {
@@ -680,35 +745,22 @@ public class AdminController {
         if (editable) {
             someCol.setCellFactory(forTableColumn());
             someCol.setOnEditCommit((TableColumn.CellEditEvent<User, String> t) -> {
-                ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
                 updateRowByKeyUser((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
             });
         }
         return someCol;
     }
 
-    private TableColumn<Customer, String> buildTableColumnStringCustomer(String colname, boolean editable, int width) {
-        TableColumn<Customer, String> someCol = new TableColumn<>(colname);
-        someCol.setMinWidth(width);
-        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
-        if (editable) {
-            someCol.setCellFactory(forTableColumn());
-            someCol.setOnEditCommit((TableColumn.CellEditEvent<Customer, String> t) -> {
-                ((Customer) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
-                updateRowByKeyCustomer((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
-            });
-        }
-        return someCol;
-    }
 
-    private TableColumn<User, Date> buildTableColumnDate(String colname, boolean editable, int width) {
+    private TableColumn<User, Date> buildTableColumnDateUser(String colname, boolean editable, int width) {
         TableColumn<User, Date> someCol = new TableColumn<>(colname);
         someCol.setMinWidth(width);
         someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
         if (editable) {
 
             someCol.setOnEditCommit((TableColumn.CellEditEvent<User, Date> t) -> {
-                ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
                 updateRowByKeyUser((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
             });
         }
@@ -722,7 +774,7 @@ public class AdminController {
         if (editable) {
 
             someCol.setOnEditCommit((TableColumn.CellEditEvent<User, Long> t) -> {
-                ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
                 updateRowByKeyUser((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
             });
         }
@@ -736,26 +788,22 @@ public class AdminController {
         if (editable) {
 
             someCol.setOnEditCommit((TableColumn.CellEditEvent<User, Double> t) -> {
-                ((User) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
                 updateRowByKeyUser((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
             });
         }
         return someCol;
     }
 
-    private TableColumn<Customer, Long> buildTableColumnLongUCustomer(String colname, boolean editable, int width) {
-        TableColumn<Customer, Long> someCol = new TableColumn<>(colname);
-        someCol.setMinWidth(width);
-        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
-        if (editable) {
-
-            someCol.setOnEditCommit((TableColumn.CellEditEvent<Customer, Long> t) -> {
-                ((Customer) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
-                updateRowByKeyCustomer((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
-            });
-        }
-        return someCol;
+    public void updateRowByKeyUser(int id, String col, String val) {
+        UserRepository.updateRowByKey(id, col, val);
     }
+
+
+
+
+
+
 
 
     public boolean showConfirmationDialog(String message) {
@@ -770,7 +818,7 @@ public class AdminController {
 
     /**
      * addNewEmployee method that will add new Employee.
-     * */
+     */
     public void addNewEmployee(ActionEvent event) {
         if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() || employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty() || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty() || employeePassword.getText().isEmpty()) {
             showErrorAlert("Invalid Input", "Invalid Input,try again");
@@ -806,7 +854,7 @@ public class AdminController {
         Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         //Create new user.
-        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, employeePhoneNumber.getText(), hashedPassword, convertStringToDouble(employeeSalary.getText()));
+        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, Long.parseLong(employeePhoneNumber.getText()) , hashedPassword, convertStringToDouble(employeeSalary.getText()));
 
         //Add the user to DB.
         UserRepository.addNewEmployee(user);
@@ -822,9 +870,675 @@ public class AdminController {
 
     }
 
+    ObservableList<PurchaseOrderLine> dataList = FXCollections.observableArrayList();
+
+    public void showInventory(ActionEvent e) throws IOException {
+
+        vendor.getItems().clear();
+        vendor.getItems().addAll(VendorRepo.getAllVendorName());
+        ingredient.getItems().clear();
+        ingredient.getItems().addAll(IngredientRepo.getAllIngredientName());
+
+
+        // tableUserPane.getChildren().clear();
+        purchasingOrderTable.getColumns().clear();
+        purchasingOrderTable.setVisible(true);
+        inventoryPane.setVisible(true);
+
+        tableUser.setVisible(false);
+        tableUserPane.setVisible(false);
+
+        tableCustomerPane.setVisible(false);
+        tableCustomer.setVisible(false);
+
+        dashBoard_form.setVisible(false);
+        addNewEmployee_form.setVisible(false);
+        menuForm.setVisible(false);
+
+        PurchaseOrderTablePane.setVisible(false);
+        purchaseOrderTable.setVisible(false);
+        PurchaseOrderTablePane.setVisible(false);
+
+
+        purchasingOrderTable.setPadding(new Insets(10, 10, 10, 10));
+
+
+        purchasingOrderTable.setItems(dataList);
+
+        purchasingOrderTable.setEditable(true);
+        purchasingOrderTable.setMaxHeight(4000);
+        purchasingOrderTable.setMaxWidth(4000);
+
+        TableColumn<PurchaseOrderLine, Ingredient> ingredientNameCol = buildTableColumnIngredientPurchaseOrderLine("ingredient", true, 140);
+
+        TableColumn<PurchaseOrderLine, Double> quantityCol = buildTableColumnDoublePurchaseOrderLine("quantity", true, 140);
+        quantityCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+            @Override
+            public String toString(Double object) {
+                return object == null ? "" : object.toString();
+            }
+
+            @Override
+            public Double fromString(String string) {
+                try {
+                    return Double.parseDouble(string);
+                } catch (NumberFormatException e) {
+                    return null; // Or handle invalid input gracefully
+                }
+            }
+        }));
+
+        quantityCol.setOnEditCommit(event -> {
+            TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
+            PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
+
+            Double newValue = cellEditEvent.getNewValue();
+            if (newValue != null) {
+                purchaseOrderLine.setQuantity(newValue);
+                // Update the database
+                PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newValue.toString());
+            } else {
+                System.out.println("Invalid salary input");
+            }
+        });
+
+        TableColumn<PurchaseOrderLine, Double> cost_per_unitCol = buildTableColumnDoublePurchaseOrderLine("cost_per_unit", true, 140);
+        cost_per_unitCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+            @Override
+            public String toString(Double object) {
+                return object == null ? "" : object.toString();
+            }
+
+            @Override
+            public Double fromString(String string) {
+                try {
+                    return Double.parseDouble(string);
+                } catch (NumberFormatException e) {
+                    return null; // Or handle invalid input gracefully
+                }
+            }
+        }));
+
+        cost_per_unitCol.setOnEditCommit(event -> {
+            TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
+            PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
+
+            Double newValue = cellEditEvent.getNewValue();
+            if (newValue != null) {
+                purchaseOrderLine.setQuantity(newValue);
+                // Update the database
+                PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newValue.toString());
+            } else {
+                System.out.println("Invalid salary input");
+            }
+        });
+
+
+        TableColumn<PurchaseOrderLine, Double> totalCol = buildTableColumnDoublePurchaseOrderLine("total", true, 100);
+        totalCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+            @Override
+            public String toString(Double object) {
+                return object == null ? "" : object.toString();
+            }
+
+            @Override
+            public Double fromString(String string) {
+                try {
+                    return Double.parseDouble(string);
+                } catch (NumberFormatException e) {
+                    return null; // Or handle invalid input gracefully
+                }
+            }
+        }));
+
+        totalCol.setOnEditCommit(event -> {
+            TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
+            PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
+
+            Double newValue = cellEditEvent.getNewValue();
+            if (newValue != null) {
+                purchaseOrderLine.setQuantity(newValue);
+                // Update the database
+                PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newValue.toString());
+            } else {
+                System.out.println("Invalid salary input");
+            }
+        });
+
+
+        purchasingOrderTable.getColumns().addAll(ingredientNameCol, quantityCol, cost_per_unitCol, totalCol);
+
+
+        purchasingOrderTable.setMaxWidth(Double.MAX_VALUE);
+        purchasingOrderTable.setMaxHeight(Double.MAX_VALUE);
+
+        purchasingOrderTable.setRowFactory(tv -> {
+
+            TableRow<PurchaseOrderLine> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem deleteItem = new MenuItem("Delete");
+            contextMenu.getItems().add(deleteItem);
+            deleteItem.setOnAction(actionEvent -> {
+                boolean confirmed = showConfirmationDialog("Are you sure you want to delete this item?");
+                if (confirmed) {
+                    PurchaseOrderLine purchaseOrderLine = row.getItem();
+                    if (purchaseOrderLine != null) {
+                        User deletedUser = UserRepository.deleteRowByKey(purchaseOrderLine.getLineId());
+                        if (deletedUser != null) {
+                            // Remove the deleted user from the TableView's observable list
+                            purchasingOrderTable.getItems().remove(purchaseOrderLine);
+                            System.out.println("Row deleted successfully.");
+                        }
+                    }
+                }
+            });
+
+            row.contextMenuProperty().bind(
+                    javafx.beans.binding.Bindings.when(
+                                    javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
+                            .then(contextMenu)
+                            .otherwise((ContextMenu) null)
+            );
+
+            return row;
+        });
+
+
+    }
+
+//    private TableColumn<Ingredient, String> buildTableColumnStringIngredient(String colname, boolean editable, int width) {
+//        TableColumn<Ingredient, String> someCol = new TableColumn<>(colname);
+//        someCol.setMinWidth(width);
+//        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+//        if (editable) {
+//            someCol.setCellFactory(forTableColumn());
+//            someCol.setOnEditCommit((TableColumn.CellEditEvent<Ingredient, String> t) -> {
+//                ((Ingredient) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
+//                updateRowByKeyIngredient((t.getRowValue().getIngredientId()), colname, String.valueOf(t.getNewValue()));
+//            });
+//        }
+//        return someCol;
+//    }
+//
+//    public void updateRowByKeyIngredient(int id, String col, String val) {
+//        IngredientRepo.updateRowByKey(id, col, val);
+//    }
+
+
+    private TableColumn<PurchaseOrderLine, Double> buildTableColumnDoublePurchaseOrderLine(String colname, boolean editable, int width) {
+        TableColumn<PurchaseOrderLine, Double> someCol = new TableColumn<>(colname);
+        someCol.setMinWidth(width);
+        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+        if (editable) {
+            someCol.setOnEditCommit((TableColumn.CellEditEvent<PurchaseOrderLine, Double> t) -> {
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
+                updateRowByKeyPurchaseOrderLine(t.getRowValue().getLineId(), colname, String.valueOf(t.getNewValue()));
+            });
+        }
+        return someCol;
+    }
+
+    private TableColumn<PurchaseOrderLine, Ingredient> buildTableColumnIngredientPurchaseOrderLine(String colname, boolean editable, int width) {
+        TableColumn<PurchaseOrderLine, Ingredient> ingredientCol = new TableColumn<>(colname);
+        ingredientCol.setMinWidth(width);
+        ingredientCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+
+        if (editable) {
+            ingredientCol.setCellFactory(ComboBoxTableCell.forTableColumn()); // Assuming Ingredient is selected from a ComboBox.
+
+            ingredientCol.setOnEditCommit((TableColumn.CellEditEvent<PurchaseOrderLine, Ingredient> t) -> {
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
+                updateRowByKeyPurchaseOrderLine(t.getRowValue().getLineId(), colname, String.valueOf(t.getNewValue()));
+            });
+        }
+
+        return ingredientCol;
+    }
+    public void updateRowByKeyPurchaseOrderLine(int id, String col, String val) {
+        PurchaseOrderLineRepo.updateRowByKey(id, col, val);
+    }
+
+    int count = 0;
+
+    public void add(ActionEvent e) throws IOException {
+        if (vendor.getValue() == null) {
+            warning.setText("Please select a vendor");
+            return;
+        }
+        if (ingredient.getValue() == null) {
+            warning.setText("Please select a ingredient");
+            return;
+        }
+        if (quantity.getText().isEmpty()) {
+            warning.setText("Please enter a quantity");
+            return;
+        }
+        if (cost.getText().isEmpty()) {
+            warning.setText("Please enter a cost");
+            return;
+        }
+        if (ageCheck(quantity, e, warning)) return;
+        if (ageCheck(cost, e, warning)) return;
+        count++;
+
+
+        for (int i = 0; i < dataList.size(); i++) {
+            if (dataList.get(i).getIngredient().getIngredientName().equals(ingredient.getValue())) {
+                dataList.get(i).setQuantity(dataList.get(i).getQuantity() + Double.parseDouble(quantity.getText()));
+                dataList.get(i).setTotal(dataList.get(i).getQuantity() * dataList.get(i).getCost_per_unit());
+                purchasingOrderTable.refresh();
+                return;
+            }
+        }
+
+        Ingredient selectedIngredient = IngredientRepo.searchByName(ingredient.getValue());
+
+        PurchaseOrderLine purchaseOrderLine = new PurchaseOrderLine(count, selectedIngredient, Double.parseDouble(quantity.getText()), Double.parseDouble(cost.getText()), Double.parseDouble(quantity.getText()) * Double.parseDouble(cost.getText()));
+
+        dataList.add(purchaseOrderLine);
+        purchasingOrderTable.setItems(dataList);
+
+
+    }
+
+    public void vendorComboBox(ActionEvent e) throws IOException {
+        vendor.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                purchasingOrderTable.getItems().clear();
+                dataList.clear();
+                cost.clear();
+                quantity.clear();
+            }
+        });
+    }
+
+    public void ingredientComboBox(ActionEvent e) throws IOException {
+        ingredient.valueProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                cost.clear();
+                quantity.clear();
+            }
+        });
+
+    }
+
+    public void placePurchaseOrder(ActionEvent e) throws IOException {
+        if (dataList.isEmpty()) {
+            warning.setText("Please select add ingredients");
+            return;
+        }
+        PurchaseOrder purchaseOrder = new PurchaseOrder();
+        double total = 0;
+        for (int i = 0; i < dataList.size(); i++) {
+            dataList.get(i).setPurchaseOrder(purchaseOrder.getId());
+            Ingredient selectedIngredient = IngredientRepo.searchByName(dataList.get(i).getIngredient().getIngredientName());
+            selectedIngredient.setQuantity(dataList.get(i).getQuantity() + selectedIngredient.getQuantity());
+            total = total + dataList.get(i).getQuantity();
+        }
+        purchaseOrder.setPurchaseOrderLine(dataList);
+        purchaseOrder.setVendor(VendorRepo.searchByName(vendor.getValue()));
+        purchaseOrder.setTotalPrice(total);
+
+        purchaseOrder.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+
+        PurchaseOrderRepo.addPurchaseOrder(purchaseOrder);
+        purchasingOrderTable.getItems().clear();
+        dataList.clear();
+        cost.clear();
+        quantity.clear();
+        warning.setText("Purchase Order Has Been Placed");
+
+    }
+
+    public void purchaseOrderTable(ActionEvent e) throws Exception {
+
+        purchaseOrderTable.setVisible(true);
+        purchaseOrderTable.getColumns().clear();
+        PurchaseOrderTablePane.setVisible(true);
+
+        purchaseOrderLineTable.setVisible(false);
+        inventoryPane.setVisible(false);
+        purchaseOrderTable.setPadding(new Insets(10, 10, 10, 10));
+
+        dataPurchaseOrder = FXCollections.observableArrayList(PurchaseOrderRepo.getAllPurchaseOrders());
+        System.out.println("Data size: " + dataPurchaseOrder.size());
+
+        purchaseOrderTable.setEditable(true);
+        purchaseOrderTable.setMaxHeight(4000);
+        purchaseOrderTable.setMaxWidth(4000);
+
+        TableColumn<PurchaseOrder, Vendor> nameVendorCol = buildTableColumnStringPurchaseOrder("vendor", true, 140);
+        //  nameVendorCol.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameVendorCol.setPrefWidth(350);
+        TableColumn<PurchaseOrder, Date> purchaseOrderDateCol = buildTableColumnDatePurchaseOrder("orderDate", true, 100);
+        purchaseOrderDateCol.setCellFactory(column -> new TableCell<>() {
+            private final DatePicker datePicker = new DatePicker();
+
+            {
+                datePicker.setOnAction(event -> {
+                    Date newDate = java.sql.Date.valueOf(datePicker.getValue());
+                    PurchaseOrder purchaseOrder = getTableView().getItems().get(getIndex());
+                    purchaseOrder.setOrderDate(newDate);
+                    // Call method to update the database
+                    updateRowByKeyPurchaseOrder(purchaseOrder.getId(), "orderDate", newDate.toString());
+                });
+            }
+
+            @Override
+            protected void updateItem(Date item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                    setGraphic(null);
+                } else {
+                    datePicker.setValue(LocalDate.parse(item.toString()));
+                    setGraphic(datePicker);
+                    setText(null);
+                }
+            }
+        });
+
+
+        TableColumn<PurchaseOrder, Double> totalPriceCol = buildTableColumnDoublePurchaseOrder("totalPrice", true, 100);
+        totalPriceCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<>() {
+            @Override
+            public String toString(Double object) {
+                return object == null ? "" : object.toString();
+            }
+
+            @Override
+            public Double fromString(String string) {
+                try {
+                    return Double.parseDouble(string);
+                } catch (NumberFormatException e) {
+                    return null; // Or handle invalid input gracefully
+                }
+            }
+        }));
+
+        totalPriceCol.setOnEditCommit(event -> {
+            TableColumn.CellEditEvent<PurchaseOrder, Double> cellEditEvent = event;
+            PurchaseOrder purchaseOrder = cellEditEvent.getRowValue();
+
+            Double newValue = cellEditEvent.getNewValue();
+            if (newValue != null) {
+                purchaseOrder.setTotalPrice(newValue);
+                // Update the database
+                PurchaseOrderRepo.updateRowByKey(purchaseOrder.getId(), "totalPrice", newValue.toString());
+            } else {
+                System.out.println("Invalid salary input");
+            }
+        });
+
+
+        purchaseOrderTable.setItems(dataPurchaseOrder);
+        purchaseOrderTable.getColumns().addAll(nameVendorCol, purchaseOrderDateCol, totalPriceCol);
+
+
+        purchaseOrderTable.setMaxWidth(Double.MAX_VALUE);
+        purchaseOrderTable.setMaxHeight(Double.MAX_VALUE);
+
+        purchaseOrderTable.setRowFactory(tv -> {
+
+            TableRow<PurchaseOrder> row = new TableRow<>();
+            ContextMenu contextMenu = new ContextMenu();
+
+            MenuItem deleteItem = new MenuItem("Delete");
+            contextMenu.getItems().add(deleteItem);
+            deleteItem.setOnAction(actionEvent -> {
+                boolean confirmed = showConfirmationDialog("Are you sure you want to delete this item?");
+                if (confirmed) {
+                    PurchaseOrder selectedPurchaseOrder = row.getItem();
+                    if (selectedPurchaseOrder != null) {
+                        PurchaseOrder deletedPurchaseOrder = PurchaseOrderRepo.deleteRowByKey(selectedPurchaseOrder.getId());
+                        if (deletedPurchaseOrder != null) {
+                            // Remove the deleted user from the TableView's observable list
+                            purchaseOrderTable.getItems().remove(selectedPurchaseOrder);
+                            System.out.println("Row deleted successfully.");
+                        }
+                    }
+                }
+            });
+
+            row.contextMenuProperty().bind(
+                    javafx.beans.binding.Bindings.when(
+                                    javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
+                            .then(contextMenu)
+                            .otherwise((ContextMenu) null)
+            );
+
+            return row;
+        });
+
+        purchaseOrderTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                purchaseOrderLineTable.setVisible(true);
+                purchaseOrderLineTable.setPadding(new Insets(10, 10, 10, 10));
+
+                dataPurchaseOrderLine.clear();
+                purchaseOrderLineTable.getItems().clear();
+                purchaseOrderLineTable.getColumns().clear();
+                PurchaseOrder selectedPurchaseOrder = purchaseOrderTable.getSelectionModel().getSelectedItem();
+
+
+
+                dataPurchaseOrderLine.addAll(PurchaseOrderRepo.searchById(selectedPurchaseOrder.getId()).getPurchaseOrderLine());
+                purchaseOrderLineTable.setItems(dataPurchaseOrderLine);
+
+                purchaseOrderLineTable.setEditable(true);
+                purchaseOrderLineTable.setMaxHeight(4000);
+                purchaseOrderLineTable.setMaxWidth(4000);
+
+                TableColumn<PurchaseOrderLine, Ingredient> ingredientNameCol = buildTableColumnIngredientPurchaseOrderLine("ingredient", true, 140);
+
+                TableColumn<PurchaseOrderLine, Double> quantityCol = buildTableColumnDoublePurchaseOrderLine("quantity", true, 140);
+                quantityCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+                    @Override
+                    public String toString(Double object) {
+                        return object == null ? "" : object.toString();
+                    }
+
+                    @Override
+                    public Double fromString(String string) {
+                        try {
+                            return Double.parseDouble(string);
+                        } catch (NumberFormatException e) {
+                            return null; // Or handle invalid input gracefully
+                        }
+                    }
+                }));
+
+                quantityCol.setOnEditCommit(event -> {
+                    TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
+                    PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
+
+                    Double newDouble = cellEditEvent.getNewValue();
+                    if (newDouble != null) {
+                        purchaseOrderLine.setQuantity(newDouble);
+                        // Update the database
+                        PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newDouble.toString());
+                    } else {
+                        System.out.println("Invalid salary input");
+                    }
+                });
+
+                TableColumn<PurchaseOrderLine, Double> cost_per_unitCol = buildTableColumnDoublePurchaseOrderLine("cost_per_unit", true, 140);
+                cost_per_unitCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+                    @Override
+                    public String toString(Double object) {
+                        return object == null ? "" : object.toString();
+                    }
+
+                    @Override
+                    public Double fromString(String string) {
+                        try {
+                            return Double.parseDouble(string);
+                        } catch (NumberFormatException e) {
+                            return null; // Or handle invalid input gracefully
+                        }
+                    }
+                }));
+
+                cost_per_unitCol.setOnEditCommit(event -> {
+                    TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
+                    PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
+
+                    Double newDouble = cellEditEvent.getNewValue();
+                    if (newDouble != null) {
+                        purchaseOrderLine.setQuantity(newDouble);
+                        // Update the database
+                        PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newDouble.toString());
+                    } else {
+                        System.out.println("Invalid salary input");
+                    }
+                });
+
+
+                TableColumn<PurchaseOrderLine, Double> totalCol = buildTableColumnDoublePurchaseOrderLine("total", true, 100);
+                totalCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
+                    @Override
+                    public String toString(Double object) {
+                        return object == null ? "" : object.toString();
+                    }
+
+                    @Override
+                    public Double fromString(String string) {
+                        try {
+                            return Double.parseDouble(string);
+                        } catch (NumberFormatException e) {
+                            return null; // Or handle invalid input gracefully
+                        }
+                    }
+                }));
+
+                totalCol.setOnEditCommit(event -> {
+                    TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
+                    PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
+
+                    Double newDouble = cellEditEvent.getNewValue();
+                    if (newDouble != null) {
+                        purchaseOrderLine.setQuantity(newDouble);
+                        // Update the database
+                        PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newDouble.toString());
+                    } else {
+                        System.out.println("Invalid salary input");
+                    }
+                });
+
+
+                purchaseOrderLineTable.getColumns().addAll(ingredientNameCol, quantityCol, cost_per_unitCol, totalCol);
+
+
+                purchaseOrderLineTable.setMaxWidth(Double.MAX_VALUE);
+                purchaseOrderLineTable.setMaxHeight(Double.MAX_VALUE);
+
+                purchaseOrderLineTable.setRowFactory(tv -> {
+
+                    TableRow<PurchaseOrderLine> row = new TableRow<>();
+                    ContextMenu contextMenu = new ContextMenu();
+
+                    MenuItem deleteItem = new MenuItem("Delete");
+                    contextMenu.getItems().add(deleteItem);
+                    deleteItem.setOnAction(actionEvent -> {
+                        boolean confirmed = showConfirmationDialog("Are you sure you want to delete this item?");
+                        if (confirmed) {
+                            PurchaseOrderLine purchaseOrderLine = row.getItem();
+                            if (purchaseOrderLine != null) {
+                                PurchaseOrderLine deletedPurchaseOrder = PurchaseOrderLineRepo.deleteRowByKey(purchaseOrderLine.getLineId());
+                                if (deletedPurchaseOrder != null) {
+                                    // Remove the deleted user from the TableView's observable list
+                                    purchaseOrderLineTable.getItems().remove(purchaseOrderLine);
+                                    System.out.println("Row deleted successfully.");
+                                }
+                            }
+                        }
+                    });
+
+                    row.contextMenuProperty().bind(
+                            javafx.beans.binding.Bindings.when(
+                                            javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
+                                    .then(contextMenu)
+                                    .otherwise((ContextMenu) null)
+                    );
+
+                    return row;
+                });
+
+
+            }
+        });
+
+    }
+
+
+    private TableColumn<PurchaseOrder, Date> buildTableColumnDatePurchaseOrder(String colname, boolean editable, int width) {
+        TableColumn<PurchaseOrder, Date> someCol = new TableColumn<>(colname);
+        someCol.setMinWidth(width);
+        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+        if (editable) {
+
+            someCol.setOnEditCommit((TableColumn.CellEditEvent<PurchaseOrder, Date> t) -> {
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
+                updateRowByKeyPurchaseOrder((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
+            });
+        }
+        return someCol;
+    }
+
+
+    private TableColumn<PurchaseOrder, Vendor> buildTableColumnStringPurchaseOrder(String colname, boolean editable, int width) {
+        TableColumn<PurchaseOrder, Vendor> someCol = new TableColumn<>(colname);
+        someCol.setMinWidth(width);
+        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+        if (editable) {
+            //  someCol.setCellFactory(forTableColumn());
+            someCol.setOnEditCommit((TableColumn.CellEditEvent<PurchaseOrder, Vendor> t) -> {
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
+                updateRowByKeyPurchaseOrder((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
+            });
+        }
+        return someCol;
+    }
+
+    private TableColumn<PurchaseOrder, Double> buildTableColumnDoublePurchaseOrder(String colname, boolean editable, int width) {
+        TableColumn<PurchaseOrder, Double> someCol = new TableColumn<>(colname);
+        someCol.setMinWidth(width);
+        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
+        if (editable) {
+
+            someCol.setOnEditCommit((TableColumn.CellEditEvent<PurchaseOrder, Double> t) -> {
+                t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
+                updateRowByKeyPurchaseOrder((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
+            });
+        }
+        return someCol;
+    }
+
+
+    public void updateRowByKeyPurchaseOrder(int id, String col, String val) {
+        PurchaseOrderRepo.updateRowByKey(id, col, val);
+    }
+
+
+    private boolean ageCheck(TextField tfAge, ActionEvent e, Label label) {
+        try {
+            if (Integer.parseInt(tfAge.getText()) > 0) {
+                return false;
+
+            } else {
+                label.setText("age is can't be negative " + e + "\n");
+                return true;
+            }
+        } catch (NumberFormatException e1) {
+            label.setText("age is not Correct " + e + "\n");
+            return true;
+        }
+    }
+
     /**
      * showErrorAlert method that will show an error alert due to entered input.
-     * */
+     */
     public void showErrorAlert(String title, String context) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(title);
@@ -835,7 +1549,7 @@ public class AdminController {
 
     /**
      * successAlert method that will show a success alert that the operation done successfully.
-     * */
+     */
     public void successAlert(String title, String context) {
         Alert successAlert = new Alert(Alert.AlertType.INFORMATION);
         successAlert.setTitle(title);

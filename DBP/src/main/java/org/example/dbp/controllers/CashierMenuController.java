@@ -84,7 +84,7 @@ public class CashierMenuController {
         billTableView.setItems(itemsObservableList);
 
         // Initialize a customer names list.
-        customerNamesList = FXCollections.observableArrayList(CustomerRepository.getAllCustomers());
+    //    customerNamesList = FXCollections.observableArrayList(CustomerRepository.getAllCustomers());
 
         // Add event handlers
         searchTextField.addEventHandler(KeyEvent.KEY_RELEASED, e -> searchCustomer());
