@@ -285,12 +285,6 @@ public class SpecialRepo {
         return resultList;
     }
 
-    public static void printCustomerWhoSpentMostIn2024(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
-    }
-
     public static List<String> getOrdersAndRevenuePerMonthIn2024() {
         List<String> resultList = new ArrayList<>();
         String query = "SELECT MONTH(i.created_date_time) AS month, "
@@ -319,11 +313,5 @@ public class SpecialRepo {
         }
 
         return resultList;
-    }
-
-    public static void printOrdersAndRevenuePerMonthIn2024(List<String> resultList) {
-        for (String result : resultList) {
-            System.out.println(result);
-        }
     }
 }

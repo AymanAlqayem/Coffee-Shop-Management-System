@@ -1,7 +1,6 @@
 package org.example.dbp.models;
 
 
-
 public class Customer {
     private int id;
     private String customerName;
@@ -53,6 +52,7 @@ public class Customer {
                 ", customerPhone='" + customerPhone + '\'' +
                 '}';
     }
+
     public void setCol(String col, Object val) {
         switch (col) {
             case "customerName":
@@ -61,8 +61,6 @@ public class Customer {
             case "phoneNumber":
                 setCustomerPhone(Long.valueOf((val.toString())));
                 break;
-
-
         }
     }
 }

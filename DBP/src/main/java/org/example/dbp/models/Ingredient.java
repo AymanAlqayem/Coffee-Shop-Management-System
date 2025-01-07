@@ -60,7 +60,7 @@ public class Ingredient {
         return "name=" + ingredientName +
                 " Unit=" + unit +
                 ", quantity=" + quantity
-               ;
+                ;
     }
 
     public void setCol(String col, Object val) {

@@ -21,7 +21,6 @@ public class Vendor {
     }
 
 
-
     public Address getAddress() {
         return address;
     }
@@ -41,6 +40,6 @@ public class Vendor {
 
     @Override
     public String toString() {
-        return "vendorName= " + vendorName + ", address= " + address.getCity() + "," + address .getStreet();
+        return "vendorName= " + vendorName + ", address= " + address.getCity() + "," + address.getStreet();
     }
 }

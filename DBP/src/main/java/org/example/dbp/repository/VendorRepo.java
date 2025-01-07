@@ -2,6 +2,7 @@ package org.example.dbp.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.example.dbp.db.DataBase;
 import org.example.dbp.models.Address;
 import org.example.dbp.models.Vendor;
@@ -34,7 +35,6 @@ public class VendorRepo {
         return vendorNames;
     }
 
-
     public static Vendor searchById(int vendorId) {
         Vendor vendor = null;
         String query = "SELECT * FROM Vendor WHERE vendorId = ?";
@@ -52,7 +52,7 @@ public class VendorRepo {
                     Address address = AddressRepo.getAddress(addressId);
 
 
-                    vendor = new Vendor(id,name ,address);
+                    vendor = new Vendor(id, name, address);
                 }
             }
 
@@ -90,9 +90,6 @@ public class VendorRepo {
 
         return vendor;
     }
-
-
-
 }
 
 

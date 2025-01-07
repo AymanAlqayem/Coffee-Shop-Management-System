@@ -5,7 +5,7 @@ create table User
     role         varchar(12)  not null,
     email        varchar(45) unique,
     hire_date    date,
-    phone_number varchar(10),
+    phone_number long,
     password     varchar(100) NOT NULL,
     salary       real         NOT NULL
 );
@@ -60,38 +60,6 @@ create table Inventory
     foreign key (admin_id) references User (id)
 );
 
-CREATE TABLE Purchase_Order
-(
-    id           int primary key auto_increment,
-    date         DATE NOT NULL,
-    total_amount real,
-    inventory_id int,
-    FOREIGN KEY (inventory_id) REFERENCES Inventory (id)
-);
-
-create table Inventory_item
-(
-    id              int primary key auto_increment,
-    name            varchar(20) NOT NULL UNIQUE,
-    Quantity        real,
-    production_date date,
-    expiry_date     date,
-    inventory_id    int,
-    foreign key (inventory_id) references Inventory (id)
-);
-
-CREATE TABLE Inventory_Order_Line
-(
-    id                INT PRIMARY KEY AUTO_INCREMENT,
-    purchase_order_id INT,
-    inventory_item_id INT,
-    quantity          INT NOT NULL,
-    unit_price        REAL,
-    FOREIGN KEY (purchase_order_id) REFERENCES Purchase_Order (id),
-    FOREIGN KEY (inventory_item_id) REFERENCES Inventory_item (id)
-);
-
-
 create table Invoice
 (
     id                int primary key auto_increment,
@@ -102,6 +70,58 @@ create table Invoice
     foreign key (cashier_id) references User (id),
     foreign key (order_id) references Order_table (id)
 );
+
+
+CREATE TABLE Address
+(
+    addressId INT AUTO_INCREMENT PRIMARY KEY,
+    street    VARCHAR(255) NOT NULL,
+    city      VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Vendor
+(
+    vendorId   INT PRIMARY KEY AUTO_INCREMENT,
+    addressId  INT,
+    vendorName VARCHAR(20),
+    FOREIGN KEY (addressId) REFERENCES Address (addressId) -- Consistent case
+);
+
+CREATE TABLE PurchaseOrder
+(
+    purchaseOrderId int primary key auto_increment,
+    vendorId        int,
+    totalPrice      int,
+    orderDate       date,
+    inventory_id    int,
+    FOREIGN KEY (vendorId) REFERENCES Vendor (vendorId),
+    FOREIGN KEY (inventory_id) REFERENCES Inventory (id)
+);
+
+create table ingredient
+(
+    ingredientId   int primary key auto_increment,
+    ingredientName varchar(20) NOT NULL UNIQUE,
+    unit           enum ('KG','L'),
+    quantity double
+
+);
+
+CREATE TABLE PurchaseOrderLine
+(
+    lineId          int primary key auto_increment,
+    purchaseOrderId int,
+    ingredientId    int,
+    quantity double,
+    cost_per_unit double,
+    FOREIGN KEY (purchaseOrderId) REFERENCES PurchaseOrder (purchaseOrderId),
+    FOREIGN KEY (ingredientId) REFERENCES ingredient (ingredientId)
+);
+
+INSERT INTO Inventory (name, admin_id)
+VALUES ('Main Inventory', 14);
+
+
 
 INSERT INTO User (name, role, email, hire_date, phone_number, password, salary)
 VALUES ('John Doe', 'admin', 'john.doe@example.com', '2024-01-01', '1234567890', 'password123', 5000),
@@ -232,7 +252,6 @@ values ('Mesflora smoothie', 18, 6),
        ('pineapple ', 18, 6),
        ('Strawberry  smoothie', 20, 6),
        ('Mango smoothie', 20, 6);
-
 
 
 INSERT INTO Order_Table (created_date_time, customer_id, cashier_id)
@@ -387,60 +406,168 @@ VALUES ('2024-11-01 12:35:00', 20.50, 3, 1),
 
 
 
-INSERT INTO Inventory (name, admin_id)
-VALUES ('Main Inventory', 14);
+INSERT INTO Address (street, city)
+VALUES ('123 Maple St', 'Springfield'),
+       ('456 Oak Ave', 'Shelbyville'),
+       ('789 Pine Rd', 'Capital City'),
+       ('101 Elm St', 'Springfield'),
+       ('202 Birch Ln', 'Shelbyville'),
+       ('303 Cedar Dr', 'Springfield'),
+       ('404 Walnut St', 'Capital City'),
+       ('505 Poplar Ave', 'Springfield'),
+       ('606 Ash Rd', 'Shelbyville'),
+       ('707 Chestnut St', 'Capital City'),
+       ('808 Sycamore Ln', 'Springfield'),
+       ('909 Hickory Dr', 'Shelbyville'),
+       ('110 Redwood St', 'Springfield'),
+       ('120 Cypress Ave', 'Capital City'),
+       ('130 Magnolia Ln', 'Springfield'),
+       ('140 Dogwood Dr', 'Shelbyville'),
+       ('150 Juniper St', 'Capital City'),
+       ('160 Fir Ave', 'Springfield'),
+       ('170 Spruce Ln', 'Shelbyville'),
+       ('180 Alder Rd', 'Capital City'),
+       ('190 Holly St', 'Springfield'),
+       ('200 Willow Ave', 'Shelbyville'),
+       ('210 Sequoia Ln', 'Capital City'),
+       ('220 Beech Dr', 'Springfield'),
+       ('230 Maple Rd', 'Shelbyville'),
+       ('240 Pine St', 'Capital City'),
+       ('250 Elm Ave', 'Springfield'),
+       ('260 Birch Ln', 'Shelbyville'),
+       ('270 Cedar Dr', 'Springfield'),
+       ('280 Walnut St', 'Capital City');
 
-INSERT INTO Purchase_Order (date, total_amount, inventory_id)
-VALUES ('2024-01-01', 500.00, 1),
-       ('2024-01-02', 150.00, 1),
-       ('2024-01-03', 200.00, 1),
-       ('2024-01-04', 800.00, 1),
-       ('2024-01-05', 350.00, 1),
-       ('2024-01-06', 120.00, 1),
-       ('2024-01-07', 600.00, 1),
-       ('2024-01-08', 950.00, 1),
-       ('2024-01-09', 400.00, 1),
-       ('2024-01-10', 720.00, 1),
-       ('2024-01-11', 850.00, 1),
-       ('2024-01-12', 320.00, 1),
-       ('2024-01-13', 100.00, 1),
-       ('2024-01-14', 450.00, 1),
-       ('2024-01-15', 530.00, 1);
+
+INSERT INTO Vendor (addressId, vendorName)
+VALUES (1, 'Vendor A'),
+       (2, 'Vendor B'),
+       (3, 'Vendor C'),
+       (4, 'Vendor D'),
+       (5, 'Vendor E'),
+       (6, 'Vendor F'),
+       (7, 'Vendor G'),
+       (8, 'Vendor H'),
+       (9, 'Vendor I'),
+       (10, 'Vendor J'),
+       (11, 'Vendor K'),
+       (12, 'Vendor L'),
+       (13, 'Vendor M'),
+       (14, 'Vendor N'),
+       (15, 'Vendor O'),
+       (16, 'Vendor P'),
+       (17, 'Vendor Q'),
+       (18, 'Vendor R'),
+       (19, 'Vendor S'),
+       (20, 'Vendor T'),
+       (21, 'Vendor U'),
+       (22, 'Vendor V'),
+       (23, 'Vendor W'),
+       (24, 'Vendor X'),
+       (25, 'Vendor Y'),
+       (26, 'Vendor Z'),
+       (27, 'Vendor AA'),
+       (28, 'Vendor BB'),
+       (29, 'Vendor CC'),
+       (30, 'Vendor DD');
 
 
-INSERT INTO Inventory_item (name, Quantity, production_date, expiry_date, inventory_id)
-VALUES ('Coke', 100, '2024-01-01', '2025-01-01', 1),
-       ('Pepsi', 200, '2024-01-02', '2025-01-02', 1),
-       ('Chips', 300, '2024-01-03', '2025-01-03', 1),
-       ('Chocolate', 150, '2024-01-04', '2025-01-04', 1),
-       ('Ice Cream', 50, '2024-01-05', '2025-01-05', 1),
-       ('Apples', 500, '2024-01-06', '2025-01-06', 1),
-       ('Carrots', 400, '2024-01-07', '2025-01-07', 1),
-       ('Sofa', 20, '2024-01-08', NULL, 1),
-       ('Shirt', 60, '2024-01-09', NULL, 1),
-       ('Notebook', 300, '2024-01-10', '2025-01-10', 1),
-       ('Pen', 1000, '2024-01-11', '2026-01-11', 1),
-       ('Hammer', 50, '2024-01-12', NULL, 1),
-       ('Dog Food', 80, '2024-01-13', '2025-01-13', 1),
-       ('Cat Litter', 40, '2024-01-14', '2025-01-14', 1),
-       ('Cake', 120, '2024-01-15', '2024-01-30', 1);
+INSERT INTO PurchaseOrder (vendorId, totalPrice, orderDate, inventory_id)
+VALUES (1, 500, '2025-01-01', 1),
+       (2, 700, '2025-01-02', 1),
+       (3, 350, '2025-01-03', 1),
+       (4, 400, '2025-01-04', 1),
+       (5, 450, '2025-01-05', 1),
+       (6, 550, '2025-01-06', 1),
+       (7, 650, '2025-01-07', 1),
+       (8, 750, '2025-01-08', 1),
+       (9, 850, '2025-01-09', 1),
+       (10, 950, '2025-01-10', 1),
+       (11, 1000, '2025-01-11', 1),
+       (12, 1100, '2025-01-12', 1),
+       (13, 1200, '2025-01-13', 1),
+       (14, 1300, '2025-01-14', 1),
+       (15, 1400, '2025-01-15', 1),
+       (16, 1500, '2025-01-16', 1),
+       (17, 1600, '2025-01-17', 1),
+       (18, 1700, '2025-01-18', 1),
+       (19, 1800, '2025-01-19', 1),
+       (20, 1900, '2025-01-20', 1),
+       (21, 2000, '2025-01-21', 1),
+       (22, 2100, '2025-01-22', 1),
+       (23, 2200, '2025-01-23', 1),
+       (24, 2300, '2025-01-24', 1),
+       (25, 2400, '2025-01-25', 1),
+       (26, 2500, '2025-01-26', 1),
+       (27, 2600, '2025-01-27', 1),
+       (28, 2700, '2025-01-28', 1),
+       (29, 2800, '2025-01-29', 1),
+       (30, 2900, '2025-01-30', 1);
 
-INSERT INTO Inventory_Order_Line (purchase_order_id, inventory_item_id, quantity, unit_price)
-VALUES (1, 1, 10, 2.50),
-       (1, 2, 5, 2.00),
-       (2, 3, 20, 1.50),
-       (3, 4, 15, 3.00),
-       (4, 5, 8, 5.00),
-       (5, 6, 50, 1.00),
-       (6, 7, 40, 1.20),
-       (7, 8, 2, 200.00),
-       (8, 9, 5, 25.00),
-       (9, 10, 10, 3.00),
-       (10, 11, 30, 0.50),
-       (11, 12, 5, 15.00),
-       (12, 13, 8, 10.00),
-       (13, 14, 4, 12.00),
-       (14, 15, 20, 6.00);
+
+INSERT INTO Ingredient (ingredientName, unit, quantity)
+VALUES ('Sugar', 'KG', 10),
+       ('Milk', 'L', 20),
+       ('Coffee', 'KG', 15),
+       ('Tea', 'KG', 12),
+       ('Flour', 'KG', 25),
+       ('Butter', 'KG', 8),
+       ('Salt', 'KG', 5),
+       ('Pepper', 'KG', 4),
+       ('Oil', 'L', 30),
+       ('Vinegar', 'L', 7),
+       ('Chocolate', 'KG', 10),
+       ('Cocoa', 'KG', 9),
+       ('Eggs', 'KG', 18),
+       ('Cheese', 'KG', 13),
+       ('Honey', 'KG', 6),
+       ('Yeast', 'KG', 2),
+       ('Rice', 'KG', 40),
+       ('Pasta', 'KG', 28),
+       ('Beans', 'KG', 17),
+       ('Tomatoes', 'KG', 50),
+       ('Carrots', 'KG', 35),
+       ('Potatoes', 'KG', 45),
+       ('Apples', 'KG', 22),
+       ('Bananas', 'KG', 24),
+       ('Oranges', 'KG', 30),
+       ('Peppers', 'KG', 20),
+       ('Fish', 'KG', 19),
+       ('Chicken', 'KG', 33),
+       ('Beef', 'KG', 32),
+       ('Lamb', 'KG', 29);
+
+INSERT INTO PurchaseOrderLine (purchaseOrderId, ingredientId, quantity, cost_per_unit)
+VALUES (1, 1, 5, 2.5),
+       (1, 2, 3, 3.0),
+       (2, 3, 4, 4.0),
+       (2, 4, 6, 2.2),
+       (3, 5, 8, 1.5),
+       (3, 6, 2, 4.5),
+       (4, 7, 10, 1.0),
+       (4, 8, 12, 0.8),
+       (5, 9, 15, 3.5),
+       (5, 10, 20, 2.7),
+       (6, 11, 6, 4.0),
+       (6, 12, 9, 3.3),
+       (7, 13, 8, 2.8),
+       (7, 14, 5, 5.0),
+       (8, 15, 4, 6.0),
+       (8, 16, 7, 1.5),
+       (9, 17, 12, 0.9),
+       (9, 18, 14, 1.3),
+       (10, 19, 20, 2.0),
+       (10, 20, 25, 1.2),
+       (11, 21, 16, 1.8),
+       (11, 22, 18, 1.6),
+       (12, 23, 22, 2.1),
+       (12, 24, 30, 1.4),
+       (13, 25, 27, 1.9),
+       (13, 26, 35, 2.3),
+       (14, 27, 40, 3.0),
+       (14, 28, 50, 1.7),
+       (15, 29, 60, 2.6),
+       (15, 30, 70, 2.8);
 
 
 
@@ -461,8 +588,13 @@ FROM invoice;
 SELECT *
 FROM inventory;
 SELECT *
-FROM inventory_item;
+FROM Address;
 SELECT *
-FROM Inventory_Order_Line;
+FROM Vendor;
 SELECT *
-FROM purchase_order;
+FROM purchaseorder;
+SELECT *
+FROM purchaseorderline;
+SELECT *
+FROM ingredient;
+

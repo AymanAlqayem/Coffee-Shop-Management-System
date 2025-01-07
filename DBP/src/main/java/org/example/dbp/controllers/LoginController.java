@@ -15,8 +15,6 @@ import org.example.dbp.repository.UserRepository;
 
 import java.io.IOException;
 
-
-
 public class LoginController extends Application {
     @FXML
     TextField tfUserName;
@@ -24,9 +22,6 @@ public class LoginController extends Application {
     PasswordField tfPass;
     @FXML
     JFXButton btLogin;
-
-
-    UserRepository userRepo = new UserRepository();
 
     public void start(Stage stage) {
         try {
@@ -162,7 +157,6 @@ public class LoginController extends Application {
 //            loginStage.close();
 //        }
 //    }
-
 
     /**
      * showAlert method that will show an alert.

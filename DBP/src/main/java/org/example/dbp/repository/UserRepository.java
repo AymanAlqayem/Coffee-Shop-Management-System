@@ -1,6 +1,5 @@
 package org.example.dbp.repository;
 
-import com.mysql.cj.xdevapi.UpdateResult;
 import org.example.dbp.db.DataBase;
 import org.example.dbp.models.User;
 
@@ -13,7 +12,6 @@ import java.util.Date;
 import java.util.List;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class UserRepository {
 
@@ -32,15 +30,14 @@ public class UserRepository {
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    user = new User(resultSet.getInt("id"),resultSet.getString("name"), resultSet.getString("role"), resultSet.getString("email"),
-                            resultSet.getDate("hire_date"), resultSet.getInt("phone_number"),
+                    user = new User(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("role"), resultSet.getString("email"),
+                            resultSet.getDate("hire_date"), resultSet.getLong("phone_number"),
                             resultSet.getString("password"), resultSet.getDouble("salary"));
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return user;
     }
 
@@ -64,109 +61,6 @@ public class UserRepository {
         }
         return null;
     }
-
-    /**
-     * getUserRole method that will get the role for a specific user.
-     * */
-    public static List<User> getAllUsers() {
-        List<User> users = new ArrayList<>();
-        String query = "SELECT * FROM user";
-
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("name");
-                String role = resultSet.getString("role");
-                String email = resultSet.getString("email");
-                Date hireDate = resultSet.getDate("hire_date");
-                long phoneNumber = resultSet.getLong("phone_number");
-                String pass = resultSet.getString("password");
-                double salary = resultSet.getDouble("salary");
-                users.add(new User(id,name, role, email, hireDate, phoneNumber, pass, salary));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return users;
-    }
-
-
-    public static void updateRowByKey(int id, String col, String val) {
-        String query = "UPDATE user SET " + col + " = ? WHERE id = ?";
-
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-
-            // Set the parameter values
-            statement.setString(1, val); // Value to set in the column
-            statement.setInt(2, id);  // Unique key to identify the row
-
-            // Execute the update
-            int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
-           //     System.out.println("Row updated successfully.");
-            } else {
-            //    System.out.println("No row found with the given key.");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    public static User deleteRowByKey(int id) {
-        String selectQuery = "SELECT * FROM user WHERE id = ?";
-        String deleteQuery = "DELETE FROM user WHERE id = ?";
-        User deletedUser = null;
-
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
-             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
-
-            // Fetch the user details before deletion
-            selectStatement.setInt(1, id);
-            try (ResultSet resultSet = selectStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    int userId = resultSet.getInt("id");
-                    String name = resultSet.getString("name");
-                    String role = resultSet.getString("role");
-                    String email = resultSet.getString("email");
-                    Date hireDate = resultSet.getDate("hire_date");
-                    long phoneNumber = resultSet.getLong("phone_number");
-                    String password = resultSet.getString("password");
-                    double salary = resultSet.getDouble("salary");
-
-                    // Create the User object to return
-                    deletedUser = new User(userId, name, role, email, hireDate, phoneNumber, password, salary);
-                } else {
-                    System.out.println("No user found with ID " + id);
-                    return null;
-                }
-            }
-
-            // Perform the deletion
-            deleteStatement.setInt(1, id);
-            int rowsDeleted = deleteStatement.executeUpdate();
-
-            if (rowsDeleted > 0) {
-                System.out.println("User with ID " + id + " was deleted successfully.");
-            } else {
-                System.out.println("Failed to delete the user with ID " + id);
-                return null;
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Error while deleting the user.");
-            return null;
-        }
-
-        return deletedUser;
-    }
-
 
 
     /**
@@ -252,5 +146,105 @@ public class UserRepository {
         } catch (SQLException e) {
         }
         return -1; // Return -1 if no matching cashier is found
+    }
+
+
+    public static List<User> getAllUsers() {
+        List<User> users = new ArrayList<>();
+        String query = "SELECT * FROM user";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("name");
+                String role = resultSet.getString("role");
+                String email = resultSet.getString("email");
+                Date hireDate = resultSet.getDate("hire_date");
+                long phoneNumber = resultSet.getLong("phone_number");
+                String pass = resultSet.getString("password");
+                double salary = resultSet.getDouble("salary");
+                users.add(new User(id, name, role, email, hireDate, phoneNumber, pass, salary));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return users;
+    }
+
+    public static void updateRowByKey(int id, String col, String val) {
+        String query = "UPDATE user SET " + col + " = ? WHERE id = ?";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            // Set the parameter values
+            statement.setString(1, val); // Value to set in the column
+            statement.setInt(2, id);  // Unique key to identify the row
+
+            // Execute the update
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                //     System.out.println("Row updated successfully.");
+            } else {
+                //    System.out.println("No row found with the given key.");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static User deleteRowByKey(int id) {
+        String selectQuery = "SELECT * FROM user WHERE id = ?";
+        String deleteQuery = "DELETE FROM user WHERE id = ?";
+        User deletedUser = null;
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
+
+            // Fetch the user details before deletion
+            selectStatement.setInt(1, id);
+            try (ResultSet resultSet = selectStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    int userId = resultSet.getInt("id");
+                    String name = resultSet.getString("name");
+                    String role = resultSet.getString("role");
+                    String email = resultSet.getString("email");
+                    Date hireDate = resultSet.getDate("hire_date");
+                    long phoneNumber = resultSet.getLong("phone_number");
+                    String password = resultSet.getString("password");
+                    double salary = resultSet.getDouble("salary");
+
+                    // Create the User object to return
+                    deletedUser = new User(userId, name, role, email, hireDate, phoneNumber, password, salary);
+                } else {
+                    System.out.println("No user found with ID " + id);
+                    return null;
+                }
+            }
+
+            // Perform the deletion
+            deleteStatement.setInt(1, id);
+            int rowsDeleted = deleteStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("User with ID " + id + " was deleted successfully.");
+            } else {
+                System.out.println("Failed to delete the user with ID " + id);
+                return null;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Error while deleting the user.");
+            return null;
+        }
+
+        return deletedUser;
     }
 }

@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class InvoiceRepo {
-
     /**
      * getTotalAmount method that will get the total amount for all orders.
      * */
