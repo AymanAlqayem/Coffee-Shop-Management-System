@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,22 +13,17 @@
    <children>
       <AnchorPane fx:id="BlackList" layoutX="-2.0" prefHeight="784.0" prefWidth="226.0" style="-fx-background-color: #050505;">
          <children>
-            <JFXButton fx:id="btInventory" layoutX="69.0" layoutY="218.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Inventory" textFill="WHITE">
-               <font>
-                  <Font name="Book Antiqua" size="18.0" />
-               </font>
-            </JFXButton>
-            <JFXButton fx:id="btMenu" layoutX="83.0" layoutY="291.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Menu" textFill="WHITE">
+            <JFXButton fx:id="btMenu" layoutX="91.0" layoutY="207.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Menu" textFill="WHITE">
                <font>
                   <Font name="Book Antiqua" size="19.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btCustomers" layoutX="72.0" layoutY="355.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Customers" textFill="WHITE">
+            <JFXButton fx:id="btCustomers" layoutX="80.0" layoutY="288.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Customers" textFill="WHITE">
                <font>
                   <Font name="Book Antiqua" size="16.0" />
                </font>
             </JFXButton>
-            <JFXButton fx:id="btAdd" layoutX="60.0" layoutY="463.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Add new customer" textFill="WHITE">
+            <JFXButton fx:id="btAdd" layoutX="70.0" layoutY="378.0" onAction="#switchWin" style="-fx-background-radius: 90;" text="Add new customer" textFill="WHITE">
                <font>
                   <Font name="Book Antiqua" size="14.0" />
                </font>
@@ -52,14 +48,9 @@
                   <Image url="@../../../signOut.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="18.0" layoutY="458.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="378.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../add.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="217.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../../inventory.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true">
@@ -67,12 +58,12 @@
                   <Image url="@../../../userAdmin.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="352.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="33.0" layoutY="285.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../customers.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="22.0" layoutY="291.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="38.0" fitWidth="38.0" layoutX="33.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../menu.png" />
                </image>
@@ -104,6 +95,11 @@
                </font>
             </Label>
             <TextField fx:id="customerPhoneNumber" layoutX="216.0" layoutY="354.0" prefHeight="36.0" prefWidth="247.0" style="-fx-background-color: White; -fx-text-inner-color: Black; -fx-border-color: Black;" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="customersPane" layoutX="227.0" layoutY="-1.0" prefHeight="784.0" prefWidth="1298.0" visible="false">
+         <children>
+            <TableView fx:id="customerTableView" layoutX="-4.0" layoutY="2.0" prefHeight="774.0" prefWidth="1298.0" />
          </children>
       </AnchorPane>
    </children>

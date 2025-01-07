@@ -1,6 +1,5 @@
 package org.example.dbp.models;
 
-import java.util.Date;
 
 public class PurchaseOrderLine {
     private int lineId;
@@ -74,10 +73,9 @@ public class PurchaseOrderLine {
     public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
+
     public void setCol(String col, Object val) {
         switch (col) {
-
-
             case "ingredient":
                 setIngredient((Ingredient) val);
                 break;

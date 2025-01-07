@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class PurchaseOrder {
     private int id;
     private Vendor vendor;
@@ -76,8 +75,6 @@ public class PurchaseOrder {
 
     public void setCol(String col, Object val) {
         switch (col) {
-
-
             case "vendor":
                 setVendor((Vendor) val);
                 break;
@@ -90,10 +87,6 @@ public class PurchaseOrder {
             case "orderDate":
                 setOrderDate((Date) val);
                 break;
-
-
         }
     }
-
-
 }

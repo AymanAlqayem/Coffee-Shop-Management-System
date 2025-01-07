@@ -1,4 +1,5 @@
 package org.example.dbp.repository;
+
 import org.example.dbp.db.DataBase;
 import org.example.dbp.models.Ingredient;
 import org.example.dbp.models.Unit;
@@ -32,6 +33,7 @@ public class IngredientRepo {
 
         return ingredientNames;
     }
+
     public static void updateRowByKey(int id, String col, String val) {
         // IngredientRepo
 
@@ -83,6 +85,4 @@ public class IngredientRepo {
 
         return ingredient;
     }
-
-
 }

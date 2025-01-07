@@ -108,7 +108,6 @@ public class AdminController {
     @FXML
     private AnchorPane specialInfoForm;
 
-
     // Basic Controllers.
 
     @FXML
@@ -299,50 +298,74 @@ public class AdminController {
      */
     public void switchWin(ActionEvent e) throws IOException {
         if (e.getSource() == btDashboard) {
-            tableUserPane.setVisible(false);
-            tableCustomerPane.setVisible(false);
-            tableCustomer.setVisible(false);
-            tableUser.setVisible(false);
-
-
             dashBoard_form.setVisible(true);
             addNewEmployee_form.setVisible(false);
-            menuForm.setVisible(false);
-            tableUserPane.setVisible(false);
-
             specialInfoForm.setVisible(false);
-        } else if (e.getSource() == btAddNewRole) {
-            tableUserPane.setVisible(false);
+            menuForm.setVisible(false);
             tableCustomerPane.setVisible(false);
-            tableCustomer.setVisible(false);
-            tableUser.setVisible(false);
-
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
+        } else if (e.getSource() == btAddNewRole) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(true);
-            menuForm.setVisible(false);
-            tableUserPane.setVisible(false);
-
             specialInfoForm.setVisible(false);
-        } else if (e.getSource() == btMenu) {
-            tableUserPane.setVisible(false);
+            menuForm.setVisible(false);
             tableCustomerPane.setVisible(false);
-            tableCustomer.setVisible(false);
-            tableUser.setVisible(false);
-
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
+        } else if (e.getSource() == btMenu) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(false);
-            menuForm.setVisible(true);
-            tableUserPane.setVisible(false);
             specialInfoForm.setVisible(false);
+            menuForm.setVisible(true);
+            tableCustomerPane.setVisible(false);
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
             loadAdminMenu(); // Call the method to load the Admin Menu FXML
         } else if (e.getSource() == btSpecialInfo) {
             dashBoard_form.setVisible(false);
-            menuForm.setVisible(false);
             addNewEmployee_form.setVisible(false);
             specialInfoForm.setVisible(true);
+            menuForm.setVisible(false);
+            tableCustomerPane.setVisible(false);
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
+        } else if (e.getSource() == btInventory) {
+            dashBoard_form.setVisible(false);
+            addNewEmployee_form.setVisible(false);
+            specialInfoForm.setVisible(false);
+            menuForm.setVisible(false);
+            tableCustomerPane.setVisible(false);
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(true);
+            PurchaseOrderTablePane.setVisible(false);
+            this.showInventory();
+        } else if (e.getSource() == btCustomers) {
+            dashBoard_form.setVisible(false);
+            addNewEmployee_form.setVisible(false);
+            specialInfoForm.setVisible(false);
+            menuForm.setVisible(false);
+            tableCustomerPane.setVisible(true);
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
+            this.showCustomer();
+        } else if (e.getSource() == btEmployees) {
+            dashBoard_form.setVisible(false);
+            addNewEmployee_form.setVisible(false);
+            specialInfoForm.setVisible(false);
+            menuForm.setVisible(false);
+            tableCustomerPane.setVisible(false);
+            tableUserPane.setVisible(true);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
+            this.showUsers();
         }
     }
-
 
     /**
      * switchInSpecialInfoForm method that will switch the buttons in the special info form.
@@ -412,7 +435,6 @@ public class AdminController {
         }
     }
 
-
     /**
      * loadAdminMenu method that will load the admin menu.
      */
@@ -428,8 +450,62 @@ public class AdminController {
         }
     }
 
+    /**
+     * addNewEmployee method that will add new Employee.
+     */
+    public void addNewEmployee(ActionEvent event) {
+        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() || employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty() || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty() || employeePassword.getText().isEmpty()) {
+            showErrorAlert("Invalid Input", "Invalid Input,try again");
+            return;
+        }
+        //Check if the email already exists.
+        if (UserRepository.isEmailExist(employeeEmail.getText())) {
+            showErrorAlert("Invalid Input", "This Employee Email already exists!");
+            return;
+        }
+        //Check if the phone number is valid.
+        if (employeePhoneNumber.getText().length() != 10 || convertStringToInt(employeePhoneNumber.getText()) == -1) {
+            showErrorAlert("Invalid Input", "Invalid Phone Number,it should be 10 digit, and it should be a numbers.!");
+            return;
+        }
 
-    public void showCustomer(ActionEvent e) throws IOException {
+        //Check if the salary is a valid number.
+        if (convertStringToDouble(employeeSalary.getText()) == null || convertStringToDouble(employeeSalary.getText()) <= 0) {
+            showErrorAlert("Invalid Input", "Please enter a valid positive salary!");
+            return;
+        }
+
+        //Check if the password length is valid.
+        if (employeePassword.getText().length() < 8) {
+            showErrorAlert("Invalid Input", "Please enter a valid password(Must be 8 characters or longer. )!");
+            return;
+        }
+
+        String hashedPassword = PasswordHash.hashPassword(employeePassword.getText());
+
+        //Convert hire date to Date.
+        LocalDate localDate = employeeHireDate.getValue();
+        Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        //Create new user.
+        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, Long.parseLong(employeePhoneNumber.getText()), hashedPassword, convertStringToDouble(employeeSalary.getText()));
+
+        //Add the user to DB.
+        UserRepository.addNewEmployee(user);
+
+        successAlert("Add Successfully", "Employee added successfully!");
+        tfEmployeeName.clear();
+        employeeEmail.clear();
+        employeeHireDate.setValue(null);
+        employeeSalary.clear();
+        employeePhoneNumber.clear();
+        employeePassword.clear();
+        roleComboBox.getSelectionModel().clearSelection();
+
+    }
+
+
+    public void showCustomer() throws IOException {
         //    tableCustomerPane.getChildren().clear();
         tableCustomer.getColumns().clear();
         tableCustomer.setVisible(true);
@@ -517,12 +593,7 @@ public class AdminController {
                 }
             });
 
-            row.contextMenuProperty().bind(
-                    javafx.beans.binding.Bindings.when(
-                                    javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
-                            .then(contextMenu)
-                            .otherwise((ContextMenu) null)
-            );
+            row.contextMenuProperty().bind(javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null));
 
             return row;
         });
@@ -545,6 +616,7 @@ public class AdminController {
         }
         return someCol;
     }
+
     private TableColumn<Customer, Long> buildTableColumnLongUCustomer(String colname, boolean editable, int width) {
         TableColumn<Customer, Long> someCol = new TableColumn<>(colname);
         someCol.setMinWidth(width);
@@ -559,10 +631,8 @@ public class AdminController {
         return someCol;
     }
 
-    public void showUsers(ActionEvent e) throws IOException {
+    public void showUsers() throws IOException {
         // tableUserPane.getChildren().clear();
-
-
         tableUser.getColumns().clear();
         tableUser.setVisible(true);
         tableUserPane.setVisible(true);
@@ -723,9 +793,7 @@ public class AdminController {
                 }
             });
 
-            row.contextMenuProperty().bind(
-                    javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null)
-            );
+            row.contextMenuProperty().bind(javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null));
 
             return row;
         });
@@ -736,7 +804,6 @@ public class AdminController {
     public void updateRowByKeyCustomer(int id, String col, String val) {
         CustomerRepository.updateRowByKey(id, col, val);
     }
-
 
     private TableColumn<User, String> buildTableColumnStringUser(String colname, boolean editable, int width) {
         TableColumn<User, String> someCol = new TableColumn<>(colname);
@@ -800,12 +867,6 @@ public class AdminController {
     }
 
 
-
-
-
-
-
-
     public boolean showConfirmationDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
@@ -816,64 +877,10 @@ public class AdminController {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
-    /**
-     * addNewEmployee method that will add new Employee.
-     */
-    public void addNewEmployee(ActionEvent event) {
-        if (tfEmployeeName.getText().isEmpty() || employeeEmail.getText().isEmpty() || employeeHireDate.getValue() == null || employeeSalary.getText().isEmpty() || roleComboBox.getSelectionModel().getSelectedItem() == null || employeePhoneNumber.getText().isEmpty() || employeePassword.getText().isEmpty()) {
-            showErrorAlert("Invalid Input", "Invalid Input,try again");
-            return;
-        }
-        //Check if the email already exists.
-        if (UserRepository.isEmailExist(employeeEmail.getText())) {
-            showErrorAlert("Invalid Input", "This Employee Email already exists!");
-            return;
-        }
-        //Check if the phone number is valid.
-        if (employeePhoneNumber.getText().length() != 10 || convertStringToInt(employeePhoneNumber.getText()) == -1) {
-            showErrorAlert("Invalid Input", "Invalid Phone Number,it should be 10 digit, and it should be a numbers.!");
-            return;
-        }
-
-        //Check if the salary is a valid number.
-        if (convertStringToDouble(employeeSalary.getText()) == null || convertStringToDouble(employeeSalary.getText()) <= 0) {
-            showErrorAlert("Invalid Input", "Please enter a valid positive salary!");
-            return;
-        }
-
-        //Check if the password length is valid.
-        if (employeePassword.getText().length() < 8) {
-            showErrorAlert("Invalid Input", "Please enter a valid password(Must be 8 characters or longer. )!");
-            return;
-        }
-
-        String hashedPassword = PasswordHash.hashPassword(employeePassword.getText());
-
-        //Convert hire date to Date.
-        LocalDate localDate = employeeHireDate.getValue();
-        Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
-        //Create new user.
-        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, Long.parseLong(employeePhoneNumber.getText()) , hashedPassword, convertStringToDouble(employeeSalary.getText()));
-
-        //Add the user to DB.
-        UserRepository.addNewEmployee(user);
-
-        successAlert("Add Successfully", "Employee added successfully!");
-        tfEmployeeName.clear();
-        employeeEmail.clear();
-        employeeHireDate.setValue(null);
-        employeeSalary.clear();
-        employeePhoneNumber.clear();
-        employeePassword.clear();
-        roleComboBox.getSelectionModel().clearSelection();
-
-    }
 
     ObservableList<PurchaseOrderLine> dataList = FXCollections.observableArrayList();
 
-    public void showInventory(ActionEvent e) throws IOException {
-
+    public void showInventory() {
         vendor.getItems().clear();
         vendor.getItems().addAll(VendorRepo.getAllVendorName());
         ingredient.getItems().clear();
@@ -1034,37 +1041,11 @@ public class AdminController {
                 }
             });
 
-            row.contextMenuProperty().bind(
-                    javafx.beans.binding.Bindings.when(
-                                    javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
-                            .then(contextMenu)
-                            .otherwise((ContextMenu) null)
-            );
+            row.contextMenuProperty().bind(javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null));
 
             return row;
         });
-
-
     }
-
-//    private TableColumn<Ingredient, String> buildTableColumnStringIngredient(String colname, boolean editable, int width) {
-//        TableColumn<Ingredient, String> someCol = new TableColumn<>(colname);
-//        someCol.setMinWidth(width);
-//        someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
-//        if (editable) {
-//            someCol.setCellFactory(forTableColumn());
-//            someCol.setOnEditCommit((TableColumn.CellEditEvent<Ingredient, String> t) -> {
-//                ((Ingredient) t.getTableView().getItems().get(t.getTablePosition().getRow())).setCol(colname, t.getNewValue());
-//                updateRowByKeyIngredient((t.getRowValue().getIngredientId()), colname, String.valueOf(t.getNewValue()));
-//            });
-//        }
-//        return someCol;
-//    }
-//
-//    public void updateRowByKeyIngredient(int id, String col, String val) {
-//        IngredientRepo.updateRowByKey(id, col, val);
-//    }
-
 
     private TableColumn<PurchaseOrderLine, Double> buildTableColumnDoublePurchaseOrderLine(String colname, boolean editable, int width) {
         TableColumn<PurchaseOrderLine, Double> someCol = new TableColumn<>(colname);
@@ -1095,6 +1076,7 @@ public class AdminController {
 
         return ingredientCol;
     }
+
     public void updateRowByKeyPurchaseOrderLine(int id, String col, String val) {
         PurchaseOrderLineRepo.updateRowByKey(id, col, val);
     }
@@ -1301,12 +1283,7 @@ public class AdminController {
                 }
             });
 
-            row.contextMenuProperty().bind(
-                    javafx.beans.binding.Bindings.when(
-                                    javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
-                            .then(contextMenu)
-                            .otherwise((ContextMenu) null)
-            );
+            row.contextMenuProperty().bind(javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null));
 
             return row;
         });
@@ -1320,7 +1297,6 @@ public class AdminController {
                 purchaseOrderLineTable.getItems().clear();
                 purchaseOrderLineTable.getColumns().clear();
                 PurchaseOrder selectedPurchaseOrder = purchaseOrderTable.getSelectionModel().getSelectedItem();
-
 
 
                 dataPurchaseOrderLine.addAll(PurchaseOrderRepo.searchById(selectedPurchaseOrder.getId()).getPurchaseOrderLine());
@@ -1455,12 +1431,7 @@ public class AdminController {
                         }
                     });
 
-                    row.contextMenuProperty().bind(
-                            javafx.beans.binding.Bindings.when(
-                                            javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
-                                    .then(contextMenu)
-                                    .otherwise((ContextMenu) null)
-                    );
+                    row.contextMenuProperty().bind(javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null));
 
                     return row;
                 });

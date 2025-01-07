@@ -1,4 +1,5 @@
 package org.example.dbp.repository;
+
 import javafx.collections.ObservableList;
 import org.example.dbp.db.DataBase;
 import org.example.dbp.models.PurchaseOrder;
@@ -23,14 +24,14 @@ public class PurchaseOrderRepo {
                 int id = resultSet.getInt("purchaseOrderId");
                 int vendorId = resultSet.getInt("vendorId");
                 ObservableList<PurchaseOrderLine> purchaseOrderLines;
-                purchaseOrderLines =  PurchaseOrderLineRepo.getAllPurchaseOrderLinesForPurchaseOrder(id);
+                purchaseOrderLines = PurchaseOrderLineRepo.getAllPurchaseOrderLinesForPurchaseOrder(id);
 
-                Double totalPrice =  resultSet.getDouble("totalPrice");
+                Double totalPrice = resultSet.getDouble("totalPrice");
                 Date orderDate = resultSet.getDate("orderDate");
 
                 Vendor vendor = VendorRepo.searchById(vendorId); // Assuming VendorRepo has a searchById method
 
-                purchaseOrders.add(new PurchaseOrder(id, vendor  , purchaseOrderLines, totalPrice, orderDate));
+                purchaseOrders.add(new PurchaseOrder(id, vendor, purchaseOrderLines, totalPrice, orderDate));
             }
 
         } catch (SQLException e) {
@@ -52,13 +53,13 @@ public class PurchaseOrderRepo {
                 if (resultSet.next()) {
                     int vendorId = resultSet.getInt("vendorId");
                     Date orderDate = resultSet.getDate("orderDate");
-                    Double totalPrice =  resultSet.getDouble("totalPrice");
+                    Double totalPrice = resultSet.getDouble("totalPrice");
                     List<PurchaseOrderLine> purchaseOrderLines;
-                    purchaseOrderLines =  PurchaseOrderLineRepo.getAllPurchaseOrderLinesForPurchaseOrder(id);
+                    purchaseOrderLines = PurchaseOrderLineRepo.getAllPurchaseOrderLinesForPurchaseOrder(id);
 
                     Vendor vendor = VendorRepo.searchById(vendorId);
 
-                    purchaseOrder = new PurchaseOrder(id, vendor, (ObservableList<PurchaseOrderLine>) purchaseOrderLines, totalPrice,orderDate);
+                    purchaseOrder = new PurchaseOrder(id, vendor, (ObservableList<PurchaseOrderLine>) purchaseOrderLines, totalPrice, orderDate);
                 }
             }
 
@@ -108,12 +109,12 @@ public class PurchaseOrderRepo {
                     Date orderDate = resultSet.getDate("orderDate");
 
                     List<PurchaseOrderLine> purchaseOrderLines;
-                    purchaseOrderLines =  PurchaseOrderLineRepo.getAllPurchaseOrderLinesForPurchaseOrder(id);
+                    purchaseOrderLines = PurchaseOrderLineRepo.getAllPurchaseOrderLinesForPurchaseOrder(id);
 
                     Vendor vendor = VendorRepo.searchById(vendorId);
 
                     // Create the PurchaseOrder object to return
-                    deletedOrder = new PurchaseOrder(orderId, vendor , (ObservableList<PurchaseOrderLine>) purchaseOrderLines, orderDate);
+                    deletedOrder = new PurchaseOrder(orderId, vendor, (ObservableList<PurchaseOrderLine>) purchaseOrderLines, orderDate);
                 } else {
                     System.out.println("No purchase order found with ID " + id);
                     return null;
@@ -139,6 +140,7 @@ public class PurchaseOrderRepo {
 
         return deletedOrder;
     }
+
     public static void addPurchaseOrder(PurchaseOrder purchaseOrder) {
         String query = "INSERT INTO PurchaseOrder(vendorId,totalPrice, orderDate) VALUES (?, ?, ?)";
 
@@ -158,8 +160,4 @@ public class PurchaseOrderRepo {
             s.printStackTrace();
         }
     }
-
-
-
-
 }
