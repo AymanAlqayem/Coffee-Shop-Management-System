@@ -13,9 +13,6 @@ import java.util.Date;
 import java.util.List;
 
 public class PurchaseOrderDetailsRepo {
-
-
-
     public static List<PurchaseOrderDetails> getAllPurchaseOrderDetails() {
         List<PurchaseOrderDetails> purchaseOrderDetails = new ArrayList<>();
         String query = "SELECT * FROM PurchaseOrderDetails";
@@ -36,11 +33,11 @@ public class PurchaseOrderDetailsRepo {
 
                 int ingredientId = resultSet.getInt("ingredientId");
                 String ingredientName = resultSet.getString("ingredientName");
-                Unit unit =  Unit.valueOf(resultSet.getString("ingredientUnit"));
+                Unit unit = Unit.valueOf(resultSet.getString("ingredientUnit"));
                 double quantity = resultSet.getDouble("ingredientStock");
 
-                purchaseOrderDetails.add(new PurchaseOrderDetails(purchaseOrderId,vendorId, totalPrice, orderDate, lineId,
-                        lineQuantity, cost_per_unit, ingredientId,ingredientName,unit,quantity));
+                purchaseOrderDetails.add(new PurchaseOrderDetails(purchaseOrderId, vendorId, totalPrice, orderDate, lineId,
+                        lineQuantity, cost_per_unit, ingredientId, ingredientName, unit, quantity));
 
             }
 
@@ -50,7 +47,5 @@ public class PurchaseOrderDetailsRepo {
 
         return purchaseOrderDetails;
     }
-
-
 
 }

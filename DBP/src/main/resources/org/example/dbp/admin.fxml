@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="base" prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.AdminController">
+<AnchorPane fx:id="base" prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.AdminController">
    <children>
       <AnchorPane fx:id="BlackList" layoutX="-2.0" prefHeight="687.0" prefWidth="210.0">
          <children>
@@ -118,16 +118,21 @@
                         <Image url="@../../../info.png" />
                      </image>
                   </ImageView>
-                  <JFXButton fx:id="btIngredient" layoutX="57.0" layoutY="585.0" onAction="#showIngredient" prefHeight="47.0" prefWidth="126.0" style="-fx-background-radius: 90;" text="Ingredient" textFill="WHITE">
+                  <JFXButton fx:id="btIngredient" layoutX="72.0" layoutY="587.0" onAction="#switchWin" prefHeight="50.0" prefWidth="120.0" style="-fx-background-radius: 90;" text="Ingredient" textFill="WHITE">
                      <font>
-                        <Font name="Book Antiqua" size="14.0" />
+                        <Font name="Book Antiqua" size="16.0" />
                      </font>
                   </JFXButton>
+                  <ImageView fitHeight="38.0" fitWidth="42.0" layoutX="16.0" layoutY="594.0">
+                     <image>
+                        <Image url="@../../../Ingredient.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dashBoard_form" layoutX="212.0" layoutY="1.0" prefHeight="727.0" prefWidth="1318.0" visible="false">
+      <AnchorPane fx:id="dashBoard_form" layoutX="212.0" layoutY="1.0" prefHeight="727.0" prefWidth="1318.0">
          <children>
             <AnchorPane layoutX="10.0" layoutY="7.0" prefHeight="200.0" prefWidth="1290.0" style="-fx-border-color: #468585;">
                <children>

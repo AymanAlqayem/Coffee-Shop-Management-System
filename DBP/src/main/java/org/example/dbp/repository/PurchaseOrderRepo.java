@@ -40,6 +40,7 @@ public class PurchaseOrderRepo {
 
         return purchaseOrders;
     }
+
     public static List<String> getAllOrderDate() {
         List<String> orderDates = new ArrayList<>();
         String query = "SELECT orderDate FROM PurchaseOrder";
@@ -59,7 +60,6 @@ public class PurchaseOrderRepo {
 
         return orderDates;
     }
-
 
     public static PurchaseOrder searchById(int id) {
         PurchaseOrder purchaseOrder = null;
@@ -166,6 +166,7 @@ public class PurchaseOrderRepo {
 
         return deletedOrder;
     }
+
     public static void addPurchaseOrder(PurchaseOrder purchaseOrder) {
         String query = "INSERT INTO PurchaseOrder(vendorId,totalPrice, orderDate) VALUES (?, ?, ?)";
 
