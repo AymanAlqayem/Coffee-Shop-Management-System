@@ -53,8 +53,6 @@ public class AdminController {
 
     @FXML
     private AnchorPane ingredientPane;
-
-
     @FXML
     private TextField ingredientName;
     @FXML
@@ -92,8 +90,6 @@ public class AdminController {
 
     @FXML
     private Label respond = new Label();
-
-
     @FXML
     private ComboBox<String> filterComboBox;
     @FXML
@@ -362,7 +358,9 @@ public class AdminController {
             tableCustomerPane.setVisible(false);
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
+            ingredientPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            reportPane.setVisible(false);
         } else if (e.getSource() == btAddNewRole) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(true);
@@ -372,6 +370,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
         } else if (e.getSource() == btMenu) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(false);
@@ -381,6 +381,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             loadAdminMenu(); // Call the method to load the Admin Menu FXML
         } else if (e.getSource() == btSpecialInfo) {
             dashBoard_form.setVisible(false);
@@ -391,6 +393,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
         } else if (e.getSource() == btInventory) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(false);
@@ -400,6 +404,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(true);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             this.showInventory();
         } else if (e.getSource() == btCustomers) {
             dashBoard_form.setVisible(false);
@@ -410,6 +416,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             this.showCustomer();
         } else if (e.getSource() == btEmployees) {
             dashBoard_form.setVisible(false);
@@ -420,13 +428,21 @@ public class AdminController {
             tableUserPane.setVisible(true);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             this.showUsers();
         } else if (e.getSource() == btIngredient) {
             dashBoard_form.setVisible(false);
-            menuForm.setVisible(false);
             addNewEmployee_form.setVisible(false);
             specialInfoForm.setVisible(false);
-            reportPane.setVisible(true);
+            menuForm.setVisible(false);
+            tableCustomerPane.setVisible(false);
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(true);
+            reportPane.setVisible(false);
+            this.showIngredient();
         }
     }
 
@@ -578,7 +594,8 @@ public class AdminController {
         Date hireDate = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         //Create new user.
-        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate, Long.parseLong(employeePhoneNumber.getText()), hashedPassword, convertStringToDouble(employeeSalary.getText()));
+        User user = new User(tfEmployeeName.getText(), roleComboBox.getValue(), employeeEmail.getText(), hireDate,
+                Long.parseLong(employeePhoneNumber.getText()), hashedPassword, convertStringToDouble(employeeSalary.getText()));
 
         //Add the user to DB.
         UserRepository.addNewEmployee(user);
@@ -961,7 +978,6 @@ public class AdminController {
         UserRepository.updateRowByKey(id, col, val);
     }
 
-
     public boolean showConfirmationDialog(String message) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmation");
@@ -972,8 +988,6 @@ public class AdminController {
         return result.isPresent() && result.get() == ButtonType.OK;
     }
 
-
-
     ObservableList<PurchaseOrderLine> dataList = FXCollections.observableArrayList();
 
     public void showInventory() {
@@ -982,32 +996,22 @@ public class AdminController {
         ingredient.getItems().clear();
         ingredient.getItems().addAll(IngredientRepo.getAllIngredientName());
 
-
         // tableUserPane.getChildren().clear();
         purchasingOrderTable.getColumns().clear();
         purchasingOrderTable.setVisible(true);
         inventoryPane.setVisible(true);
-
         tableUser.setVisible(false);
         tableUserPane.setVisible(false);
-
         tableCustomerPane.setVisible(false);
         tableCustomer.setVisible(false);
-
         dashBoard_form.setVisible(false);
         addNewEmployee_form.setVisible(false);
         menuForm.setVisible(false);
-
         PurchaseOrderTablePane.setVisible(false);
         purchaseOrderTable.setVisible(false);
         PurchaseOrderTablePane.setVisible(false);
-
-
         purchasingOrderTable.setPadding(new Insets(10, 10, 10, 10));
-
-
         purchasingOrderTable.setItems(dataList);
-
         purchasingOrderTable.setEditable(true);
         purchasingOrderTable.setMaxHeight(4000);
         purchasingOrderTable.setMaxWidth(4000);
@@ -1069,7 +1073,6 @@ public class AdminController {
         cost_per_unitCol.setOnEditCommit(event -> {
             TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
             PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
-
             Double newValue = cellEditEvent.getNewValue();
             if (newValue != null) {
                 purchaseOrderLine.setCost_per_unit(newValue);
@@ -1084,14 +1087,8 @@ public class AdminController {
                 System.out.println("Invalid cost_per_unit input");
             }
         });
-
-
         TableColumn<PurchaseOrderLine, Double> totalCol = buildTableColumnDoublePurchaseOrderLine("total", true, 100);
-
-
         purchasingOrderTable.getColumns().addAll(ingredientNameCol, quantityCol, cost_per_unitCol, totalCol);
-
-
         purchasingOrderTable.setMaxWidth(Double.MAX_VALUE);
         purchasingOrderTable.setMaxHeight(Double.MAX_VALUE);
 
@@ -1143,7 +1140,6 @@ public class AdminController {
                 updateRowByKeyPurchaseOrderLine(t.getRowValue().getLineId(), colname, String.valueOf(t.getNewValue()));
             });
         }
-
         return ingredientCol;
     }
 
@@ -1190,8 +1186,6 @@ public class AdminController {
 
         dataList.add(purchaseOrderLine);
         purchasingOrderTable.setItems(dataList);
-
-
     }
 
     public void vendorComboBox(ActionEvent e) throws IOException {
@@ -1212,7 +1206,6 @@ public class AdminController {
                 quantity.clear();
             }
         });
-
     }
 
     public void placePurchaseOrder(ActionEvent e) throws IOException {
@@ -1232,9 +1225,7 @@ public class AdminController {
         purchaseOrder.setPurchaseOrderLine(dataList);
         purchaseOrder.setVendor(VendorRepo.searchByName(vendor.getValue()));
         purchaseOrder.setTotalPrice(total);
-
         purchaseOrder.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
-
         PurchaseOrderRepo.addPurchaseOrder(purchaseOrder);
         purchasingOrderTable.getItems().clear();
         dataList.clear();
@@ -1245,7 +1236,6 @@ public class AdminController {
     }
 
     public void purchaseOrderTable(ActionEvent e) throws Exception {
-
         purchaseOrderTable.setVisible(true);
         purchaseOrderTable.getColumns().clear();
         PurchaseOrderTablePane.setVisible(true);
@@ -1292,10 +1282,7 @@ public class AdminController {
             }
         });
 
-
         TableColumn<PurchaseOrder, Double> totalPriceCol = buildTableColumnDoublePurchaseOrder("totalPrice", true, 100);
-
-
         purchaseOrderTable.setItems(dataPurchaseOrder);
         purchaseOrderTable.getColumns().addAll(nameVendorCol, purchaseOrderDateCol, totalPriceCol);
 
@@ -1397,7 +1384,6 @@ public class AdminController {
                         }
                     }
                 }));
-
                 cost_per_unitCol.setOnEditCommit(event -> {
                     TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
                     PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
@@ -1411,7 +1397,6 @@ public class AdminController {
                         System.out.println("Invalid salary input");
                     }
                 });
-
 
                 TableColumn<PurchaseOrderLine, Double> totalCol = buildTableColumnDoublePurchaseOrderLine("total", true, 100);
                 totalCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
@@ -1433,7 +1418,6 @@ public class AdminController {
                 totalCol.setOnEditCommit(event -> {
                     TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
                     PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
-
                     Double newDouble = cellEditEvent.getNewValue();
                     if (newDouble != null) {
                         purchaseOrderLine.setQuantity(newDouble);
@@ -1443,19 +1427,12 @@ public class AdminController {
                         System.out.println("Invalid salary input");
                     }
                 });
-
-
                 purchaseOrderLineTable.getColumns().addAll(ingredientNameCol, quantityCol, cost_per_unitCol, totalCol);
-
-
                 purchaseOrderLineTable.setMaxWidth(Double.MAX_VALUE);
                 purchaseOrderLineTable.setMaxHeight(Double.MAX_VALUE);
-
                 purchaseOrderLineTable.setRowFactory(tv -> {
-
                     TableRow<PurchaseOrderLine> row = new TableRow<>();
                     ContextMenu contextMenu = new ContextMenu();
-
                     MenuItem deleteItem = new MenuItem("Delete");
                     contextMenu.getItems().add(deleteItem);
                     deleteItem.setOnAction(actionEvent -> {
@@ -1477,11 +1454,8 @@ public class AdminController {
 
                     return row;
                 });
-
-
             }
         });
-
     }
 
 
@@ -1519,7 +1493,6 @@ public class AdminController {
         someCol.setMinWidth(width);
         someCol.setCellValueFactory(new PropertyValueFactory<>(colname));
         if (editable) {
-
             someCol.setOnEditCommit((TableColumn.CellEditEvent<PurchaseOrder, Double> t) -> {
                 t.getTableView().getItems().get(t.getTablePosition().getRow()).setCol(colname, t.getNewValue());
                 updateRowByKeyPurchaseOrder((t.getRowValue().getId()), colname, String.valueOf(t.getNewValue()));
@@ -1535,46 +1508,30 @@ public class AdminController {
 
 
     public void showReports(ActionEvent e) throws Exception {
-
-
         purchaseOrderTable.getColumns().clear();
         reportPane.setVisible(true);
         PurchaseOrderTablePane.setVisible(false);
         purchaseOrderLineTable.setVisible(false);
         inventoryPane.setVisible(false);
-
-
-        criteriaCombobox.getItems().addAll("Vendor Name", "Ingredient Name","Order Date");
+        criteriaCombobox.getItems().addAll("Vendor Name", "Ingredient Name", "Order Date");
         dataPurchaseOrderDetails = FXCollections.observableArrayList(PurchaseOrderDetailsRepo.getAllPurchaseOrderDetails());
         reportTable.setMaxHeight(4000);
         reportTable.setMaxWidth(4000);
-
-
         TableColumn<PurchaseOrderDetails, Integer> purchaseOrderId = buildTableColumnIntegerPurchaseOrderDetails("purchaseOrderId", true, 140);
         TableColumn<PurchaseOrderDetails, Integer> vendorIDCol = buildTableColumnIntegerPurchaseOrderDetailsVenderID("vendorID", true, 140);
         TableColumn<PurchaseOrderDetails, Date> purchaseOrderDateCol = buildTableColumnDatePurchaseOrderDetails("orderDate", true, 100);
-
         TableColumn<PurchaseOrderDetails, Double> totalPriceCol = buildTableColumnDoublePurchaseOrderDetails("totalPrice", true, 100);
-
-
         TableColumn<PurchaseOrderDetails, Double> quantityCol = buildTableColumnDoublePurchaseOrderDetails("quantity", true, 140);
         TableColumn<PurchaseOrderDetails, Double> cost_per_unitCol = buildTableColumnDoublePurchaseOrderDetails("cost_per_unit", true, 140);
-
-
         TableColumn<PurchaseOrderDetails, Integer> ingredientIdCol = buildTableColumnIntegerPurchaseOrderDetails("ingredientId", true, 140);
         TableColumn<PurchaseOrderDetails, String> ingredientNameCol = buildTableColumnStringPurchaseOrderDetails("ingredientName", true, 140);
         TableColumn<PurchaseOrderDetails, Unit> ingredientUnitCol = buildTableColumnUnitPurchaseOrderLine("ingredientUnit", true, 140);
         TableColumn<PurchaseOrderDetails, Double> ingredientStockCol = buildTableColumnDoublePurchaseOrderDetails("ingredientStock", true, 140);
-
-
         reportTable.setItems(dataPurchaseOrderDetails);
         reportTable.getColumns().addAll(purchaseOrderId, vendorIDCol, purchaseOrderDateCol, totalPriceCol, quantityCol, cost_per_unitCol, ingredientIdCol, ingredientNameCol, ingredientUnitCol, ingredientStockCol);
         reportTable.refresh();
-
         reportTable.setMaxWidth(Double.MAX_VALUE);
         reportTable.setMaxHeight(Double.MAX_VALUE);
-
-
     }
 
 
@@ -1642,6 +1599,7 @@ public class AdminController {
             filterComboBox.setDisable(true);
         }
     }
+
     ObservableList<PurchaseOrderDetails> dataPurchaseOrderDetailsFilter = FXCollections.observableArrayList();
 
     public void showTableReport(ActionEvent e) throws Exception {
@@ -1694,24 +1652,16 @@ public class AdminController {
 
     }
 
-    public void showIngredient(ActionEvent e) throws Exception {
-        ingredientPane.setVisible(true);
+    public void showIngredient() {
         ingredientTable.getColumns().clear();
-
         unitComboBox.getItems().addAll(Unit.KG, Unit.L);
-
         ingredientTable.setPadding(new Insets(10, 10, 10, 10));
-
         dataIngredient = FXCollections.observableArrayList(IngredientRepo.getAllIngredient());
-
         ingredientTable.setEditable(true);
-
-
         TableColumn<Ingredient, String> ingredientNameCol = buildTableColumnStringIngredient("ingredientName", true, 140);
         ingredientNameCol.setCellFactory(TextFieldTableCell.forTableColumn());
 
         TableColumn<Ingredient, Unit> ingredientUnitCol = buildTableColumnUnitIngredient("unit", true, 140);
-
 
         TableColumn<Ingredient, Double> ingredientStockCol = buildTableColumnDoubleIngredient("quantity", true, 140);
         ingredientStockCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
@@ -1729,7 +1679,6 @@ public class AdminController {
                 }
             }
         }));
-
         ingredientStockCol.setOnEditCommit(event -> {
             TableColumn.CellEditEvent<Ingredient, Double> cellEditEvent = event;
             Ingredient ingredient = cellEditEvent.getRowValue();
@@ -1743,20 +1692,13 @@ public class AdminController {
                 System.out.println("Invalid quantity input");
             }
         });
-
-
         ingredientTable.setItems(dataIngredient);
         ingredientTable.getColumns().addAll(ingredientNameCol, ingredientUnitCol, ingredientStockCol);
-
-
         ingredientTable.setMaxWidth(Double.MAX_VALUE);
         ingredientTable.setMaxHeight(Double.MAX_VALUE);
-
         ingredientTable.setRowFactory(tv -> {
-
             TableRow<Ingredient> row = new TableRow<>();
             ContextMenu contextMenu = new ContextMenu();
-
             MenuItem deleteItem = new MenuItem("Delete");
             contextMenu.getItems().add(deleteItem);
             deleteItem.setOnAction(actionEvent -> {
@@ -1773,17 +1715,10 @@ public class AdminController {
                 }
             });
 
-            row.contextMenuProperty().bind(
-                    javafx.beans.binding.Bindings.when(
-                                    javafx.beans.binding.Bindings.isNotNull(row.itemProperty()))
-                            .then(contextMenu)
-                            .otherwise((ContextMenu) null)
-            );
+            row.contextMenuProperty().bind(javafx.beans.binding.Bindings.when(javafx.beans.binding.Bindings.isNotNull(row.itemProperty())).then(contextMenu).otherwise((ContextMenu) null));
 
             return row;
         });
-
-
     }
 
     private TableColumn<Ingredient, Double> buildTableColumnDoubleIngredient(String colname, boolean editable, int width) {
@@ -1830,7 +1765,6 @@ public class AdminController {
         }
         return someCol;
     }
-
 
     public void addIngredient(ActionEvent e) throws Exception {
         if (ingredientName.getText().isEmpty()) {
@@ -1926,7 +1860,6 @@ public class AdminController {
         successAlert.setHeaderText(null);
         successAlert.setContentText(context);
         successAlert.showAndWait();
-
     }
 
     /**

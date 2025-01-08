@@ -140,123 +140,6 @@ VALUES ('John Doe', 'admin', 'john.doe@example.com', '2024-01-01', '1234567890',
 INSERT INTO Inventory (name, admin_id)
 VALUES ('Main Inventory', 14);
 
-INSERT INTO Customer (customer_name, phone_number)
-VALUES ('Michael Davis', '1111111111'),
-       ('Emily Garcia', '2222222222'),
-       ('Daniel Harris', '3333333333'),
-       ('Sophia Martinez', '4444444444'),
-       ('Matthew Clark', '5555555555'),
-       ('Olivia Rodriguez', '6666666666'),
-       ('Lucas Lewis', '7777777777'),
-       ('Emma Walker', '8888888888'),
-       ('Jack Allen', '9999999999'),
-       ('Chloe Hall', '1010101010'),
-       ('Henry Young', '1212121212'),
-       ('Ella King', '1313131313'),
-       ('Alexander Wright', '1414141414'),
-       ('Amelia Scott', '1515151515'),
-       ('William Turner', '1616161616'),
-       ('Isabella Hill', '1717171717'),
-       ('Benjamin Moore', '1818181818'),
-       ('Mia Baker', '1919191919'),
-       ('James Carter', '2020202020'),
-       ('Charlotte Adams', '2121212121'),
-       ('Jacob Nelson', '2222222222'),
-       ('Lily Torres', '2323232323'),
-       ('Elijah Lee', '2424242424'),
-       ('Sophie Ramirez', '2525252525'),
-       ('Mason Perez', '2626262626'),
-       ('Grace Collins', '2727272727'),
-       ('Logan Murphy', '2828282828'),
-       ('Hannah Barnes', '2929292929'),
-       ('Sebastian Reed', '3030303030'),
-       ('Zoe Sanders', '3131313131'),
-       ('Noah Foster', '3232323232'),
-       ('Ava Brooks', '3333333333'),
-       ('Ethan Bennett', '3434343434'),
-       ('Harper Howard', '3535353535');
-
-
-insert into category (name)
-values ('Hot Drinks')
-     , ('Cold Drinks')
-     , ('Ice')
-     , ('Mohito')
-     , ('Milk Chick')
-     , ('Smoothies');
-
-insert into menu_item(item_name, price, category_id)
-values ('Espresso', 10, 1),
-       ('Americano', 12, 1),
-       ('Cappuccino', 16, 1),
-       ('Nescafe', 16, 1),
-       ('Cafe latte', 16, 1),
-       ('Spanish latte', 16, 1),
-       ('Hot chocolate', 16, 1),
-       ('Tea latte', 16, 1),
-       ('Hazelnut latte ', 16, 1),
-       ('Fresh Vanilla', 16, 1),
-       ('Caramel', 16, 1),
-       ('Sahlab', 12, 1),
-       ('Arabic coffee', 12, 1),
-       ('Mint tea ', 12, 1),
-       ('Green tea', 12, 1),
-       ('Ginger,cinnamon and honey', 16, 1),
-       ('Orange juice', 17, 2),
-       ('Lemon and mint', 17, 2),
-       ('Watermelon', 17, 2),
-       ('Mango and orange', 18, 2),
-       ('Mango and banana ', 18, 2),
-       ('Banana and milk', 18, 2),
-       ('Strawberry', 18, 2),
-       ('Ice tea', 18, 3),
-       ('Ice latte', 17, 3),
-       ('Ice coffee', 18, 3),
-       ('Ice mocha', 18, 3),
-       ('Ice tea latte', 18, 3),
-       ('Ice hazelnut latte', 18, 3),
-       ('Ice spanish latte', 18, 3),
-       ('Ice fresh vanilla latte', 18, 3),
-       ('Ice caramel latte', 18, 3),
-       ('Blueberry', 18, 5),
-       ('Oreo', 17, 5),
-       ('chocolate', 18, 5),
-       ('Strawberry and Blueberry', 18, 5),
-       ('Mix berry', 18, 5),
-       ('Vanilla', 16, 5),
-       ('Lotus', 18, 5),
-       ('snickers', 18, 5),
-       ('Gengar', 17, 4),
-       ('Strawberry mohito ', 17, 4),
-       ('raspberry', 17, 4),
-       ('Mesflora ', 18, 4),
-       ('Mix berry mohito', 17, 4),
-       ('Blackberry', 17, 4),
-       ('kewe', 17, 4),
-       ('Mesflora smoothie', 18, 6),
-       ('pineapple ', 18, 6),
-       ('Strawberry  smoothie', 20, 6),
-       ('Mango smoothie', 20, 6);
-
-INSERT INTO User (name, role, email, hire_date, phone_number, password, salary)
-VALUES ('John Doe', 'admin', 'john.doe@example.com', '2024-01-01', '1234567890', 'password123', 5000),
-       ('Jane Smith', 'admin', 'jane.smith@example.com', '2024-01-02', '0987654321', 'password123', 5000),
-       ('Alice Johnson', 'cashier', 'alice.johnson@example.com', '2024-02-01', '2345678901', 'password123', 3000),
-       ('Bob Brown', 'cashier', 'bob.brown@example.com', '2024-03-01', '3456789012', 'password123', 3000),
-       ('Charlie White', 'cashier', 'charlie.white@example.com', '2024-04-01', '4567890123', 'password123', 3000),
-       ('Diana Green', 'cashier', 'diana.green@example.com', '2024-05-01', '5678901234', 'password123', 3000),
-       ('Ethan Black', 'cashier', 'ethan.black@example.com', '2024-06-01', '6789012345', 'password123', 3000),
-       ('Liam Carter', 'admin', 'liam.carter@example.com', '2024-07-01', '7890123456', 'password123', 5000),
-       ('Sophia Taylor', 'admin', 'sophia.taylor@example.com', '2024-08-01', '8901234567', 'password123', 5000),
-       ('Isabella Harris', 'cashier', 'isabella.harris@example.com', '2024-09-01', '9012345678', 'password123', 3000),
-       ('Mason Turner', 'cashier', 'mason.turner@example.com', '2024-10-01', '9123456789', 'password123', 3000),
-       ('Ava Lopez', 'cashier', 'ava.lopez@example.com', '2024-11-01', '9234567890', 'password123', 3000),
-       ('Lucas Walker', 'admin', 'lucas.walker@example.com', '2024-12-01', '9345678901', 'password123', 5000),
-       ('Ayman', 'admin', 'Ayman@gmail.com', '2024-01-01', '1234567890', '1220040', 5000),
-       ('Sam', 'cashier', 'sam@gmail.com', '2024-10-10', '1234567800', '1220041', 3500);
-
-INSERT INTO Inventory (name, admin_id)
-VALUES ('Main Inventory', 14);
 
 INSERT INTO Customer (customer_name, phone_number)
 VALUES ('John Smith', '1234567890'),
@@ -330,6 +213,7 @@ VALUES ('John Smith', '1234567890'),
        ('Noah White', '6612345678'),
        ('Lily King', '7723456789');
 
+
 insert into category (name)
 values ('Hot Drinks')
      , ('Cold Drinks')
@@ -390,6 +274,7 @@ values ('Espresso', 10, 1),
        ('pineapple ', 18, 6),
        ('Strawberry  smoothie', 20, 6),
        ('Mango smoothie', 20, 6);
+
 
 -- Generating 100 Orders
 INSERT INTO Order_table (created_date_time, cashier_id, customer_id)
@@ -1056,6 +941,27 @@ VALUES (1, 1, 100, 5),
        (23, 46, 50, 5),
        (24, 47, 30, 2),
        (24, 48, 60, 3);
+
+CREATE VIEW PurchaseOrderDetails AS
+SELECT po.purchaseOrderId,
+       po.vendorId,
+       po.totalPrice,
+       po.orderDate,
+
+       pol.lineId,
+       pol.quantity      AS lineQuantity,
+       pol.cost_per_unit AS lineCostPerUnit,
+
+       ing.ingredientId,
+       ing.ingredientName,
+       ing.unit          AS ingredientUnit,
+       ing.quantity      AS ingredientStock
+FROM PurchaseOrder po
+         JOIN
+     PurchaseOrderLine pol ON po.purchaseOrderId = pol.purchaseOrderId
+         JOIN
+     ingredient ing ON pol.ingredientId = ing.ingredientId;
+
 
 
 SELECT *

@@ -66,97 +66,45 @@ public class LoginController extends Application {
             showAlert("Error", "Username and password cannot be empty.");
             return;
         }
-        User user = UserRepository.getUserByUsernameAndPassword(tfUserName.getText(), tfPass.getText());
+
+        // Hash the entered password
+        String hashedPassword = PasswordHash.hashPassword(password);
+
+        // Fetch user by username and hashed password
+        User user = UserRepository.getUserByUsernameAndPassword(username, hashedPassword);
+
         if (user == null) {
             showAlert("Login Failed", "Invalid username or password.");
         } else if (user.getRole().equalsIgnoreCase("Admin")) {
-
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/admin.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
 
-
-            // Get the AdminController and pass the username to it
             AdminController adminController = fxmlLoader.getController();
             adminController.setUserName(username);
 
-            // Show the new stage
             Stage adminStage = new Stage();
             adminStage.setTitle("Admin Stage");
             adminStage.setScene(scene);
             adminStage.show();
 
-            // Close the login stage
             Stage loginStage = (Stage) tfUserName.getScene().getWindow();
             loginStage.close();
         } else {
             FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Cashier.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
 
-            // Get the AdminController and pass the username to it
             CashierController cashierController = fxmlLoader.getController();
             cashierController.setUserName(username);
 
-            // Show the new stage
-            Stage adminStage = new Stage();
-            adminStage.setTitle("Cashier Stage");
-            adminStage.setScene(scene);
-            adminStage.show();
+            Stage cashierStage = new Stage();
+            cashierStage.setTitle("Cashier Stage");
+            cashierStage.setScene(scene);
+            cashierStage.show();
 
-            // Close the login stage
             Stage loginStage = (Stage) tfUserName.getScene().getWindow();
             loginStage.close();
         }
     }
-
-
-    //Using hash
-//    public void login() throws IOException {
-//        String username = tfUserName.getText();
-//        String password = tfPass.getText();
-//
-//        if (username.isEmpty() || password.isEmpty()) {
-//            showAlert("Error", "Username and password cannot be empty.");
-//            return;
-//        }
-//
-//        // Hash the entered password
-//        String hashedPassword = PasswordHash.hashPassword(password);
-//
-//        // Fetch user by username and hashed password
-//        User user = UserRepository.getUserByUsernameAndPassword(username, hashedPassword);
-//
-//        if (user == null) {
-//            showAlert("Login Failed", "Invalid username or password.");
-//        } else if (user.getRole().equalsIgnoreCase("Admin")) {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/admin.fxml"));
-//            Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
-//
-//            AdminController adminController = fxmlLoader.getController();
-//            adminController.setUserName(username);
-//
-//            Stage adminStage = new Stage();
-//            adminStage.setTitle("Admin Stage");
-//            adminStage.setScene(scene);
-//            adminStage.show();
-//
-//            Stage loginStage = (Stage) tfUserName.getScene().getWindow();
-//            loginStage.close();
-//        } else {
-//            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/org/example/dbp/Cashier.fxml"));
-//            Scene scene = new Scene(fxmlLoader.load(), 1525, 782);
-//
-//            CashierController cashierController = fxmlLoader.getController();
-//            cashierController.setUserName(username);
-//
-//            Stage cashierStage = new Stage();
-//            cashierStage.setTitle("Cashier Stage");
-//            cashierStage.setScene(scene);
-//            cashierStage.show();
-//
-//            Stage loginStage = (Stage) tfUserName.getScene().getWindow();
-//            loginStage.close();
-//        }
-//    }
 
     /**
      * showAlert method that will show an alert.
