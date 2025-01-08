@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="base" prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.AdminController">
+<AnchorPane fx:id="base" prefHeight="782.0" prefWidth="1525.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.dbp.controllers.AdminController">
    <children>
       <AnchorPane fx:id="BlackList" layoutX="-2.0" prefHeight="687.0" prefWidth="210.0">
          <children>
@@ -127,7 +127,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="dashBoard_form" layoutX="212.0" layoutY="1.0" prefHeight="727.0" prefWidth="1318.0">
+      <AnchorPane fx:id="dashBoard_form" layoutX="212.0" layoutY="1.0" prefHeight="727.0" prefWidth="1318.0" visible="false">
          <children>
             <AnchorPane layoutX="10.0" layoutY="7.0" prefHeight="200.0" prefWidth="1290.0" style="-fx-border-color: #468585;">
                <children>
@@ -453,7 +453,7 @@
       <AnchorPane fx:id="PurchaseOrderTablePane" layoutX="212.0" prefHeight="797.0" prefWidth="1328.0" visible="false">
          <children>
             <TableView fx:id="purchaseOrderTable" editable="true" prefHeight="504.0" prefWidth="1318.0" tableMenuButtonVisible="true" />
-            <TableView fx:id="purchaseOrderLineTable" editable="true" layoutX="10.0" layoutY="504.0" prefHeight="293.0" prefWidth="1318.0" tableMenuButtonVisible="true" visible="false" />
+            <TableView fx:id="purchaseOrderLineTable" editable="true" layoutX="10.0" layoutY="504.0" prefHeight="294.0" prefWidth="1318.0" tableMenuButtonVisible="true" visible="false" />
          </children>
       </AnchorPane>
       <AnchorPane fx:id="ingredientPane" layoutX="212.0" prefHeight="798.0" prefWidth="1538.0" visible="false">

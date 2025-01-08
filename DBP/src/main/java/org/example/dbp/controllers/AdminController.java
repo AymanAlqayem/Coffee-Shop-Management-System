@@ -19,9 +19,7 @@ import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
 import javafx.scene.text.FontWeight;
@@ -134,6 +132,7 @@ public class AdminController {
     //Forms.
     @FXML
     private AnchorPane tableCustomerPane;
+
     @FXML
     private TableView tableCustomer;
     @FXML
@@ -1331,8 +1330,13 @@ public class AdminController {
         });
 
         purchaseOrderTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+
             if (newValue != null) {
                 purchaseOrderLineTable.setVisible(true);
+                ingredient.getItems().addAll(IngredientRepo.getAllIngredientName());
+
+
                 purchaseOrderLineTable.setPadding(new Insets(10, 10, 10, 10));
 
                 dataPurchaseOrderLine.clear();
@@ -1351,98 +1355,10 @@ public class AdminController {
                 TableColumn<PurchaseOrderLine, Ingredient> ingredientNameCol = buildTableColumnIngredientPurchaseOrderLine("ingredient", true, 140);
 
                 TableColumn<PurchaseOrderLine, Double> quantityCol = buildTableColumnDoublePurchaseOrderLine("quantity", true, 140);
-                quantityCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double object) {
-                        return object == null ? "" : object.toString();
-                    }
-
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return Double.parseDouble(string);
-                        } catch (NumberFormatException e) {
-                            return null; // Or handle invalid input gracefully
-                        }
-                    }
-                }));
-
-                quantityCol.setOnEditCommit(event -> {
-                    TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
-                    PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
-
-                    Double newDouble = cellEditEvent.getNewValue();
-                    if (newDouble != null) {
-                        purchaseOrderLine.setQuantity(newDouble);
-                        // Update the database
-                        PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newDouble.toString());
-                    } else {
-                        System.out.println("Invalid salary input");
-                    }
-                });
 
                 TableColumn<PurchaseOrderLine, Double> cost_per_unitCol = buildTableColumnDoublePurchaseOrderLine("cost_per_unit", true, 140);
-                cost_per_unitCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double object) {
-                        return object == null ? "" : object.toString();
-                    }
-
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return Double.parseDouble(string);
-                        } catch (NumberFormatException e) {
-                            return null; // Or handle invalid input gracefully
-                        }
-                    }
-                }));
-
-                cost_per_unitCol.setOnEditCommit(event -> {
-                    TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
-                    PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
-
-                    Double newDouble = cellEditEvent.getNewValue();
-                    if (newDouble != null) {
-                        purchaseOrderLine.setQuantity(newDouble);
-                        // Update the database
-                        PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newDouble.toString());
-                    } else {
-                        System.out.println("Invalid salary input");
-                    }
-                });
-
 
                 TableColumn<PurchaseOrderLine, Double> totalCol = buildTableColumnDoublePurchaseOrderLine("total", true, 100);
-                totalCol.setCellFactory(column -> new TextFieldTableCell<>(new StringConverter<Double>() {
-                    @Override
-                    public String toString(Double object) {
-                        return object == null ? "" : object.toString();
-                    }
-
-                    @Override
-                    public Double fromString(String string) {
-                        try {
-                            return Double.parseDouble(string);
-                        } catch (NumberFormatException e) {
-                            return null; // Or handle invalid input gracefully
-                        }
-                    }
-                }));
-
-                totalCol.setOnEditCommit(event -> {
-                    TableColumn.CellEditEvent<PurchaseOrderLine, Double> cellEditEvent = event;
-                    PurchaseOrderLine purchaseOrderLine = cellEditEvent.getRowValue();
-
-                    Double newDouble = cellEditEvent.getNewValue();
-                    if (newDouble != null) {
-                        purchaseOrderLine.setQuantity(newDouble);
-                        // Update the database
-                        PurchaseOrderLineRepo.updateRowByKey(purchaseOrderLine.getLineId(), "salary", newDouble.toString());
-                    } else {
-                        System.out.println("Invalid salary input");
-                    }
-                });
 
 
                 purchaseOrderLineTable.getColumns().addAll(ingredientNameCol, quantityCol, cost_per_unitCol, totalCol);
@@ -1483,6 +1399,7 @@ public class AdminController {
         });
 
     }
+
 
 
     private TableColumn<PurchaseOrder, Date> buildTableColumnDatePurchaseOrder(String colname, boolean editable, int width) {

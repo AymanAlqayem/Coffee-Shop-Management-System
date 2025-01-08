@@ -27,9 +27,17 @@ public class PurchaseOrder {
         this.id = id;
         this.vendor = vendor;
         this.purchaseOrderLine = purchaseOrderLine;
-        for (PurchaseOrderLine orderLine : purchaseOrderLine) {
-            totalPrice = totalPrice + orderLine.getTotal();
+
+        // Ensure totalPrice is not null
+        if (totalPrice == null) {
+            totalPrice = 0.0;
         }
+
+        // Calculate total price
+        for (PurchaseOrderLine orderLine : purchaseOrderLine) {
+            totalPrice += orderLine.getTotal();
+        }
+
         this.orderDate = orderDate;
     }
 

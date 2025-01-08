@@ -113,11 +113,13 @@ public class PurchaseOrderRepo {
 
     public static PurchaseOrder deleteRowByKey(int id) {
         String selectQuery = "SELECT * FROM PurchaseOrder WHERE purchaseOrderId = ?";
+        String deletePurchaseOrderLineQuery = "DELETE FROM PurchaseOrderLine WHERE purchaseOrderId = ?";
         String deleteQuery = "DELETE FROM PurchaseOrder WHERE purchaseOrderId = ?";
         PurchaseOrder deletedOrder = null;
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
+             PreparedStatement deletePurchaseOrderLineStatement = connection.prepareStatement(deletePurchaseOrderLineQuery);
              PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
 
             // Fetch the purchase order details before deletion
@@ -141,7 +143,11 @@ public class PurchaseOrderRepo {
                 }
             }
 
-            // Perform the deletion
+            // Delete dependent rows in PurchaseOrderLine
+            deletePurchaseOrderLineStatement.setInt(1, id);
+            deletePurchaseOrderLineStatement.executeUpdate();
+
+            // Perform the deletion in PurchaseOrder
             deleteStatement.setInt(1, id);
             int rowsDeleted = deleteStatement.executeUpdate();
 
@@ -160,7 +166,6 @@ public class PurchaseOrderRepo {
 
         return deletedOrder;
     }
-
     public static void addPurchaseOrder(PurchaseOrder purchaseOrder) {
         String query = "INSERT INTO PurchaseOrder(vendorId,totalPrice, orderDate) VALUES (?, ?, ?)";
 
