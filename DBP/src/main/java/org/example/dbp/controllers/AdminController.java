@@ -352,6 +352,7 @@ public class AdminController {
     /**
      * switchWin method that will witch between widows based a specific button.
      */
+
     public void switchWin(ActionEvent e) throws IOException {
         if (e.getSource() == btDashboard) {
             dashBoard_form.setVisible(true);
@@ -361,7 +362,9 @@ public class AdminController {
             tableCustomerPane.setVisible(false);
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
+            ingredientPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            reportPane.setVisible(false);
         } else if (e.getSource() == btAddNewRole) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(true);
@@ -371,6 +374,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
         } else if (e.getSource() == btMenu) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(false);
@@ -380,6 +385,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             loadAdminMenu(); // Call the method to load the Admin Menu FXML
         } else if (e.getSource() == btSpecialInfo) {
             dashBoard_form.setVisible(false);
@@ -390,6 +397,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
         } else if (e.getSource() == btInventory) {
             dashBoard_form.setVisible(false);
             addNewEmployee_form.setVisible(false);
@@ -399,6 +408,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(true);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             this.showInventory();
         } else if (e.getSource() == btCustomers) {
             dashBoard_form.setVisible(false);
@@ -409,6 +420,8 @@ public class AdminController {
             tableUserPane.setVisible(false);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             this.showCustomer();
         } else if (e.getSource() == btEmployees) {
             dashBoard_form.setVisible(false);
@@ -419,13 +432,21 @@ public class AdminController {
             tableUserPane.setVisible(true);
             inventoryPane.setVisible(false);
             PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(false);
+            reportPane.setVisible(false);
             this.showUsers();
         } else if (e.getSource() == btIngredient) {
             dashBoard_form.setVisible(false);
-            menuForm.setVisible(false);
             addNewEmployee_form.setVisible(false);
             specialInfoForm.setVisible(false);
-            reportPane.setVisible(true);
+            menuForm.setVisible(false);
+            tableCustomerPane.setVisible(false);
+            tableUserPane.setVisible(false);
+            inventoryPane.setVisible(false);
+            PurchaseOrderTablePane.setVisible(false);
+            ingredientPane.setVisible(true);
+            reportPane.setVisible(false);
+            this.showIngredient();
         }
     }
 
@@ -972,7 +993,6 @@ public class AdminController {
     }
 
 
-
     ObservableList<PurchaseOrderLine> dataList = FXCollections.observableArrayList();
 
     public void showInventory() {
@@ -1401,7 +1421,6 @@ public class AdminController {
     }
 
 
-
     private TableColumn<PurchaseOrder, Date> buildTableColumnDatePurchaseOrder(String colname, boolean editable, int width) {
         TableColumn<PurchaseOrder, Date> someCol = new TableColumn<>(colname);
         someCol.setMinWidth(width);
@@ -1461,7 +1480,7 @@ public class AdminController {
         inventoryPane.setVisible(false);
 
 
-        criteriaCombobox.getItems().addAll("Vendor Name", "Ingredient Name","Order Date");
+        criteriaCombobox.getItems().addAll("Vendor Name", "Ingredient Name", "Order Date");
         dataPurchaseOrderDetails = FXCollections.observableArrayList(PurchaseOrderDetailsRepo.getAllPurchaseOrderDetails());
         reportTable.setMaxHeight(4000);
         reportTable.setMaxWidth(4000);
@@ -1559,6 +1578,7 @@ public class AdminController {
             filterComboBox.setDisable(true);
         }
     }
+
     ObservableList<PurchaseOrderDetails> dataPurchaseOrderDetailsFilter = FXCollections.observableArrayList();
 
     public void showTableReport(ActionEvent e) throws Exception {
@@ -1611,7 +1631,7 @@ public class AdminController {
 
     }
 
-    public void showIngredient(ActionEvent e) throws Exception {
+    public void showIngredient() {
         ingredientPane.setVisible(true);
         ingredientTable.getColumns().clear();
 

@@ -33,6 +33,7 @@ public class IngredientRepo {
 
         return ingredientNames;
     }
+
     public static List<Ingredient> getAllIngredient() {
         List<Ingredient> ingredients = new ArrayList<>();
         String query = "SELECT ingredientId, ingredientName, unit, quantity FROM ingredient";
@@ -59,7 +60,6 @@ public class IngredientRepo {
     }
 
 
-
     public static void updateRowByKey(int id, String col, String val) {
         // IngredientRepo
 
@@ -84,6 +84,7 @@ public class IngredientRepo {
             e.printStackTrace();
         }
     }
+
     public static void updateRowByKeyName(int id, String col, String val) {
         String query = "UPDATE Ingredient SET " + col + " = ? WHERE ingredientId = ?";
 
@@ -142,6 +143,7 @@ public class IngredientRepo {
 
         return ingredient;
     }
+
     public static void addIngredient(Ingredient ingredient) {
         String query = "INSERT INTO ingredient(ingredientName, unit, quantity) VALUES (?, ?, ?)";
 
