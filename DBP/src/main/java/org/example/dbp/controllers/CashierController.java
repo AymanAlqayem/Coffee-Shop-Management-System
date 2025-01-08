@@ -7,11 +7,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import org.example.dbp.models.Customer;
@@ -52,6 +54,8 @@ public class CashierController {
 
     @FXML
     private AnchorPane customersPane;
+
+    private String originalCashierName;
 
     //Controllers in add a new customers form.
     @FXML
@@ -106,7 +110,7 @@ public class CashierController {
      * */
     private void loadCashierMenu() {
         try {
-            CashierMenuController.cashierName = lbName.getText();
+            CashierMenuController.cashierName = originalCashierName;
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/org/example/dbp/CashierMenu.fxml"));
             AnchorPane menuPane = loader.load(); // Load the menu content
             // Clear existing content and add the menu pane to menuForm
@@ -172,9 +176,27 @@ public class CashierController {
      * setUserName method that will set the username
      * */
     public void setUserName(String userName) {
-        lbName.setText(userName);
-    }
+        originalCashierName = userName;
 
+        if (userName != null && !userName.trim().isEmpty()) { // Check for null and empty string
+            String[] nameParts = userName.trim().split("\\s+", 2); // Split on spaces, limit to 2 parts
+
+            if (nameParts.length == 2) { // Ensure there are at least two parts
+                String firstName = nameParts[0];
+                String lastName = nameParts[1];
+                lbName.setText(firstName + "\n" + lastName); // Set first name and last name on separate lines
+            } else {
+                lbName.setText(userName.trim()); // Handle single-word names
+            }
+
+            lbName.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            lbName.setAlignment(Pos.CENTER_LEFT); // Align text to the left
+            lbName.setWrapText(false);
+            lbName.setMinHeight(50); // Set a minimum height for two lines
+        } else {
+            lbName.setText(""); // Handle null or empty username
+        }
+    }
 
     public void showCustomer() {
         customerTableView.getColumns().clear();

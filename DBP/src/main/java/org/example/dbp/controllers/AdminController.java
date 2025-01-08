@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
@@ -18,6 +19,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 
@@ -64,21 +66,13 @@ public class AdminController {
     @FXML
     private Label warning;
     @FXML
-    private Button addPO;
-    @FXML
     private AnchorPane inventoryPane;
-
-    @FXML
-    private Button btPurchaseOrderTable;
-
 
     @FXML
     private TextField cost;
 
     @FXML
     private ComboBox<String> ingredient;
-    @FXML
-    private Button placePurchaseOrder;
     @FXML
     private TableView<PurchaseOrderLine> purchasingOrderTable;
 
@@ -129,9 +123,6 @@ public class AdminController {
     private JFXButton btAddNewRole;
 
     @FXML
-    private JFXButton btSignOut;
-
-    @FXML
     private JFXButton btSpecialInfo;
 
     @FXML
@@ -176,6 +167,7 @@ public class AdminController {
     private LineChart<String, Number> incomeChart;
 
     //Controllers in special Info form.
+    //Ayman.
     @FXML
     JFXButton totalSalesPerCahierButton;
     @FXML
@@ -183,15 +175,27 @@ public class AdminController {
     @FXML
     JFXButton mostPopularMenuItemButton;
     @FXML
-    JFXButton totalRevenuePerCategory2024Button;
+    JFXButton totalRevenuePerCategory2025Button;
     @FXML
     JFXButton totalOrdersPerCustomerButton;
-    @FXML
-    JFXButton topSellingMenuItemButton;
-    @FXML
-    JFXButton customerWithNoPurchasesButton;
+
     @FXML
     JFXButton ordersRevenuePerDayButton;
+
+    //Abdallah.
+    @FXML
+    JFXButton mostActiveCashierButton;
+    @FXML
+    JFXButton customerSpentMostIn2025;
+    @FXML
+    JFXButton totalRevenuePerMonthIn2025;
+    @FXML
+    JFXButton customersWithNoPurchasesButton;
+    @FXML
+    JFXButton avgOrderPerCustomer;
+    @FXML
+    JFXButton totalRevenuePerVendorIn2025;
+
     @FXML
     TextArea resultTextArea;
 
@@ -371,66 +375,93 @@ public class AdminController {
      * switchInSpecialInfoForm method that will switch the buttons in the special info form.
      * */
     public void switchInSpecialInfoForm(ActionEvent e) {
-        resultTextArea.setFont(Font.font("Book Antiqua", FontWeight.BOLD, 20));
+        resultTextArea.setFont(Font.font("Book Antiqua", FontWeight.BOLD, 25));
 
         if (e.getSource() == totalSalesPerCahierButton) {
             resultTextArea.clear();
             List<String> resultList = SpecialRepo.getTotalSalesPerCashier();
             for (String result : resultList) {
                 resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
             }
-
-
         } else if (e.getSource() == cashierWithHighestInvoiceButton) {
             resultTextArea.clear();
-            List<String> resultList = SpecialRepo.getCashierWithHighestAverageInvoiceAmount();
+            List<String> resultList = SpecialRepo.getCashierWithHighestTotalInvoiceAmount();
             for (String result : resultList) {
                 resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
             }
-
-
         } else if (e.getSource() == mostPopularMenuItemButton) {
             resultTextArea.clear();
             List<String> resultList = SpecialRepo.getMostPopularMenuItems();
             for (String result : resultList) {
                 resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
             }
-
-
-        } else if (e.getSource() == totalRevenuePerCategory2024Button) {
+        } else if (e.getSource() == totalRevenuePerCategory2025Button) {
             resultTextArea.clear();
-            List<String> resultList = SpecialRepo.getTotalRevenuePerCategoryIn2024();
+            List<String> resultList = SpecialRepo.getTotalRevenuePerCategoryIn2025();
             for (String result : resultList) {
                 resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
             }
-
-
         } else if (e.getSource() == totalOrdersPerCustomerButton) {
             resultTextArea.clear();
             List<String> resultList = SpecialRepo.getTotalOrdersAndRevenuePerCustomer();
             for (String result : resultList) {
                 resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
             }
-
-        } else if (e.getSource() == topSellingMenuItemButton) {
-            resultTextArea.clear();
-            List<String> resultList = SpecialRepo.getTopSellingMenuItemsByRevenue();
-            for (String result : resultList) {
-                resultTextArea.appendText(result + '\n');
-            }
-
-        } else if (e.getSource() == customerWithNoPurchasesButton) {
-            resultTextArea.clear();
-            List<String> resultList = SpecialRepo.getCustomersWithNoPurchases();
-            for (String result : resultList) {
-                resultTextArea.appendText(result + '\n');
-            }
-
         } else if (e.getSource() == ordersRevenuePerDayButton) {
             resultTextArea.clear();
             List<String> resultList = SpecialRepo.getOrdersAndRevenuePerDay();
             for (String result : resultList) {
                 resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
+            }
+        } //Abdallah
+        else if (e.getSource() == mostActiveCashierButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getMostActiveCashierByDate();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
+            }
+        } else if (e.getSource() == customerSpentMostIn2025) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getCustomersWhoSpentMostIn2025();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
+            }
+        } else if (e.getSource() == totalRevenuePerMonthIn2025) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getNoOfOrdersAndRevenuePerMonthIn2025();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
+            }
+        } else if (e.getSource() == customersWithNoPurchasesButton) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getCustomersWithNoPurchases();
+            System.out.println(resultList);
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
+            }
+        } else if (e.getSource() == avgOrderPerCustomer) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getAverageOrderValuePerCustomer2025();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
+            }
+        } else if (e.getSource() == totalRevenuePerVendorIn2025) {
+            resultTextArea.clear();
+            List<String> resultList = SpecialRepo.getTotalRevenuePerVendor2025();
+            for (String result : resultList) {
+                resultTextArea.appendText(result + '\n');
+                resultTextArea.appendText("____________________________________" + '\n');
             }
         }
     }
@@ -1534,7 +1565,24 @@ public class AdminController {
      * setUserName method that will set the username
      */
     public void setUserName(String userName) {
-        lbUserName.setText(userName);
+        if (userName != null && !userName.trim().isEmpty()) { // Check for null and empty string
+            String[] nameParts = userName.trim().split("\\s+", 2); // Split on spaces, limit to 2 parts
+
+            if (nameParts.length == 2) { // Ensure there are at least two parts
+                String firstName = nameParts[0];
+                String lastName = nameParts[1];
+                lbUserName.setText(firstName + "\n" + lastName); // Set first name and last name on separate lines
+            } else {
+                lbUserName.setText(userName.trim()); // Handle single-word names
+            }
+
+            lbUserName.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            lbUserName.setAlignment(Pos.CENTER_LEFT); // Align text to the left
+            lbUserName.setWrapText(false);
+            lbUserName.setMinHeight(50); // Set a minimum height for two lines
+        } else {
+            lbUserName.setText(""); // Handle null or empty username
+        }
     }
 
     /**

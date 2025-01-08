@@ -72,17 +72,12 @@ public class OrderRepo {
     }
 
     /**
-     * totalNumberOfCustomers method that will get the total number of customers for last work day(current).
+     * totalNumberOfCustomers method that will get the total number of customers for the current day.
      * */
     public static int totalNumberOfCustomers() {
         String query = "SELECT COUNT(DISTINCT customer_id) " +
                 "FROM order_table " +
-                "WHERE DATE(created_date_time) = (" +
-                "    SELECT DATE(created_date_time) " +
-                "    FROM order_table " +
-                "    ORDER BY created_date_time DESC " +
-                "    LIMIT 1" +
-                ")";
+                "WHERE DATE(created_date_time) = CURDATE()"; // CURDATE() returns the current date
 
         try (Connection connection = DataBase.getDBConnection();
              PreparedStatement stmt = connection.prepareStatement(query);

@@ -22,17 +22,14 @@ public class UserRepository {
         User user = null;
         String query = "SELECT * FROM user WHERE name = ? AND password = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, hashedPassword);
 
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    user = new User(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("role"), resultSet.getString("email"),
-                            resultSet.getDate("hire_date"), resultSet.getLong("phone_number"),
-                            resultSet.getString("password"), resultSet.getDouble("salary"));
+                    user = new User(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("role"), resultSet.getString("email"), resultSet.getDate("hire_date"), resultSet.getLong("phone_number"), resultSet.getString("password"), resultSet.getDouble("salary"));
                 }
             }
         } catch (SQLException e) {
@@ -47,8 +44,7 @@ public class UserRepository {
     public static String getUserRole(String username, String hashedPassword) {
         String query = "SELECT * FROM user WHERE name = ? AND password = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, username);
             statement.setString(2, hashedPassword);
             ResultSet resultSet = statement.executeQuery();
@@ -69,8 +65,7 @@ public class UserRepository {
     public static boolean isEmailExist(String email) {
         String query = "SELECT * FROM user WHERE email = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -100,11 +95,9 @@ public class UserRepository {
      * addNewEmployee method that will add new employee to DB.
      * */
     public static void addNewEmployee(User user) {
-        String query = "insert into user(name , role , email , hire_date , phone_number , password , salary)" +
-                " values(?,?,?,?,?,?,?)";
+        String query = "insert into user(name , role , email , hire_date , phone_number , password , salary)" + " values(?,?,?,?,?,?,?)";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             preparedStatement.setString(1, user.getName());
             preparedStatement.setString(2, user.getRole());
             preparedStatement.setString(3, user.getEmail());
@@ -130,8 +123,7 @@ public class UserRepository {
     public static int getCashierId(String cashierName) {
         String query = "SELECT id FROM user WHERE name = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
             // Set the parameter for the prepared statement
             statement.setString(1, cashierName);
 
@@ -140,6 +132,7 @@ public class UserRepository {
 
             // Check if there is a result and return the ID
             if (resultSet.next()) {
+                System.out.println(resultSet.getInt("id") + ".....");
                 return resultSet.getInt("id");
             }
 
@@ -153,9 +146,7 @@ public class UserRepository {
         List<User> users = new ArrayList<>();
         String query = "SELECT * FROM user";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -178,8 +169,7 @@ public class UserRepository {
     public static void updateRowByKey(int id, String col, String val) {
         String query = "UPDATE user SET " + col + " = ? WHERE id = ?";
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query)) {
 
             // Set the parameter values
             statement.setString(1, val); // Value to set in the column
@@ -203,9 +193,7 @@ public class UserRepository {
         String deleteQuery = "DELETE FROM user WHERE id = ?";
         User deletedUser = null;
 
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement selectStatement = connection.prepareStatement(selectQuery);
-             PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement selectStatement = connection.prepareStatement(selectQuery); PreparedStatement deleteStatement = connection.prepareStatement(deleteQuery)) {
 
             // Fetch the user details before deletion
             selectStatement.setInt(1, id);
