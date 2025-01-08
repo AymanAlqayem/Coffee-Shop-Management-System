@@ -26,18 +26,12 @@ import java.util.*;
 public class CashierMenuController {
     @FXML
     private Accordion menuAccordion;
-
-    @FXML
-    private JFXButton btDone;
-
     @FXML
     private JFXButton createBillButton;
-
     @FXML
     private JFXButton printInvoiceButton;
     @FXML
     private TextField amountTextFiled;
-
     @FXML
     private Label orderNoTextFiled;
     @FXML
@@ -46,28 +40,22 @@ public class CashierMenuController {
     private Label custNameTextFiled;
     @FXML
     private Label dateTimeTextFiled;
-
     private double totalBillAmount = 0.0;
     @FXML
     private Label totalPriceLabel;
-
     @FXML
     private TableView<InvoiceItems> billTableView;
-
     @FXML
     private TableColumn<InvoiceItems, String> itemTableColumn; // Change type to InvoiceItems
     @FXML
     private TableColumn<InvoiceItems, Integer> quantityTableColumn; // Change type to InvoiceItems
     @FXML
     private TableColumn<InvoiceItems, Double> priceTableColumn; // Change
-
     @FXML
     private ListView<String> searchResultsListView;
-
     private ObservableList<String> customerNamesList;
     @FXML
     private TextField searchTextField;
-
     private ObservableList<InvoiceItems> itemsObservableList = FXCollections.observableArrayList();
 
     @FXML
@@ -80,11 +68,12 @@ public class CashierMenuController {
         quantityTableColumn.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         priceTableColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
 
+        // Initialize a customer names list.
+        customerNamesList = FXCollections.observableArrayList(CustomerRepository.getAllCustomersA());
+
+
         // Set bill items in the bill table view.
         billTableView.setItems(itemsObservableList);
-
-        // Initialize a customer names list.
-    //    customerNamesList = FXCollections.observableArrayList(CustomerRepository.getAllCustomers());
 
         // Add event handlers
         searchTextField.addEventHandler(KeyEvent.KEY_RELEASED, e -> searchCustomer());

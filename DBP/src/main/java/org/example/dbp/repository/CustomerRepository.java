@@ -28,13 +28,10 @@ public class CustomerRepository {
         }
     }
 
-
     /**
      * isCustomerExist method that will check if the customer already exists.
      * */
-
-
-    public  static boolean isCustomerExist(String phoneNumber) {
+    public static boolean isCustomerExist(String phoneNumber) {
         String query = "SELECT * FROM customer WHERE phone_number=?";
 
         try (Connection connection = DataBase.getDBConnection();
@@ -50,31 +47,6 @@ public class CustomerRepository {
 
         }
         return false;
-    }
-
-
-
-
-
-    public static List<Customer> getAllCustomers() {
-        List<Customer> customers = new ArrayList<>();
-        String query = "SELECT * FROM Customer";
-
-        try (Connection connection = DataBase.getDBConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
-
-            while (resultSet.next()) {
-                int id = resultSet.getInt("id");
-                String name = resultSet.getString("customerName");
-                long phoneNumber = resultSet.getLong("phone_number");
-                customers.add(new Customer(id, name, phoneNumber));
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return customers;
     }
 
     /**
@@ -103,10 +75,45 @@ public class CustomerRepository {
         return -1; // Return -1 if no matching customer is found
     }
 
+    /**
+     * getAllCustomers method that will get all customers.
+     * */
+    public static ArrayList<String> getAllCustomersA() {
+        String query = "select customer_name from customer";
+
+        ArrayList<String> customers = new ArrayList<>();
+        try (Connection connection = DataBase.getDBConnection(); PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
+            while (resultSet.next()) {
+                customers.add(resultSet.getString("customer_name"));
+            }
+
+        } catch (SQLException e) {
+
+        }
+        return customers;
+    }
 
 
+    public static List<Customer> getAllCustomers() {
+        List<Customer> customers = new ArrayList<>();
+        String query = "SELECT * FROM Customer";
 
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
 
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                String name = resultSet.getString("customer_name");
+                long phoneNumber = resultSet.getLong("phone_number");
+                customers.add(new Customer(id, name, phoneNumber));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
 
     public static Customer deleteRowByKey(int id) {
         String selectQuery = "SELECT * FROM customer WHERE id = ?";
@@ -177,10 +184,6 @@ public class CustomerRepository {
             e.printStackTrace();
         }
     }
-
-
-
-
 }
 
 

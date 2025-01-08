@@ -41,7 +41,7 @@ public class PurchaseOrderLineRepo {
                 double costPerUnit = resultSet.getDouble("cost_per_unit");
                 Ingredient ingredient = searchById(ingredientId);
                 // Create a PurchaseOrderLine object and add it to the list
-                purchaseOrderLines.add(new PurchaseOrderLine(lineId, purchaseOrderId,ingredient, quantity, costPerUnit, quantity * costPerUnit));
+                purchaseOrderLines.add(new PurchaseOrderLine(lineId, purchaseOrderId, ingredient, quantity, costPerUnit, quantity * costPerUnit));
             }
 
         } catch (SQLException e) {
@@ -50,7 +50,6 @@ public class PurchaseOrderLineRepo {
 
         return purchaseOrderLines;
     }
-
 
     public static Ingredient searchById(int id) {
         Ingredient ingredient = null;
@@ -80,7 +79,6 @@ public class PurchaseOrderLineRepo {
         return ingredient;
     }
 
-
     public static ObservableList<PurchaseOrderLine> getAllPurchaseOrderLinesForPurchaseOrder(int purchaseOrderId) {
         ObservableList<PurchaseOrderLine> purchaseOrderLines = FXCollections.observableArrayList();
         String query = "SELECT * FROM PurchaseOrderLine WHERE purchaseOrderId = ?";
@@ -108,15 +106,6 @@ public class PurchaseOrderLineRepo {
 
         return purchaseOrderLines;
     }
-
-
-
-
-
-
-
-
-
 
     public static void updateRowByKey(int id, String col, String val) {
         // PurchaseOrderLineRepo
@@ -189,7 +178,4 @@ public class PurchaseOrderLineRepo {
 
         return deletedLine;
     }
-
-
-
 }

@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class MenuItemRepo {
-
     /**
      * getMenuItemId method that will get the item id or a specific item name.
      * */

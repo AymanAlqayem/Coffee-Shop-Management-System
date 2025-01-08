@@ -90,11 +90,9 @@ public class User {
     }
 
 
-
     public void setHire_date(Date hire_date) {
         this.hireDate = hire_date;
     }
-
 
 
     public void setPhoneNumber(int phoneNumber) {
@@ -108,7 +106,6 @@ public class User {
     public void setPass(String pass) {
         this.pass = pass;
     }
-
 
 
     public void setSalary(double salary) {

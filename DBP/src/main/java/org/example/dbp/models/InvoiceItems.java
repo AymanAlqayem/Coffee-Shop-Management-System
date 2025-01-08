@@ -22,6 +22,4 @@ public class InvoiceItems {
     public double getPrice() {
         return price;
     }
-
-
 }
