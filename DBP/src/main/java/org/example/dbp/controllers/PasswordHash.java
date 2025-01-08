@@ -23,6 +23,7 @@ public class PasswordHash {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("Error hashing password", e);
         }
-    }
 
+
+    }
 }
