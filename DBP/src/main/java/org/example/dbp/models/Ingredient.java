@@ -11,6 +11,12 @@ public class Ingredient {
 
     }
 
+    public Ingredient(String ingredientName, Unit unit, double quantity) {
+        this.ingredientName = ingredientName;
+        this.unit = unit;
+        this.quantity = quantity;
+    }
+
     public Unit getUnit() {
         return unit;
     }

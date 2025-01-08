@@ -10,8 +10,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -118,6 +118,11 @@
                         <Image url="@../../../info.png" />
                      </image>
                   </ImageView>
+                  <JFXButton fx:id="btIngredient" layoutX="57.0" layoutY="585.0" onAction="#showIngredient" prefHeight="47.0" prefWidth="126.0" style="-fx-background-radius: 90;" text="Ingredient" textFill="WHITE">
+                     <font>
+                        <Font name="Book Antiqua" size="14.0" />
+                     </font>
+                  </JFXButton>
                </children>
             </AnchorPane>
          </children>
@@ -407,12 +412,92 @@
                   <Font size="22.0" />
                </font>
             </Label>
+            <Button fx:id="reports" layoutX="797.0" layoutY="706.0" mnemonicParsing="false" onAction="#showReports" prefHeight="57.0" prefWidth="268.0" text="Reports">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
       <AnchorPane fx:id="PurchaseOrderTablePane" layoutX="212.0" prefHeight="797.0" prefWidth="1328.0" visible="false">
          <children>
             <TableView fx:id="purchaseOrderTable" editable="true" prefHeight="504.0" prefWidth="1318.0" tableMenuButtonVisible="true" />
             <TableView fx:id="purchaseOrderLineTable" editable="true" layoutX="10.0" layoutY="504.0" prefHeight="293.0" prefWidth="1318.0" tableMenuButtonVisible="true" visible="false" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="ingredientPane" layoutX="212.0" prefHeight="798.0" prefWidth="1538.0" visible="false">
+         <children>
+            <TextField fx:id="ingredientName" layoutX="230.0" layoutY="156.0" />
+            <Label layoutX="70.0" layoutY="148.0" prefHeight="34.0" prefWidth="156.0" text="ingredientName:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="585.0" layoutY="35.0" prefHeight="34.0" prefWidth="156.0" text="Ingredients">
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </Label>
+            <Label layoutX="406.0" layoutY="150.0" prefHeight="30.0" prefWidth="50.0" text="unit:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="unitComboBox" layoutX="462.0" layoutY="152.0" prefWidth="150.0" />
+            <Label layoutX="678.0" layoutY="149.0" prefHeight="28.0" prefWidth="112.0" text="quantity:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="ingredientQuantity" layoutX="767.0" layoutY="155.0" />
+            <Button fx:id="addIngredient" layoutX="955.0" layoutY="152.0" mnemonicParsing="false" onAction="#addIngredient" text="Add" />
+            <TableView fx:id="ingredientTable" layoutX="6.0" layoutY="376.0" prefHeight="400.0" prefWidth="1730.0" />
+            <Label layoutX="70.0" layoutY="316.0" prefHeight="34.0" prefWidth="143.0" text="Filter Quantity:">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="QuantityFilter" layoutX="226.0" layoutY="321.0" />
+            <Button fx:id="ingredientFilter" layoutX="406.0" layoutY="321.0" mnemonicParsing="false" onAction="#ingredientFilter" text="Filter" />
+            <Button fx:id="ingredientReset" layoutX="491.0" layoutY="320.0" mnemonicParsing="false" onAction="#ingredientsReset" text="Reset" />
+            <Label fx:id="ingredientWarning" layoutX="305.0" layoutY="208.0" prefHeight="92.0" prefWidth="954.0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="reportPane" layoutX="213.0" prefHeight="784.0" prefWidth="1329.0" visible="false">
+         <children>
+            <Label layoutX="664.0" layoutY="25.0" prefHeight="47.0" prefWidth="98.0" text="Reports">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="criteriaCombobox" layoutX="196.0" layoutY="117.0" onAction="#setCriteriaCombobox" prefHeight="36.0" prefWidth="143.0" />
+            <Label layoutX="66.0" layoutY="105.0" prefHeight="47.0" prefWidth="120.0" text="Criteria: ">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Label>
+            <Label layoutX="361.0" layoutY="111.0" prefHeight="47.0" prefWidth="75.0" text="Filter:">
+               <font>
+                  <Font size="27.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="filterComboBox" disable="true" layoutX="457.0" layoutY="117.0" prefHeight="36.0" prefWidth="143.0" />
+            <Button fx:id="ShowTable" layoutX="653.0" layoutY="115.0" mnemonicParsing="false" onAction="#showTableReport" prefHeight="38.0" prefWidth="120.0" text="Show Table">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
+            <Label fx:id="respond" layoutX="74.0" layoutY="166.0" prefHeight="58.0" prefWidth="1228.0" />
+            <TableView fx:id="reportTable" layoutY="224.0" prefHeight="547.0" prefWidth="1302.0" />
+            <Button fx:id="reset" layoutX="868.0" layoutY="115.0" mnemonicParsing="false" onAction="#reset" prefHeight="38.0" prefWidth="120.0" text="Reset">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Button>
          </children>
       </AnchorPane>
    </children>

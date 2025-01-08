@@ -39,6 +39,26 @@ public class PurchaseOrderRepo {
 
         return purchaseOrders;
     }
+    public static List<String> getAllOrderDate() {
+        List<String> orderDates = new ArrayList<>();
+        String query = "SELECT orderDate FROM PurchaseOrder";
+
+        try (Connection connection = DataBase.getDBConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String orderDate = resultSet.getString("orderDate");
+                orderDates.add(orderDate);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return orderDates;
+    }
+
 
     public static PurchaseOrder searchById(int id) {
         PurchaseOrder purchaseOrder = null;
